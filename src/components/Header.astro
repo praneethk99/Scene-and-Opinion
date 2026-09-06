@@ -14,22 +14,21 @@ import HeaderLink from './HeaderLink.astro';
 				</div>
 			</a>
 		</h2>
-		<div class="internal-links">
+		<div class="internal-links nav-links">
 			<HeaderLink href="/">Home</HeaderLink>
 			<HeaderLink href="/blog">Read</HeaderLink>
 			<HeaderLink href="/about">Watch</HeaderLink>
 		</div>
 		<div class="social-links">
-<a href="mailto:sceneandopinion69@gmail.com">
-	<span class="sr-only">Send an Email</span>
-	<svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
-		<path
-			fill="currentColor"
-			d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
-		></path>
-	</svg>
-</a>			
-
+			<a href="mailto:sceneandopinion69@gmail.com">
+				<span class="sr-only">Send an Email</span>
+				<svg viewBox="0 0 24 24" aria-hidden="true" width="24" height="24">
+					<path
+						fill="currentColor"
+						d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"
+					></path>
+				</svg>
+			</a>			
 
 			<a href="https://www.youtube.com/@Sceneandopinion" target="_blank">
 				<span class="sr-only">Subscribe to Scene and Opinion</span>
@@ -64,9 +63,12 @@ import HeaderLink from './HeaderLink.astro';
 	}
 
 	header {
-		margin: 0;
-		padding: 1rem 2rem;
-		background-color: #030a1c;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 1rem;
+		padding: 1.5rem 1rem;
+		background-color: #0b132b;
 		background-image: 
 			linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
 			linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
@@ -80,8 +82,17 @@ import HeaderLink from './HeaderLink.astro';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		width: 100%;
 		max-width: 1200px;
 		margin: 0 auto;
+	}
+
+	/* Desktop layout adjustment */
+	@media (min-width: 640px) {
+		header {
+			flex-direction: row;
+			justify-content: space-between;
+		}
 	}
 
 	/* Logo & Title Layout */
@@ -131,9 +142,11 @@ import HeaderLink from './HeaderLink.astro';
 	}
 
 	/* Internal Links Container */
-	.internal-links {
+	.internal-links,
+	.nav-links {
 		display: flex;
-		gap: 2rem;
+		gap: 1.5rem;
+		align-items: center;
 	}
 
 	/* Navigation Link Typography & Colors */
