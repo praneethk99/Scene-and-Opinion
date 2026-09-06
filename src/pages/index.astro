@@ -1,0 +1,43 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1>Scenes, Hot Takes, and Cinematic Breaks 🎬🍿</h1>
+			<p>
+				Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, 
+				sharp film breakdowns, and the freshest updates in cinema. Whether we’re dissecting a masterpiece 
+				or roasting a flop, we bring the story behind the screen straight to your feed.
+			</p>
+			
+			<h2>What We Do</h2>
+			<ul>
+				<li>Honest Movie Reviews</li>
+				<li>Deep-Dive Film Breakdowns</li>
+				<li>Fresh Cinema News & Updates</li>
+			</ul>
+
+			<h2>Follow the Channel</h2>
+			<p>
+				Catch daily takes and quick reviews on our 
+				<a href="https://www.instagram.com/sceneandopinion/" target="_blank" rel="noopener noreferrer">Instagram</a> 
+				and watch full in-depth video breakdowns on our 
+				<a href="https://www.youtube.com/@Sceneandopinion" target="_blank" rel="noopener noreferrer">YouTube</a> channel.
+			</p>
+			<p>
+				Hit follow, subscribe, and tune in—let’s talk film!
+			</p>
+		</main>
+		<Footer />
+	</body>
+</html>

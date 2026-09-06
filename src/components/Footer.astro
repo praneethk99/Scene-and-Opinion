@@ -1,0 +1,33 @@
+---
+const today = new Date();
+---
+
+<footer>
+	&copy; {today.getFullYear()} Scene and Opinion. All rights reserved.
+	<div class="social-links">
+		<a href="mailto:sceneandopinion69@gmail.com">
+	sceneandopinion69@gmail.com
+</a>
+	</div>
+</footer>
+<style>
+	footer {
+		padding: 2em 1em 6em 1em;
+		background: linear-gradient(var(--gray-gradient)) no-repeat;
+		color: rgb(var(--gray));
+		text-align: center;
+	}
+	.social-links {
+		display: flex;
+		justify-content: center;
+		gap: 1em;
+		margin-top: 1em;
+	}
+	.social-links a {
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+	}
+	.social-links a:hover {
+		color: rgb(var(--gray-dark));
+	}
+</style>
