@@ -1,43 +1,56 @@
----
-import BaseHead from '../components/BaseHead.astro';
-import Footer from '../components/Footer.astro';
-import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
----
+/* Modern Reset & Box Sizing Baseline */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>Scenes, Hot Takes, and Cinematic Breaks 🎬🍿</h1>
-			<p>
-				Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, 
-				sharp film breakdowns, and the freshest updates in cinema. Whether we’re dissecting a masterpiece 
-				or roasting a flop, we bring the story behind the screen straight to your feed.
-			</p>
-			
-			<h2>What We Do</h2>
-			<ul>
-				<li>Honest Movie Reviews</li>
-				<li>Deep-Dive Film Breakdowns</li>
-				<li>Fresh Cinema News & Updates</li>
-			</ul>
+/* Prevent horizontal overflow and handle media assets */
+img, video, iframe, picture, svg {
+  max-width: 100%;
+  height: auto;
+  display: block; /* Prevents unwanted inline whitespace gap */
+}
 
-			<h2>Follow the Channel</h2>
-			<p>
-				Catch daily takes and quick reviews on our 
-				<a href="https://www.instagram.com/sceneandopinion/" target="_blank" rel="noopener noreferrer">Instagram</a> 
-				and watch full in-depth video breakdowns on our 
-				<a href="https://www.youtube.com/@Sceneandopinion" target="_blank" rel="noopener noreferrer">YouTube</a> channel.
-			</p>
-			<p>
-				Hit follow, subscribe, and tune in—let’s talk film!
-			</p>
-		</main>
-		<Footer />
-	</body>
-</html>
+/* Container safety to prevent overflow across all devices */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Responsive Container */
+main {
+  width: 100%;
+  max-width: 800px;
+  margin-inline: auto; /* Modern logical property for margin left/right */
+  padding: clamp(1rem, 3vw, 2rem); /* Fluid padding scaling from 1rem to 2rem */
+}
+
+/* Responsive Layout Elements */
+header, footer {
+  width: 100%;
+  padding: 1rem;
+}
+
+/* Responsive Typography using Fluid Scaling (clamp) */
+h1 {
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  line-height: 1.3;
+}
+
+/* Mobile-Specific Tweaks */
+@media (max-width: 600px) {
+  header, footer {
+    padding: 0.75rem 1rem;
+  }
+  
+  /* Optional: Increases touch target sizing for buttons/links on touch screens */
+  button, a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
