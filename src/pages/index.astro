@@ -4,19 +4,41 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Sample blog post data
-const articles = [
+// Define side posters and video slides with YouTube links
+const sidebarImages = [
+	'/poster1.jpg',
+	'/poster2.jpg',
+	'/poster3.jpg',
+	'/poster4.jpg',
+	'/poster5.jpg',
+	'/poster6.jpg'
+];
+
+// Carousel items with thumbnails and YouTube video URLs
+const videoSlides = [
 	{
-		title: 'Markdown Style Guide',
-		date: 'Jun 19, 2024',
-		slug: '/blog/markdown-style-guide',
-		images: ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg']
+		img: '/poster1.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
 	},
 	{
-		title: 'First Film Review Entry',
-		date: 'Jul 05, 2024',
-		slug: '/blog/first-review',
-		images: ['/poster4.jpg', '/poster5.jpg', '/poster6.jpg']
+		img: '/poster2.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster3.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster4.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster5.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster6.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
 	}
 ];
 ---
@@ -24,95 +46,147 @@ const articles = [
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Read - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
 			*, *::before, *::after {
 				box-sizing: border-box;
 			}
 
 			html, body {
-				width: 100%;
-				max-width: 100vw;
+				max-width: 100%;
 				overflow-x: hidden;
 				margin: 0;
 				padding: 0;
-				/* Cinematic Ambient Dark Background */
-				background: #0b132b linear-gradient(180deg, #0b132b 0%, #1c2541 100%) fixed;
-				color: #f0f6fc;
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-				-webkit-font-smoothing: antialiased;
+				background-color: #0b132b;
+				color: #ffffff;
+				font-family: system-ui, -apple-system, sans-serif;
 			}
 
-			.read-container {
-				width: 100%;
-				max-width: 900px;
+			/* 3-Column Page Grid */
+			.page-container {
+				display: grid;
+				grid-template-columns: 240px minmax(0, 1fr) 240px;
+				gap: 2rem;
+				max-width: 1400px;
 				margin: 0 auto;
-				padding: 1.5rem 1rem 3rem 1rem;
+				padding: 2rem 1rem;
 			}
 
-			.articles-grid {
+			.main-content {
+				width: 100%;
+				min-width: 0;
+			}
+
+			/* Vertical Sidebars */
+			.sidebar {
 				display: flex;
 				flex-direction: column;
-				gap: 2.5rem;
+				gap: 1.5rem;
+			}
+
+			.sidebar img {
+				width: 100%;
+				height: 320px;
+				aspect-ratio: 3 / 4;
+				object-fit: cover;
+				border-radius: 12px;
+				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+			}
+
+			/* Content Styling */
+			h1 { font-size: 2.2rem; margin-bottom: 1rem; color: #fff; }
+			h2 { font-size: 1.5rem; color: #58a6ff; margin-top: 1.5rem; }
+			p, li { font-size: 1.05rem; line-height: 1.6; color: #e6edf3; }
+			a { color: #58a6ff; }
+
+			/* Widescreen Interactive Video Carousel */
+			.carousel-section {
+				margin-top: 2rem;
 				width: 100%;
 			}
 
-			/* Glassmorphism Cinematic Card */
-			.article-card {
-				width: 100%;
-				background: rgba(15, 23, 42, 0.75);
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				border-radius: 16px;
-				padding: 1rem;
-				box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-				backdrop-filter: blur(10px);
-				-webkit-backdrop-filter: blur(10px);
-			}
-
-			/* Carousel Outer Container */
 			.carousel-wrapper {
 				position: relative;
 				width: 100%;
 				overflow: hidden;
 				border-radius: 12px;
-				background-color: #000;
 			}
 
 			.carousel-track {
 				display: flex;
+				transition: transform 0.5s ease-in-out;
 				width: 100%;
-				transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-				will-change: transform;
 			}
 
+			/* Slide Container & Clickable Anchor */
 			.carousel-slide-link {
 				min-width: 100%;
 				width: 100%;
+				position: relative;
 				display: block;
 				text-decoration: none;
-				flex-shrink: 0;
+				border-radius: 12px;
+				overflow: hidden;
 			}
 
-			.carousel-slide {
+			.carousel-slide-img {
 				width: 100%;
+				aspect-ratio: 16 / 9;
 				height: auto;
-				aspect-ratio: 16 / 9; /* Landscape ratio on desktop */
+				max-height: 420px;
 				object-fit: cover;
 				display: block;
+				transition: transform 0.3s ease;
+			}
+
+			/* Play Button Overlay */
+			.play-button-overlay {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 68px;
+				height: 68px;
+				background-color: rgba(0, 0, 0, 0.7);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+				transition: all 0.3s ease;
+				backdrop-filter: blur(4px);
+			}
+
+			.play-icon {
+				width: 0;
+				height: 0;
+				border-top: 12px solid transparent;
+				border-bottom: 12px solid transparent;
+				border-left: 20px solid #ffffff;
+				margin-left: 4px; /* Center triangular alignment */
+			}
+
+			/* Hover Effects */
+			.carousel-slide-link:hover .play-button-overlay {
+				background-color: #ff0000; /* YouTube Red on Hover */
+				transform: translate(-50%, -50%) scale(1.15);
+			}
+
+			.carousel-slide-link:hover .carousel-slide-img {
+				transform: scale(1.02);
 			}
 
 			/* Navigation Dots */
 			.carousel-dots {
 				display: flex;
 				justify-content: center;
-				align-items: center;
 				gap: 8px;
 				margin-top: 1rem;
 			}
 
 			.dot {
-				width: 8px;
-				height: 8px;
+				width: 10px;
+				height: 10px;
 				border-radius: 50%;
 				background-color: rgba(255, 255, 255, 0.3);
 				cursor: pointer;
@@ -121,169 +195,131 @@ const articles = [
 
 			.dot.active {
 				background-color: #58a6ff;
-				width: 20px;
-				border-radius: 6px;
-				box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
+				width: 24px;
+				border-radius: 8px;
 			}
 
-			/* High-Contrast Typography */
-			.article-info {
-				text-align: center;
-				padding: 1rem 0.5rem 0.5rem 0.5rem;
-			}
-
-			.article-title {
-				font-size: 1.6rem;
-				font-weight: 700;
-				line-height: 1.3;
-				margin: 0 0 0.4rem 0;
-			}
-
-			.article-title a {
-				color: #ffffff;
-				text-decoration: none;
-				transition: color 0.2s ease;
-			}
-
-			.article-title a:hover {
-				color: #58a6ff;
-			}
-
-			.article-date {
-				font-size: 0.9rem;
-				color: #8b949e;
-				font-weight: 500;
-				margin: 0;
-				letter-spacing: 0.5px;
-			}
-
-			/* Mobile Optimizations */
-			@media (max-width: 640px) {
-				.read-container {
-					padding: 1rem 0.75rem 2rem 0.75rem;
+			/* Responsive Rules */
+			@media (max-width: 1024px) {
+				.page-container {
+					grid-template-columns: 1fr;
 				}
-
-				.article-card {
-					padding: 0.75rem;
-					border-radius: 12px;
+				.sidebar {
+					display: none;
 				}
+			}
 
-				.carousel-slide {
-					aspect-ratio: 4 / 3; /* Optimized height for mobile screens */
+			@media (max-width: 600px) {
+				.play-button-overlay {
+					width: 50px;
+					height: 50px;
 				}
-
-				.article-title {
-					font-size: 1.25rem;
-				}
-
-				.article-date {
-					font-size: 0.825rem;
+				.play-icon {
+					border-top: 9px solid transparent;
+					border-bottom: 9px solid transparent;
+					border-left: 15px solid #ffffff;
 				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
+		
+		<div class="page-container">
+			<!-- Left Sidebar Posters -->
+			<aside class="sidebar">
+				<img src={sidebarImages[0]} alt="Poster 1" />
+				<img src={sidebarImages[1]} alt="Poster 2" />
+				<img src={sidebarImages[2]} alt="Poster 3" />
+			</aside>
 
-		<main class="read-container">
-			<div class="articles-grid">
-				{articles.map((article, articleIdx) => (
-					<article class="article-card">
-						<!-- Single-Image Responsive Carousel -->
-						<div class="carousel-wrapper">
-							<div class="carousel-track" id={`track-${articleIdx}`}>
-								{article.images.map((imgSrc, imgIdx) => (
-									<a href={article.slug} class="carousel-slide-link">
-										<img 
-											src={imgSrc} 
-											alt={`${article.title} slide ${imgIdx + 1}`} 
-											class="carousel-slide" 
-											loading={articleIdx === 0 ? "eager" : "lazy"}
-										/>
-									</a>
-								))}
-							</div>
-						</div>
+			<!-- Center Main Content -->
+			<main class="main-content">
+				<h1>Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
+				<p>
+					Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, 
+					sharp film breakdowns, and the freshest updates in cinema.
+				</p>
 
-						<div class="carousel-dots" id={`dots-${articleIdx}`}>
-							{article.images.map((_, imgIdx) => (
-								<span 
-									class={`dot ${imgIdx === 0 ? 'active' : ''}`} 
-									data-article={articleIdx} 
-									data-index={imgIdx}
-								></span>
+				<h2>What We Do</h2>
+				<ul>
+					<li>Honest Movie Reviews</li>
+					<li>Deep-Dive Film Breakdowns</li>
+					<li>Fresh Cinema News & Updates</li>
+				</ul>
+
+				<h2>Follow the Channel</h2>
+				<p>
+					Catch daily takes and quick reviews on our <a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer">Instagram</a> 
+					and watch full in-depth video analysis on our YouTube channel.
+				</p>
+
+				<!-- VIDEO CAROUSEL WITH PLAY BUTTON -->
+				<div class="carousel-section">
+					<div class="carousel-wrapper">
+						<div class="carousel-track" id="carouselTrack">
+							{videoSlides.map((slide, index) => (
+								<a 
+									href={slide.videoUrl} 
+									target="_blank" 
+									rel="noopener noreferrer" 
+									class="carousel-slide-link"
+									aria-label={`Watch video ${index + 1} on YouTube`}
+								>
+									<img src={slide.img} alt={`Video Thumbnail ${index + 1}`} class="carousel-slide-img" />
+									<div class="play-button-overlay">
+										<div class="play-icon"></div>
+									</div>
+								</a>
 							))}
 						</div>
+					</div>
+					<div class="carousel-dots" id="carouselDots">
+						{videoSlides.map((_, index) => (
+							<span class={`dot ${index === 0 ? 'active' : ''}`} data-index={index}></span>
+						))}
+					</div>
+				</div>
+			</main>
 
-						<!-- Article Title & Date -->
-						<div class="article-info">
-							<h2 class="article-title">
-								<a href={article.slug}>{article.title}</a>
-							</h2>
-							<p class="article-date">{article.date}</p>
-						</div>
-					</article>
-				))}
-			</div>
-		</main>
+			<!-- Right Sidebar Posters -->
+			<aside class="sidebar">
+				<img src={sidebarImages[3]} alt="Poster 4" />
+				<img src={sidebarImages[4]} alt="Poster 5" />
+				<img src={sidebarImages[5]} alt="Poster 6" />
+			</aside>
+		</div>
 
 		<Footer />
 
-		<!-- Client-Side Touch & Auto-Slide Script -->
+		<!-- Client-Side Carousel Script -->
 		<script>
-			document.querySelectorAll('.article-card').forEach((card, articleIdx) => {
-				const track = document.getElementById(`track-${articleIdx}`) as HTMLElement;
-				const dots = card.querySelectorAll('.dot');
-				const totalSlides = dots.length;
-				let currentIndex = 0;
+			const track = document.getElementById('carouselTrack') as HTMLElement;
+			const dots = document.querySelectorAll('.dot');
+			const totalSlides = dots.length;
+			let currentIndex = 0;
 
-				function updateSlide(index: number) {
-					currentIndex = index;
-					track.style.transform = `translateX(-${currentIndex * 100}%)`;
+			function updateCarousel(index: number) {
+				currentIndex = index;
+				track.style.transform = `translateX(-${currentIndex * 100}%)`;
 
-					dots.forEach((dot, i) => {
-						dot.classList.toggle('active', i === currentIndex);
-					});
-				}
+				dots.forEach((dot, i) => {
+					dot.classList.toggle('active', i === currentIndex);
+				});
+			}
 
-				// Automatic transition every 4 seconds
-				setInterval(() => {
-					const nextIndex = (currentIndex + 1) % totalSlides;
-					updateSlide(nextIndex);
-				}, 4000);
+			// Auto scroll every 4 seconds
+			setInterval(() => {
+				const nextIndex = (currentIndex + 1) % totalSlides;
+				updateCarousel(nextIndex);
+			}, 4000);
 
-				// Touch Navigation for Mobile Devices
-				let startX = 0;
-				let endX = 0;
-
-				track.addEventListener('touchstart', (e) => {
-					startX = e.touches[0].clientX;
-				}, { passive: true });
-
-				track.addEventListener('touchend', (e) => {
-					endX = e.changedTouches[0].clientX;
-					const diff = startX - endX;
-
-					if (Math.abs(diff) > 40) { // Threshold for swipe
-						if (diff > 0) {
-							// Swipe left (next)
-							const nextIndex = (currentIndex + 1) % totalSlides;
-							updateSlide(nextIndex);
-						} else {
-							// Swipe right (previous)
-							const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-							updateSlide(prevIndex);
-						}
-					}
-				}, { passive: true });
-
-				// Dot click event
-				dots.forEach((dot) => {
-					dot.addEventListener('click', (e) => {
-						const target = e.target as HTMLElement;
-						const index = parseInt(target.getAttribute('data-index') || '0', 10);
-						updateSlide(index);
-					});
+			// Click dot to navigate manually
+			dots.forEach((dot) => {
+				dot.addEventListener('click', (e) => {
+					const target = e.target as HTMLElement;
+					const index = parseInt(target.getAttribute('data-index') || '0', 10);
+					updateCarousel(index);
 				});
 			});
 		</script>

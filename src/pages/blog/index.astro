@@ -1,75 +1,65 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import { getCollection } from 'astro:content';
 
-// Sample blog post data
-const articles = [
-	{
-		title: 'Markdown Style Guide',
-		date: 'Jun 19, 2024',
-		slug: '/blog/markdown-style-guide',
-		images: ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg']
-	},
-	{
-		title: 'First Film Review Entry',
-		date: 'Jul 05, 2024',
-		slug: '/blog/first-review',
-		images: ['/poster4.jpg', '/poster5.jpg', '/poster6.jpg']
-	}
-];
+// Fetch all markdown blog posts dynamically
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Fallback poster collection for posts that don't have multiple gallery images
+const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poster4.jpg', '/poster5.jpg', '/poster6.jpg'];
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={`Read - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style is:global>
+			/* Force dark background across global body & wrapper elements */
+			html, body, main {
+				background-color: #0b132b !important;
+				background: #0b132b linear-gradient(180deg, #0b132b 0%, #1c2541 100%) fixed !important;
+				color: #f0f6fc !important;
+				margin: 0;
+				padding: 0;
+				width: 100%;
+				max-width: 100vw;
+				overflow-x: hidden;
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			}
+		</style>
 		<style>
 			*, *::before, *::after {
 				box-sizing: border-box;
 			}
 
-			html, body {
-				width: 100%;
-				max-width: 100vw;
-				overflow-x: hidden;
-				margin: 0;
-				padding: 0;
-				/* Cinematic Ambient Dark Background */
-				background: #0b132b linear-gradient(180deg, #0b132b 0%, #1c2541 100%) fixed;
-				color: #f0f6fc;
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-				-webkit-font-smoothing: antialiased;
-			}
-
 			.read-container {
 				width: 100%;
-				max-width: 900px;
+				max-width: 850px;
 				margin: 0 auto;
-				padding: 1.5rem 1rem 3rem 1rem;
+				padding: 2rem 1rem 4rem 1rem;
 			}
 
 			.articles-grid {
 				display: flex;
 				flex-direction: column;
-				gap: 2.5rem;
+				gap: 3rem;
 				width: 100%;
 			}
 
-			/* Glassmorphism Cinematic Card */
 			.article-card {
 				width: 100%;
-				background: rgba(15, 23, 42, 0.75);
+				background: rgba(15, 23, 42, 0.85);
 				border: 1px solid rgba(255, 255, 255, 0.1);
 				border-radius: 16px;
-				padding: 1rem;
+				padding: 1.25rem;
 				box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
-				backdrop-filter: blur(10px);
-				-webkit-backdrop-filter: blur(10px);
 			}
 
-			/* Carousel Outer Container */
 			.carousel-wrapper {
 				position: relative;
 				width: 100%;
@@ -89,19 +79,17 @@ const articles = [
 				min-width: 100%;
 				width: 100%;
 				display: block;
-				text-decoration: none;
 				flex-shrink: 0;
 			}
 
 			.carousel-slide {
 				width: 100%;
-				height: auto;
-				aspect-ratio: 16 / 9; /* Landscape ratio on desktop */
+				aspect-ratio: 16 / 9;
 				object-fit: cover;
 				display: block;
+				border-radius: 12px;
 			}
 
-			/* Navigation Dots */
 			.carousel-dots {
 				display: flex;
 				justify-content: center;
@@ -121,63 +109,46 @@ const articles = [
 
 			.dot.active {
 				background-color: #58a6ff;
-				width: 20px;
+				width: 22px;
 				border-radius: 6px;
 				box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
 			}
 
-			/* High-Contrast Typography */
 			.article-info {
 				text-align: center;
-				padding: 1rem 0.5rem 0.5rem 0.5rem;
+				padding-top: 1.2rem;
 			}
 
 			.article-title {
-				font-size: 1.6rem;
+				font-size: 1.75rem;
 				font-weight: 700;
-				line-height: 1.3;
-				margin: 0 0 0.4rem 0;
+				margin: 0 0 0.5rem 0;
 			}
 
 			.article-title a {
-				color: #ffffff;
+				color: #ffffff !important;
 				text-decoration: none;
-				transition: color 0.2s ease;
 			}
 
 			.article-title a:hover {
-				color: #58a6ff;
+				color: #58a6ff !important;
 			}
 
 			.article-date {
 				font-size: 0.9rem;
-				color: #8b949e;
-				font-weight: 500;
+				color: #8b949e !important;
 				margin: 0;
-				letter-spacing: 0.5px;
 			}
 
-			/* Mobile Optimizations */
 			@media (max-width: 640px) {
 				.read-container {
 					padding: 1rem 0.75rem 2rem 0.75rem;
 				}
-
-				.article-card {
-					padding: 0.75rem;
-					border-radius: 12px;
-				}
-
 				.carousel-slide {
-					aspect-ratio: 4 / 3; /* Optimized height for mobile screens */
+					aspect-ratio: 4 / 3;
 				}
-
 				.article-title {
-					font-size: 1.25rem;
-				}
-
-				.article-date {
-					font-size: 0.825rem;
+					font-size: 1.3rem;
 				}
 			}
 		</style>
@@ -187,49 +158,59 @@ const articles = [
 
 		<main class="read-container">
 			<div class="articles-grid">
-				{articles.map((article, articleIdx) => (
-					<article class="article-card">
-						<!-- Single-Image Responsive Carousel -->
-						<div class="carousel-wrapper">
-							<div class="carousel-track" id={`track-${articleIdx}`}>
-								{article.images.map((imgSrc, imgIdx) => (
-									<a href={article.slug} class="carousel-slide-link">
-										<img 
-											src={imgSrc} 
-											alt={`${article.title} slide ${imgIdx + 1}`} 
-											class="carousel-slide" 
-											loading={articleIdx === 0 ? "eager" : "lazy"}
-										/>
-									</a>
+				{posts.map((post, articleIdx) => {
+					// Use post heroImage or fallback to sidebar posters for slide demo
+					const slideImages = [
+						post.data.heroImage || fallbackPosters[articleIdx % fallbackPosters.length],
+						fallbackPosters[(articleIdx + 1) % fallbackPosters.length],
+						fallbackPosters[(articleIdx + 2) % fallbackPosters.length]
+					];
+
+					return (
+						<article class="article-card">
+							<div class="carousel-wrapper">
+								<div class="carousel-track" id={`track-${articleIdx}`}>
+									{slideImages.map((imgSrc, imgIdx) => (
+										<a href={`/blog/${post.slug}/`} class="carousel-slide-link">
+											<img 
+												src={imgSrc} 
+												alt={`${post.data.title} slide ${imgIdx + 1}`} 
+												class="carousel-slide" 
+											/>
+										</a>
+									))}
+								</div>
+							</div>
+
+							<div class="carousel-dots" id={`dots-${articleIdx}`}>
+								{slideImages.map((_, imgIdx) => (
+									<span 
+										class={`dot ${imgIdx === 0 ? 'active' : ''}`} 
+										data-index={imgIdx}
+									></span>
 								))}
 							</div>
-						</div>
 
-						<div class="carousel-dots" id={`dots-${articleIdx}`}>
-							{article.images.map((_, imgIdx) => (
-								<span 
-									class={`dot ${imgIdx === 0 ? 'active' : ''}`} 
-									data-article={articleIdx} 
-									data-index={imgIdx}
-								></span>
-							))}
-						</div>
-
-						<!-- Article Title & Date -->
-						<div class="article-info">
-							<h2 class="article-title">
-								<a href={article.slug}>{article.title}</a>
-							</h2>
-							<p class="article-date">{article.date}</p>
-						</div>
-					</article>
-				))}
+							<div class="article-info">
+								<h2 class="article-title">
+									<a href={`/blog/${post.slug}/`}>{post.data.title}</a>
+								</h2>
+								<p class="article-date">
+									{post.data.pubDate.toLocaleDateString('en-us', {
+										year: 'numeric',
+										month: 'short',
+										day: 'numeric',
+									})}
+								</p>
+							</div>
+						</article>
+					);
+				})}
 			</div>
 		</main>
 
 		<Footer />
 
-		<!-- Client-Side Touch & Auto-Slide Script -->
 		<script>
 			document.querySelectorAll('.article-card').forEach((card, articleIdx) => {
 				const track = document.getElementById(`track-${articleIdx}`) as HTMLElement;
@@ -239,45 +220,19 @@ const articles = [
 
 				function updateSlide(index: number) {
 					currentIndex = index;
-					track.style.transform = `translateX(-${currentIndex * 100}%)`;
-
+					if (track) {
+						track.style.transform = `translateX(-${currentIndex * 100}%)`;
+					}
 					dots.forEach((dot, i) => {
 						dot.classList.toggle('active', i === currentIndex);
 					});
 				}
 
-				// Automatic transition every 4 seconds
 				setInterval(() => {
 					const nextIndex = (currentIndex + 1) % totalSlides;
 					updateSlide(nextIndex);
 				}, 4000);
 
-				// Touch Navigation for Mobile Devices
-				let startX = 0;
-				let endX = 0;
-
-				track.addEventListener('touchstart', (e) => {
-					startX = e.touches[0].clientX;
-				}, { passive: true });
-
-				track.addEventListener('touchend', (e) => {
-					endX = e.changedTouches[0].clientX;
-					const diff = startX - endX;
-
-					if (Math.abs(diff) > 40) { // Threshold for swipe
-						if (diff > 0) {
-							// Swipe left (next)
-							const nextIndex = (currentIndex + 1) % totalSlides;
-							updateSlide(nextIndex);
-						} else {
-							// Swipe right (previous)
-							const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-							updateSlide(prevIndex);
-						}
-					}
-				}, { passive: true });
-
-				// Dot click event
 				dots.forEach((dot) => {
 					dot.addEventListener('click', (e) => {
 						const target = e.target as HTMLElement;
