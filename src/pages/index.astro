@@ -71,7 +71,7 @@ const images = [
 			p, li { font-size: 1.05rem; line-height: 1.6; color: #e6edf3; }
 			a { color: #58a6ff; }
 
-			/* Horizontal Image Carousel Component */
+			/* Single-Image Carousel Component */
 			.carousel-section {
 				margin-top: 2rem;
 				width: 100%;
@@ -80,6 +80,8 @@ const images = [
 			.carousel-wrapper {
 				position: relative;
 				width: 100%;
+				max-width: 450px; /* Constrains poster width for single item view */
+				margin: 0 auto;
 				overflow: hidden;
 				border-radius: 12px;
 			}
@@ -87,13 +89,13 @@ const images = [
 			.carousel-track {
 				display: flex;
 				transition: transform 0.5s ease-in-out;
-				gap: 12px;
+				width: 100%;
 			}
 
 			.carousel-slide {
-				min-width: calc(33.333% - 8px); /* Displays 3 posters at a time */
-				height: 260px;
-				border-radius: 10px;
+				min-width: 100%; /* Displays exactly ONE image at a time */
+				height: 380px;
+				border-radius: 12px;
 				object-fit: cover;
 			}
 
@@ -111,7 +113,7 @@ const images = [
 				border-radius: 50%;
 				background-color: rgba(255, 255, 255, 0.3);
 				cursor: pointer;
-				transition: background-color 0.3s;
+				transition: all 0.3s ease;
 			}
 
 			.dot.active {
@@ -127,9 +129,6 @@ const images = [
 				}
 				.sidebar {
 					display: none;
-				}
-				.carousel-slide {
-					min-width: calc(50% - 6px); /* 2 posters visible on mobile */
 				}
 			}
 		</style>
@@ -166,7 +165,7 @@ const images = [
 					and watch full in-depth video analysis on our YouTube channel.
 				</p>
 
-				<!-- MOVING IMAGE CAROUSEL AREA -->
+				<!-- SINGLE MOVING IMAGE CAROUSEL AREA -->
 				<div class="carousel-section">
 					<div class="carousel-wrapper">
 						<div class="carousel-track" id="carouselTrack">
@@ -193,7 +192,7 @@ const images = [
 
 		<Footer />
 
-		<!-- Client-Side Script to Drive Auto-Slider Animation -->
+		<!-- Client-Side Script to Drive Single-Image Slider -->
 		<script>
 			const track = document.getElementById('carouselTrack') as HTMLElement;
 			const dots = document.querySelectorAll('.dot');
@@ -202,18 +201,17 @@ const images = [
 
 			function updateCarousel(index: number) {
 				currentIndex = index;
-				// Calculates width percentage shift per slide
-				const slideWidth = (track.children[0] as HTMLElement).getBoundingClientRect().width + 12;
-				track.style.transform = `translateX(-${currentIndex * slideWidth}px)`;
+				// Moves track by 100% per slide to show one image at a time
+				track.style.transform = `translateX(-${currentIndex * 100}%)`;
 
 				dots.forEach((dot, i) => {
 					dot.classList.toggle('active', i === currentIndex);
 				});
 			}
 
-			// Auto scroll every 3 seconds
+			// Auto scroll every 3 seconds across all images
 			setInterval(() => {
-				const nextIndex = (currentIndex + 1) % (totalSlides - 2); // Loop back when reaching end
+				const nextIndex = (currentIndex + 1) % totalSlides;
 				updateCarousel(nextIndex);
 			}, 3000);
 
