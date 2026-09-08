@@ -5,13 +5,26 @@ import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 
-// Fetch all markdown blog posts dynamically
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
+let posts = [];
+try {
+	posts = (await getCollection('blog')).sort(
+		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	);
+} catch (e) {
+	posts = [];
+}
 
-// Fallback poster collection for posts that don't have multiple gallery images
-const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poster4.jpg', '/poster5.jpg', '/poster6.jpg'];
+const ITEMS_PER_PAGE = 50;
+const paginatedPosts = posts.slice(0, ITEMS_PER_PAGE);
+
+// 5 images array for the featured top carousel
+const firstPostCarouselImages = [
+	'/poster1.jpg',
+	'/poster2.jpg',
+	'/poster3.jpg',
+	'/poster4.jpg',
+	'/poster5.jpg'
+];
 ---
 
 <!doctype html>
@@ -19,11 +32,10 @@ const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poste
 	<head>
 		<BaseHead title={`Read - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style is:global>
-			/* Force dark background across global body & wrapper elements */
 			html, body, main {
-				background-color: #0b132b !important;
-				background: #0b132b linear-gradient(180deg, #0b132b 0%, #1c2541 100%) fixed !important;
-				color: #f0f6fc !important;
+				background-color: #050a18 !important;
+				background: #050a18 linear-gradient(180deg, #050a18 0%, #0b132b 100%) fixed !important;
+				color: #ffffff !important;
 				margin: 0;
 				padding: 0;
 				width: 100%;
@@ -39,33 +51,28 @@ const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poste
 
 			.read-container {
 				width: 100%;
-				max-width: 850px;
+				max-width: 900px;
 				margin: 0 auto;
 				padding: 2rem 1rem 4rem 1rem;
 			}
 
-			.articles-grid {
-				display: flex;
-				flex-direction: column;
-				gap: 3rem;
-				width: 100%;
-			}
-
-			.article-card {
+			/* FIRST ITEM: 5-Image Carousel Layout */
+			.featured-card {
 				width: 100%;
 				background: rgba(15, 23, 42, 0.85);
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				border-radius: 16px;
+				border: 1px solid rgba(88, 166, 255, 0.3);
+				border-radius: 20px;
 				padding: 1.25rem;
-				box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+				margin-bottom: 2.5rem;
+				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 			}
 
 			.carousel-wrapper {
 				position: relative;
 				width: 100%;
 				overflow: hidden;
-				border-radius: 12px;
-				background-color: #000;
+				border-radius: 14px;
+				background-color: #000000;
 			}
 
 			.carousel-track {
@@ -87,7 +94,7 @@ const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poste
 				aspect-ratio: 16 / 9;
 				object-fit: cover;
 				display: block;
-				border-radius: 12px;
+				border-radius: 14px;
 			}
 
 			.carousel-dots {
@@ -109,46 +116,86 @@ const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poste
 
 			.dot.active {
 				background-color: #58a6ff;
-				width: 22px;
+				width: 24px;
 				border-radius: 6px;
-				box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
+				box-shadow: 0 0 10px rgba(88, 166, 255, 0.7);
 			}
 
 			.article-info {
 				text-align: center;
-				padding-top: 1.2rem;
+				padding: 1.2rem 0.5rem 0.5rem 0.5rem;
 			}
 
 			.article-title {
-				font-size: 1.75rem;
+				font-size: 1.8rem;
 				font-weight: 700;
 				margin: 0 0 0.5rem 0;
 			}
 
 			.article-title a {
-				color: #ffffff !important;
+				color: #58a6ff !important;
 				text-decoration: none;
 			}
 
-			.article-title a:hover {
-				color: #58a6ff !important;
+			/* REMAINING 50 SMALL BLOCKS GRID */
+			.reviews-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+				gap: 1.25rem;
+				width: 100%;
 			}
 
-			.article-date {
-				font-size: 0.9rem;
-				color: #8b949e !important;
+			.short-review-card {
+				background: rgba(15, 23, 42, 0.7);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 14px;
+				overflow: hidden;
+				transition: transform 0.2s ease, border-color 0.2s ease;
+				display: flex;
+				flex-direction: column;
+				text-decoration: none;
+			}
+
+			.short-review-card:hover {
+				transform: translateY(-4px);
+				border-color: #58a6ff;
+			}
+
+			.card-thumb {
+				width: 100%;
+				aspect-ratio: 16 / 9;
+				object-fit: cover;
+				display: block;
+			}
+
+			.card-body {
+				padding: 1rem;
+				text-align: center;
+			}
+
+			.review-heading {
+				font-size: 1.05rem;
+				font-weight: 600;
+				color: #ffffff;
+				margin: 0 0 0.4rem 0;
+			}
+
+			.review-date {
+				font-size: 0.8rem;
+				color: #8b949e;
 				margin: 0;
 			}
 
 			@media (max-width: 640px) {
-				.read-container {
-					padding: 1rem 0.75rem 2rem 0.75rem;
+				.reviews-grid {
+					grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+					gap: 0.85rem;
 				}
 				.carousel-slide {
 					aspect-ratio: 4 / 3;
 				}
 				.article-title {
-					font-size: 1.3rem;
+					font-size: 1.35rem;
 				}
 			}
 		</style>
@@ -157,81 +204,92 @@ const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poste
 		<Header />
 
 		<main class="read-container">
-			<div class="articles-grid">
-				{posts.map((post, articleIdx) => {
-					// Use post heroImage or fallback to sidebar posters for slide demo
-					const slideImages = [
-						post.data.heroImage || fallbackPosters[articleIdx % fallbackPosters.length],
-						fallbackPosters[(articleIdx + 1) % fallbackPosters.length],
-						fallbackPosters[(articleIdx + 2) % fallbackPosters.length]
-					];
+			{paginatedPosts.length > 0 && (
+				<article class="featured-card">
+					<div class="carousel-wrapper">
+						<div class="carousel-track" id="featuredTrack">
+							{firstPostCarouselImages.map((imgSrc, index) => (
+								<a href={`/blog/${paginatedPosts[0].slug}/`} class="carousel-slide-link">
+									<img 
+										src={imgSrc} 
+										alt={`Featured slide ${index + 1}`} 
+										class="carousel-slide" 
+									/>
+								</a>
+							))}
+						</div>
+					</div>
 
-					return (
-						<article class="article-card">
-							<div class="carousel-wrapper">
-								<div class="carousel-track" id={`track-${articleIdx}`}>
-									{slideImages.map((imgSrc, imgIdx) => (
-										<a href={`/blog/${post.slug}/`} class="carousel-slide-link">
-											<img 
-												src={imgSrc} 
-												alt={`${post.data.title} slide ${imgIdx + 1}`} 
-												class="carousel-slide" 
-											/>
-										</a>
-									))}
-								</div>
-							</div>
+					<div class="carousel-dots" id="featuredDots">
+						{firstPostCarouselImages.map((_, index) => (
+							<span 
+								class={`dot ${index === 0 ? 'active' : ''}`} 
+								data-index={index}
+							></span>
+						))}
+					</div>
 
-							<div class="carousel-dots" id={`dots-${articleIdx}`}>
-								{slideImages.map((_, imgIdx) => (
-									<span 
-										class={`dot ${imgIdx === 0 ? 'active' : ''}`} 
-										data-index={imgIdx}
-									></span>
-								))}
-							</div>
+					<div class="article-info">
+						<h2 class="article-title">
+							<a href={`/blog/${paginatedPosts[0].slug}/`}>{paginatedPosts[0].data.title} - Review</a>
+						</h2>
+						<p class="review-date">
+							{paginatedPosts[0].data.pubDate.toLocaleDateString('en-us', {
+								year: 'numeric',
+								month: 'short',
+								day: 'numeric',
+							})}
+						</p>
+					</div>
+				</article>
+			)}
 
-							<div class="article-info">
-								<h2 class="article-title">
-									<a href={`/blog/${post.slug}/`}>{post.data.title}</a>
-								</h2>
-								<p class="article-date">
-									{post.data.pubDate.toLocaleDateString('en-us', {
-										year: 'numeric',
-										month: 'short',
-										day: 'numeric',
-									})}
-								</p>
-							</div>
-						</article>
-					);
-				})}
+			<div class="reviews-grid">
+				{paginatedPosts.slice(1).map((post) => (
+					<a href={`/blog/${post.slug}/`} class="short-review-card">
+						<img 
+							src={post.data.heroImage || '/poster1.jpg'} 
+							alt={post.data.title} 
+							class="card-thumb" 
+						/>
+						<div class="card-body">
+							<h3 class="review-heading">{post.data.title} - Review</h3>
+							<p class="review-date">
+								{post.data.pubDate.toLocaleDateString('en-us', {
+									year: 'numeric',
+									month: 'short',
+									day: 'numeric',
+								})}
+							</p>
+						</div>
+					</a>
+				))}
 			</div>
 		</main>
 
 		<Footer />
 
 		<script>
-			document.querySelectorAll('.article-card').forEach((card, articleIdx) => {
-				const track = document.getElementById(`track-${articleIdx}`) as HTMLElement;
-				const dots = card.querySelectorAll('.dot');
-				const totalSlides = dots.length;
-				let currentIndex = 0;
+			const track = document.getElementById('featuredTrack') as HTMLElement;
+			const dots = document.querySelectorAll('#featuredDots .dot');
+			const totalSlides = dots.length;
+			let currentIndex = 0;
 
-				function updateSlide(index: number) {
-					currentIndex = index;
-					if (track) {
-						track.style.transform = `translateX(-${currentIndex * 100}%)`;
-					}
-					dots.forEach((dot, i) => {
-						dot.classList.toggle('active', i === currentIndex);
-					});
+			function updateSlide(index: number) {
+				currentIndex = index;
+				if (track) {
+					track.style.transform = `translateX(-${currentIndex * 100}%)`;
 				}
+				dots.forEach((dot, i) => {
+					dot.classList.toggle('active', i === currentIndex);
+				});
+			}
 
+			if (totalSlides > 0) {
 				setInterval(() => {
 					const nextIndex = (currentIndex + 1) % totalSlides;
 					updateSlide(nextIndex);
-				}, 4000);
+				}, 3500);
 
 				dots.forEach((dot) => {
 					dot.addEventListener('click', (e) => {
@@ -240,7 +298,7 @@ const fallbackPosters = ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg', '/poste
 						updateSlide(index);
 					});
 				});
-			});
+			}
 		</script>
 	</body>
 </html>
