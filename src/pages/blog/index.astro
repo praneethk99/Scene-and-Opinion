@@ -4,301 +4,237 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
+import FormattedDate from '../../components/FormattedDate.astro';
 
-let posts = [];
-try {
-	posts = (await getCollection('blog')).sort(
-		(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-	);
-} catch (e) {
-	posts = [];
-}
+// Fetch all blog posts dynamically from your Astro Content Collection
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
 
-const ITEMS_PER_PAGE = 50;
-const paginatedPosts = posts.slice(0, ITEMS_PER_PAGE);
-
-// 5 images array for the featured top carousel
-const firstPostCarouselImages = [
-	'/poster1.jpg',
-	'/poster2.jpg',
-	'/poster3.jpg',
-	'/poster4.jpg',
-	'/poster5.jpg'
+// 6 Carousel Posters Data (Replace image and link URLs with your own)
+const featuredPosters = [
+  { 
+    title: "Jana Nayagan", 
+    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Jana+Nayagan", 
+    link: "/blog/jana-nayagan" 
+  },
+  { 
+    title: "Lenin", 
+    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Lenin", 
+    link: "/blog/lenin" 
+  },
+  { 
+    title: "Evil Dead Burn", 
+    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Evil+Dead", 
+    link: "/blog/evil-dead-burn" 
+  },
+  { 
+    title: "Mukhbir", 
+    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Mukhbir", 
+    link: "/blog/mukhbir" 
+  },
+  { 
+    title: "Dark Light", 
+    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Dark+Light", 
+    link: "/blog/dark-light" 
+  },
+  { 
+    title: "Vanda Devullu", 
+    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Vanda+Devullu", 
+    link: "/blog/vanda-devullu" 
+  }
 ];
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Read - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style is:global>
-			html, body, main {
-				background-color: #050a18 !important;
-				background: #050a18 linear-gradient(180deg, #050a18 0%, #0b132b 100%) fixed !important;
-				color: #ffffff !important;
-				margin: 0;
-				padding: 0;
-				width: 100%;
-				max-width: 100vw;
-				overflow-x: hidden;
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-			}
-		</style>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main class="read-container">
+			
+			<!-- 6-IMAGE CAROUSEL SECTION -->
+			<section class="carousel-wrapper">
+				<button class="nav-btn prev" id="scrollLeft" aria-label="Scroll Left">&#10094;</button>
+
+				<div class="carousel-track" id="carouselTrack">
+					{featuredPosters.map((poster) => (
+						<a href={poster.link} class="carousel-card" title={poster.title}>
+							<img src={poster.image} alt={poster.title} loading="lazy" />
+						</a>
+					))}
+				</div>
+
+				<button class="nav-btn next" id="scrollRight" aria-label="Scroll Right">&#10095;</button>
+			</section>
+
+			<!-- 4 ROWS OF READ POSTS -->
+			<section class="posts-grid">
+				{posts.slice(0, 4).map((post) => (
+					<a href={`/blog/${post.slug}/`} class="post-card">
+						<div class="post-image-container">
+							<img src={post.data.heroImage} alt={post.data.title} class="post-image" loading="lazy" />
+						</div>
+						<h2 class="post-title">{post.data.title}</h2>
+						<span class="post-date">
+							<FormattedDate date={post.data.pubDate} />
+						</span>
+					</a>
+				))}
+			</section>
+
+		</main>
+		<Footer />
+
+		<script>
+			const track = document.getElementById('carouselTrack');
+			const leftBtn = document.getElementById('scrollLeft');
+			const rightBtn = document.getElementById('scrollRight');
+
+			leftBtn?.addEventListener('click', () => {
+				track?.scrollBy({ left: -220, behavior: 'smooth' });
+			});
+
+			rightBtn?.addEventListener('click', () => {
+				track?.scrollBy({ left: 220, behavior: 'smooth' });
+			});
+		</script>
+
 		<style>
-			*, *::before, *::after {
-				box-sizing: border-box;
-			}
-
+			/* Centered main container matching Scene and Opinion layout */
 			.read-container {
-				width: 100%;
-				max-width: 900px;
+				max-width: 680px;
 				margin: 0 auto;
-				padding: 2rem 1rem 4rem 1rem;
+				padding: 2rem 1rem;
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
 			}
 
-			/* FIRST ITEM: 5-Image Carousel Layout */
-			.featured-card {
-				width: 100%;
-				background: rgba(15, 23, 42, 0.85);
-				border: 1px solid rgba(88, 166, 255, 0.3);
-				border-radius: 20px;
-				padding: 1.25rem;
-				margin-bottom: 2.5rem;
-				box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-			}
-
+			/* ---------------- 6 CAROUSEL POSTERS ---------------- */
 			.carousel-wrapper {
 				position: relative;
 				width: 100%;
-				overflow: hidden;
-				border-radius: 14px;
-				background-color: #000000;
+				background: #0d1527;
+				border: 1px solid #1a2642;
+				border-radius: 12px;
+				padding: 0.75rem;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 			}
 
 			.carousel-track {
 				display: flex;
-				width: 100%;
-				transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-				will-change: transform;
+				gap: 0.65rem;
+				overflow-x: auto;
+				scroll-behavior: smooth;
+				scrollbar-width: none; /* Firefox */
 			}
 
-			.carousel-slide-link {
-				min-width: 100%;
-				width: 100%;
-				display: block;
-				flex-shrink: 0;
+			.carousel-track::-webkit-scrollbar {
+				display: none; /* Chrome & Safari */
 			}
 
-			.carousel-slide {
-				width: 100%;
-				aspect-ratio: 16 / 9;
-				object-fit: cover;
-				display: block;
-				border-radius: 14px;
-			}
-
-			.carousel-dots {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				gap: 8px;
-				margin-top: 1rem;
-			}
-
-			.dot {
-				width: 8px;
-				height: 8px;
-				border-radius: 50%;
-				background-color: rgba(255, 255, 255, 0.3);
-				cursor: pointer;
-				transition: all 0.3s ease;
-			}
-
-			.dot.active {
-				background-color: #58a6ff;
-				width: 24px;
+			.carousel-card {
+				flex: 0 0 calc((100% - (5 * 0.65rem)) / 6);
+				min-width: 85px;
+				aspect-ratio: 2 / 3;
 				border-radius: 6px;
-				box-shadow: 0 0 10px rgba(88, 166, 255, 0.7);
-			}
-
-			.article-info {
-				text-align: center;
-				padding: 1.2rem 0.5rem 0.5rem 0.5rem;
-			}
-
-			.article-title {
-				font-size: 1.8rem;
-				font-weight: 700;
-				margin: 0 0 0.5rem 0;
-			}
-
-			.article-title a {
-				color: #58a6ff !important;
-				text-decoration: none;
-			}
-
-			/* REMAINING 50 SMALL BLOCKS GRID */
-			.reviews-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-				gap: 1.25rem;
-				width: 100%;
-			}
-
-			.short-review-card {
-				background: rgba(15, 23, 42, 0.7);
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				border-radius: 14px;
 				overflow: hidden;
-				transition: transform 0.2s ease, border-color 0.2s ease;
+				border: 1px solid #1f2d4e;
+				transition: transform 0.25s ease, border-color 0.25s ease;
+			}
+
+			.carousel-card:hover {
+				transform: translateY(-4px) scale(1.03);
+				border-color: #3b82f6;
+			}
+
+			.carousel-card img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.nav-btn {
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				background: rgba(0, 0, 0, 0.85);
+				color: #fff;
+				border: 1px solid #334155;
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 10;
+				font-size: 0.8rem;
+				transition: background 0.2s, transform 0.2s;
+			}
+
+			.nav-btn:hover {
+				background: rgba(0, 0, 0, 1);
+				transform: translateY(-50%) scale(1.1);
+			}
+
+			.nav-btn.prev { left: -10px; }
+			.nav-btn.next { right: -10px; }
+
+			/* ---------------- 4 POST ROWS ---------------- */
+			.posts-grid {
 				display: flex;
 				flex-direction: column;
+				gap: 1.5rem;
+			}
+
+			.post-card {
+				background: #0d1527;
+				border: 1px solid #1a2642;
+				border-radius: 12px;
+				padding: 1.25rem;
 				text-decoration: none;
-			}
-
-			.short-review-card:hover {
-				transform: translateY(-4px);
-				border-color: #58a6ff;
-			}
-
-			.card-thumb {
-				width: 100%;
-				aspect-ratio: 16 / 9;
-				object-fit: cover;
-				display: block;
-			}
-
-			.card-body {
-				padding: 1rem;
-				text-align: center;
-			}
-
-			.review-heading {
-				font-size: 1.05rem;
-				font-weight: 600;
 				color: #ffffff;
-				margin: 0 0 0.4rem 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				transition: border-color 0.2s, transform 0.2s;
 			}
 
-			.review-date {
+			.post-card:hover {
+				border-color: #3b82f6;
+				transform: translateY(-2px);
+			}
+
+			.post-image-container {
+				width: 100%;
+				height: 240px;
+				border-radius: 8px;
+				overflow: hidden;
+				background-color: #152037;
+				margin-bottom: 0.75rem;
+			}
+
+			.post-image {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.post-title {
+				font-size: 1.1rem;
+				font-weight: 600;
+				margin: 0.25rem 0;
+			}
+
+			.post-date {
 				font-size: 0.8rem;
-				color: #8b949e;
-				margin: 0;
-			}
-
-			@media (max-width: 640px) {
-				.reviews-grid {
-					grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-					gap: 0.85rem;
-				}
-				.carousel-slide {
-					aspect-ratio: 4 / 3;
-				}
-				.article-title {
-					font-size: 1.35rem;
-				}
+				color: #94a3b8;
 			}
 		</style>
-	</head>
-	<body>
-		<Header />
-
-		<main class="read-container">
-			{paginatedPosts.length > 0 && (
-				<article class="featured-card">
-					<div class="carousel-wrapper">
-						<div class="carousel-track" id="featuredTrack">
-							{firstPostCarouselImages.map((imgSrc, index) => (
-								<a href={`/blog/${paginatedPosts[0].slug}/`} class="carousel-slide-link">
-									<img 
-										src={imgSrc} 
-										alt={`Featured slide ${index + 1}`} 
-										class="carousel-slide" 
-									/>
-								</a>
-							))}
-						</div>
-					</div>
-
-					<div class="carousel-dots" id="featuredDots">
-						{firstPostCarouselImages.map((_, index) => (
-							<span 
-								class={`dot ${index === 0 ? 'active' : ''}`} 
-								data-index={index}
-							></span>
-						))}
-					</div>
-
-					<div class="article-info">
-						<h2 class="article-title">
-							<a href={`/blog/${paginatedPosts[0].slug}/`}>{paginatedPosts[0].data.title} - Review</a>
-						</h2>
-						<p class="review-date">
-							{paginatedPosts[0].data.pubDate.toLocaleDateString('en-us', {
-								year: 'numeric',
-								month: 'short',
-								day: 'numeric',
-							})}
-						</p>
-					</div>
-				</article>
-			)}
-
-			<div class="reviews-grid">
-				{paginatedPosts.slice(1).map((post) => (
-					<a href={`/blog/${post.slug}/`} class="short-review-card">
-						<img 
-							src={post.data.heroImage || '/poster1.jpg'} 
-							alt={post.data.title} 
-							class="card-thumb" 
-						/>
-						<div class="card-body">
-							<h3 class="review-heading">{post.data.title} - Review</h3>
-							<p class="review-date">
-								{post.data.pubDate.toLocaleDateString('en-us', {
-									year: 'numeric',
-									month: 'short',
-									day: 'numeric',
-								})}
-							</p>
-						</div>
-					</a>
-				))}
-			</div>
-		</main>
-
-		<Footer />
-
-		<script>
-			const track = document.getElementById('featuredTrack') as HTMLElement;
-			const dots = document.querySelectorAll('#featuredDots .dot');
-			const totalSlides = dots.length;
-			let currentIndex = 0;
-
-			function updateSlide(index: number) {
-				currentIndex = index;
-				if (track) {
-					track.style.transform = `translateX(-${currentIndex * 100}%)`;
-				}
-				dots.forEach((dot, i) => {
-					dot.classList.toggle('active', i === currentIndex);
-				});
-			}
-
-			if (totalSlides > 0) {
-				setInterval(() => {
-					const nextIndex = (currentIndex + 1) % totalSlides;
-					updateSlide(nextIndex);
-				}, 3500);
-
-				dots.forEach((dot) => {
-					dot.addEventListener('click', (e) => {
-						const target = e.target as HTMLElement;
-						const index = parseInt(target.getAttribute('data-index') || '0', 10);
-						updateSlide(index);
-					});
-				});
-			}
-		</script>
 	</body>
 </html>
