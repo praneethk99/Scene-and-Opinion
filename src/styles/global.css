@@ -2,160 +2,205 @@
   The CSS in this style tag is based off of Bear Blog's default CSS.
   https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+*/
 
 :root {
-	--accent: #2337ff;
-	--accent-dark: #000d8a;
-	--black: 15, 18, 25;
-	--gray: 96, 115, 159;
-	--gray-light: 229, 233, 240;
-	--gray-dark: 34, 41, 57;
-	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
-	--box-shadow:
-		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%),
-		0 16px 32px rgba(var(--gray), 33%);
+  --accent: #4f70ff;
+  --accent-hover: #7b96ff;
+  --bg-primary: #0b132b;
+  --bg-secondary: #030a1c;
+  --text-primary: #ffffff;
+  --text-secondary: #e6edf3;
+  --gray: 96, 115, 159;
+  --gray-light: 229, 233, 240;
+  --gray-dark: 34, 41, 57;
+  --box-shadow:
+    0 2px 6px rgba(0, 0, 0, 25%), 0 8px 24px rgba(0, 0, 0, 33%),
+    0 16px 32px rgba(0, 0, 0, 33%);
 }
 
-body {
-	margin: 0;
-	padding: 0;
-	text-align: left;
-	background-color: #0b132b; /* Ensures dark background across the full page */
-	color: #ffffff;           /* Make text readable on dark background */
-	font-family: system-ui, sans-serif;
-	word-wrap: break-word;
-	overflow-wrap: break-word;
-	font-size: 20px;
-	line-height: 1.7;
+/* Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: system-ui, -apple-system, sans-serif;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-size: 20px;
+  line-height: 1.7;
+}
+
+/* 3-Column Layout Container */
+.page-container {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 800px) 180px;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
 }
 
 main {
-	padding: 1.5rem 1rem;
-	max-width: 800px;
-	width: calc(100% - 2em);
-	margin: 0 auto;
+  padding: 0;
+  width: 100%;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	margin: 0 0 0.5rem 0;
-	color: #ffffff;
-	line-height: 1.2;
+/* Vertical Poster Sidebars */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
 }
 
-/* Prevent huge headline text on narrow mobile viewports */
+.sidebar img {
+  width: 100%;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: var(--box-shadow);
+  transition: transform 0.2s ease-in-out;
+}
+
+.sidebar img:hover {
+  transform: scale(1.04);
+}
+
+/* Typography & Links */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
 h1 {
-	font-size: clamp(1.8rem, 6vw, 2.8rem);
+  font-size: clamp(1.8rem, 6vw, 2.8rem);
 }
 
 h2 {
-	font-size: 2.441em;
+  font-size: 2.441em;
+  color: var(--accent);
 }
 
 h3 {
-	font-size: 1.953em;
+  font-size: 1.953em;
 }
 
 h4 {
-	font-size: 1.563em;
+  font-size: 1.563em;
 }
 
 h5 {
-	font-size: 1.25em;
+  font-size: 1.25em;
 }
 
-strong,
-b {
-	font-weight: 700;
+strong, b {
+  font-weight: 700;
 }
 
 a {
-	color: #4f70ff; /* Adjusted accent color for better contrast on dark backgrounds */
+  color: var(--accent);
 }
 
 a:hover {
-	color: #7b96ff;
+  color: var(--accent-hover);
 }
 
 p {
-	margin-bottom: 1em;
+  margin-bottom: 1em;
+  color: var(--text-secondary);
 }
 
 .prose p {
-	margin-bottom: 2em;
+  margin-bottom: 2em;
+}
+
+/* Assets & Utility Elements */
+img, video, iframe, picture, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+textarea, input {
+  font-size: 16px;
 }
 
 textarea {
-	width: 100%;
-	font-size: 16px;
-}
-
-input {
-	font-size: 16px;
+  width: 100%;
 }
 
 table {
-	width: 100%;
-}
-
-img {
-	max-width: 100%;
-	height: auto;
-	border-radius: 8px;
+  width: 100%;
 }
 
 code {
-	padding: 2px 5px;
-	background-color: rgba(255, 255, 255, 0.1);
-	border-radius: 2px;
-	color: #ffffff;
+  padding: 2px 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  color: var(--text-primary);
 }
 
 pre {
-	padding: 1.5em;
-	border-radius: 8px;
-	background-color: #030a1c;
+  padding: 1.5em;
+  border-radius: 8px;
+  background-color: var(--bg-secondary);
 }
 
 pre > code {
-	all: unset;
+  all: unset;
 }
 
 blockquote {
-	border-left: 4px solid var(--accent);
-	padding: 0 0 0 20px;
-	margin: 0;
-	font-size: 1.333em;
+  border-left: 4px solid var(--accent);
+  padding: 0 0 0 20px;
+  margin: 0;
+  font-size: 1.333em;
 }
 
 hr {
-	border: none;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1024px) {
+  .page-container {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    display: none; /* Auto-hide poster sidebars on tablet and mobile */
+  }
 }
 
 @media (max-width: 720px) {
-	body {
-		font-size: 18px;
-	}
-	main {
-		padding: 1em;
-	}
+  body {
+    font-size: 18px;
+  }
+  .page-container {
+    padding: 1em;
+  }
 }
 
 .sr-only {
-	border: 0;
-	padding: 0;
-	margin: 0;
-	position: absolute !important;
-	height: 1px;
-	width: 1px;
-	overflow: hidden;
-	clip: rect(1px, 1px, 1px, 1px);
-	clip-path: inset(50%);
-	white-space: nowrap;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
