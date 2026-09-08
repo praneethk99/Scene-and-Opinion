@@ -2,7 +2,18 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import InfiniteMarquee from '../components/InfiniteMarquee.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+
+// Poster images array for the scrolling marquee banner
+const marqueePosters = [
+	'/poster1.jpg',
+	'/poster2.jpg',
+	'/poster3.jpg',
+	'/poster4.jpg',
+	'/poster5.jpg',
+	'/poster6.jpg'
+];
 ---
 
 <!doctype html>
@@ -31,7 +42,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				display: block;
 			}
 
-			/* 3-Column Layout Container with Wider Sidebars */
+			/* 3-Column Layout Container */
 			.page-container {
 				display: grid;
 				grid-template-columns: 240px minmax(0, 800px) 240px;
@@ -103,6 +114,14 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				transform: scale(1.04);
 			}
 
+			/* Style integration for the child Marquee component */
+			.main-content :global(.marquee-container) {
+				width: 100%;
+				margin-left: 0;
+				margin-top: 2rem;
+				margin-bottom: 1rem;
+			}
+
 			/* Responsive Breakpoints: Auto-hide sidebars on smaller screens */
 			@media (max-width: 1100px) {
 				.page-container {
@@ -153,6 +172,9 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 					Catch daily takes and quick reviews on our <a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer">Instagram</a> 
 					and watch full in-depth video analysis on our YouTube channel.
 				</p>
+
+				<!-- Infinite Rotating Poster Carousel -->
+				<InfiniteMarquee images={marqueePosters} />
 			</main>
 
 			<!-- Right Vertical Sidebar -->

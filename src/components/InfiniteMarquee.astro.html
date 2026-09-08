@@ -1,0 +1,66 @@
+---
+interface Props {
+  images: string[];
+}
+const { images } = Astro.props;
+
+// Duplicate the array once to create the seamless infinite loop
+const marqueeImages = [...images, ...images];
+---
+
+<div class="marquee-container">
+  <div class="marquee-content">
+    {marqueeImages.map((src) => (
+      <img src={src} alt="Scrolling poster" class="marquee-image" />
+    ))}
+  </div>
+</div>
+
+<style>
+  .marquee-container {
+    width: 100vw; /* Spans the full viewport width */
+    margin-left: calc(-50vw + 50%); /* Centers the absolute-width container */
+    overflow: hidden; /* Hides images outside the view */
+    background-color: transparent;
+    padding: 1rem 0;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .marquee-content {
+    display: flex;
+    gap: 1rem;
+    width: fit-content;
+    animation: marquee-scroll 25s linear infinite; /* Adjust time for speed */
+  }
+
+  .marquee-image {
+    width: 160px; /* Adjust image width */
+    height: 240px; /* Adjust image height */
+    aspect-ratio: 2 / 3;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Define the scroll animation */
+  @keyframes marquee-scroll {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%); /* Scroll exactly half the duplicated width */
+    }
+  }
+
+  /* Reduce animation speed on smaller screens to remain watchable */
+  @media (max-width: 600px) {
+    .marquee-content {
+      animation-duration: 35s;
+    }
+    .marquee-image {
+      width: 120px;
+      height: 180px;
+    }
+  }
+</style>
