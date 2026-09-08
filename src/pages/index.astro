@@ -31,18 +31,18 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				display: block;
 			}
 
-			/* 3-Column Layout Container */
+			/* 3-Column Layout Container with Wider Sidebars */
 			.page-container {
 				display: grid;
-				grid-template-columns: 180px minmax(0, 800px) 180px;
+				grid-template-columns: 240px minmax(0, 800px) 240px;
 				justify-content: center;
-				gap: 2rem;
-				max-width: 1300px;
+				gap: 2.5rem;
+				max-width: 1400px;
 				margin: 0 auto;
 				padding: clamp(1rem, 3vw, 2.5rem);
 			}
 
-			/* Main Content Sizing & Fluid Typography */
+			/* Main Content Typography & Spacing */
 			.main-content {
 				width: 100%;
 			}
@@ -81,7 +81,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				text-decoration: underline;
 			}
 
-			/* Vertical Sidebars */
+			/* Vertical Sidebars with Equal Poster Sizes */
 			.sidebar {
 				display: flex;
 				flex-direction: column;
@@ -91,8 +91,10 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 			.sidebar img {
 				width: 100%;
-				border-radius: 12px;
+				height: 320px;
+				aspect-ratio: 3 / 4;
 				object-fit: cover;
+				border-radius: 12px;
 				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 				transition: transform 0.2s ease-in-out;
 			}
@@ -101,8 +103,8 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 				transform: scale(1.04);
 			}
 
-			/* Responsive Breakpoints: Hide sidebars on smaller screens */
-			@media (max-width: 1024px) {
+			/* Responsive Breakpoints: Auto-hide sidebars on smaller screens */
+			@media (max-width: 1100px) {
 				.page-container {
 					grid-template-columns: 1fr;
 				}
