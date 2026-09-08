@@ -1,114 +1,291 @@
 ---
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import BaseHead from '../../components/BaseHead.astro';
-import Footer from '../../components/Footer.astro';
-import FormattedDate from '../../components/FormattedDate.astro';
-import Header from '../../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+// Sample blog post data
+const articles = [
+	{
+		title: 'Markdown Style Guide',
+		date: 'Jun 19, 2024',
+		slug: '/blog/markdown-style-guide',
+		images: ['/poster1.jpg', '/poster2.jpg', '/poster3.jpg']
+	},
+	{
+		title: 'First Film Review Entry',
+		date: 'Jul 05, 2024',
+		slug: '/blog/first-review',
+		images: ['/poster4.jpg', '/poster5.jpg', '/poster6.jpg']
+	}
+];
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<BaseHead title={`Read - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			main {
-				width: 960px;
+			*, *::before, *::after {
+				box-sizing: border-box;
 			}
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
+
+			html, body {
+				width: 100%;
+				max-width: 100vw;
+				overflow-x: hidden;
 				margin: 0;
 				padding: 0;
+				/* Cinematic Ambient Dark Background */
+				background: #0b132b linear-gradient(180deg, #0b132b 0%, #1c2541 100%) fixed;
+				color: #f0f6fc;
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+				-webkit-font-smoothing: antialiased;
 			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
+
+			.read-container {
 				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
+				max-width: 900px;
+				margin: 0 auto;
+				padding: 1.5rem 1rem 3rem 1rem;
 			}
-			ul li:first-child img {
+
+			.articles-grid {
+				display: flex;
+				flex-direction: column;
+				gap: 2.5rem;
 				width: 100%;
 			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
+
+			/* Glassmorphism Cinematic Card */
+			.article-card {
+				width: 100%;
+				background: rgba(15, 23, 42, 0.75);
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 16px;
+				padding: 1rem;
+				box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+				backdrop-filter: blur(10px);
+				-webkit-backdrop-filter: blur(10px);
 			}
-			ul li img {
-				margin-bottom: 0.5rem;
+
+			/* Carousel Outer Container */
+			.carousel-wrapper {
+				position: relative;
+				width: 100%;
+				overflow: hidden;
 				border-radius: 12px;
+				background-color: #000;
 			}
-			ul li a {
+
+			.carousel-track {
+				display: flex;
+				width: 100%;
+				transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+				will-change: transform;
+			}
+
+			.carousel-slide-link {
+				min-width: 100%;
+				width: 100%;
+				display: block;
+				text-decoration: none;
+				flex-shrink: 0;
+			}
+
+			.carousel-slide {
+				width: 100%;
+				height: auto;
+				aspect-ratio: 16 / 9; /* Landscape ratio on desktop */
+				object-fit: cover;
 				display: block;
 			}
-			.title {
+
+			/* Navigation Dots */
+			.carousel-dots {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 8px;
+				margin-top: 1rem;
+			}
+
+			.dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background-color: rgba(255, 255, 255, 0.3);
+				cursor: pointer;
+				transition: all 0.3s ease;
+			}
+
+			.dot.active {
+				background-color: #58a6ff;
+				width: 20px;
+				border-radius: 6px;
+				box-shadow: 0 0 8px rgba(88, 166, 255, 0.6);
+			}
+
+			/* High-Contrast Typography */
+			.article-info {
+				text-align: center;
+				padding: 1rem 0.5rem 0.5rem 0.5rem;
+			}
+
+			.article-title {
+				font-size: 1.6rem;
+				font-weight: 700;
+				line-height: 1.3;
+				margin: 0 0 0.4rem 0;
+			}
+
+			.article-title a {
+				color: #ffffff;
+				text-decoration: none;
+				transition: color 0.2s ease;
+			}
+
+			.article-title a:hover {
+				color: #58a6ff;
+			}
+
+			.article-date {
+				font-size: 0.9rem;
+				color: #8b949e;
+				font-weight: 500;
 				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
+				letter-spacing: 0.5px;
 			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
+
+			/* Mobile Optimizations */
+			@media (max-width: 640px) {
+				.read-container {
+					padding: 1rem 0.75rem 2rem 0.75rem;
 				}
-				ul li {
-					width: 100%;
-					text-align: center;
+
+				.article-card {
+					padding: 0.75rem;
+					border-radius: 12px;
 				}
-				ul li:first-child {
-					margin-bottom: 0;
+
+				.carousel-slide {
+					aspect-ratio: 4 / 3; /* Optimized height for mobile screens */
 				}
-				ul li:first-child .title {
-					font-size: 1.563em;
+
+				.article-title {
+					font-size: 1.25rem;
+				}
+
+				.article-date {
+					font-size: 0.825rem;
 				}
 			}
 		</style>
 	</head>
 	<body>
 		<Header />
-		<main>
-			<section>
-				<ul>
-					{
-						posts.map((post) => (
-							<li>
-								<a href={`/blog/${post.id}/`}>
-									{post.data.heroImage && (
-										<Image width={720} height={360} src={post.data.heroImage} alt="" />
-									)}
-									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
-								</a>
-							</li>
-						))
-					}
-				</ul>
-			</section>
+
+		<main class="read-container">
+			<div class="articles-grid">
+				{articles.map((article, articleIdx) => (
+					<article class="article-card">
+						<!-- Single-Image Responsive Carousel -->
+						<div class="carousel-wrapper">
+							<div class="carousel-track" id={`track-${articleIdx}`}>
+								{article.images.map((imgSrc, imgIdx) => (
+									<a href={article.slug} class="carousel-slide-link">
+										<img 
+											src={imgSrc} 
+											alt={`${article.title} slide ${imgIdx + 1}`} 
+											class="carousel-slide" 
+											loading={articleIdx === 0 ? "eager" : "lazy"}
+										/>
+									</a>
+								))}
+							</div>
+						</div>
+
+						<div class="carousel-dots" id={`dots-${articleIdx}`}>
+							{article.images.map((_, imgIdx) => (
+								<span 
+									class={`dot ${imgIdx === 0 ? 'active' : ''}`} 
+									data-article={articleIdx} 
+									data-index={imgIdx}
+								></span>
+							))}
+						</div>
+
+						<!-- Article Title & Date -->
+						<div class="article-info">
+							<h2 class="article-title">
+								<a href={article.slug}>{article.title}</a>
+							</h2>
+							<p class="article-date">{article.date}</p>
+						</div>
+					</article>
+				))}
+			</div>
 		</main>
+
 		<Footer />
+
+		<!-- Client-Side Touch & Auto-Slide Script -->
+		<script>
+			document.querySelectorAll('.article-card').forEach((card, articleIdx) => {
+				const track = document.getElementById(`track-${articleIdx}`) as HTMLElement;
+				const dots = card.querySelectorAll('.dot');
+				const totalSlides = dots.length;
+				let currentIndex = 0;
+
+				function updateSlide(index: number) {
+					currentIndex = index;
+					track.style.transform = `translateX(-${currentIndex * 100}%)`;
+
+					dots.forEach((dot, i) => {
+						dot.classList.toggle('active', i === currentIndex);
+					});
+				}
+
+				// Automatic transition every 4 seconds
+				setInterval(() => {
+					const nextIndex = (currentIndex + 1) % totalSlides;
+					updateSlide(nextIndex);
+				}, 4000);
+
+				// Touch Navigation for Mobile Devices
+				let startX = 0;
+				let endX = 0;
+
+				track.addEventListener('touchstart', (e) => {
+					startX = e.touches[0].clientX;
+				}, { passive: true });
+
+				track.addEventListener('touchend', (e) => {
+					endX = e.changedTouches[0].clientX;
+					const diff = startX - endX;
+
+					if (Math.abs(diff) > 40) { // Threshold for swipe
+						if (diff > 0) {
+							// Swipe left (next)
+							const nextIndex = (currentIndex + 1) % totalSlides;
+							updateSlide(nextIndex);
+						} else {
+							// Swipe right (previous)
+							const prevIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+							updateSlide(prevIndex);
+						}
+					}
+				}, { passive: true });
+
+				// Dot click event
+				dots.forEach((dot) => {
+					dot.addEventListener('click', (e) => {
+						const target = e.target as HTMLElement;
+						const index = parseInt(target.getAttribute('data-index') || '0', 10);
+						updateSlide(index);
+					});
+				});
+			});
+		</script>
 	</body>
 </html>
