@@ -71,7 +71,7 @@ const images = [
 			p, li { font-size: 1.05rem; line-height: 1.6; color: #e6edf3; }
 			a { color: #58a6ff; }
 
-			/* Single-Image Carousel Component */
+			/* Widescreen Full-Width Carousel Component */
 			.carousel-section {
 				margin-top: 2rem;
 				width: 100%;
@@ -79,9 +79,7 @@ const images = [
 
 			.carousel-wrapper {
 				position: relative;
-				width: 100%;
-				max-width: 450px; /* Constrains poster width for single item view */
-				margin: 0 auto;
+				width: 100%; /* Spans full width of center column */
 				overflow: hidden;
 				border-radius: 12px;
 			}
@@ -93,8 +91,11 @@ const images = [
 			}
 
 			.carousel-slide {
-				min-width: 100%; /* Displays exactly ONE image at a time */
-				height: 380px;
+				min-width: 100%;
+				width: 100%;
+				aspect-ratio: 16 / 9; /* Landscape widescreen aspect ratio */
+				height: auto;
+				max-height: 420px;
 				border-radius: 12px;
 				object-fit: cover;
 			}
@@ -165,7 +166,7 @@ const images = [
 					and watch full in-depth video analysis on our YouTube channel.
 				</p>
 
-				<!-- SINGLE MOVING IMAGE CAROUSEL AREA -->
+				<!-- FULL WIDTH MOVING IMAGE CAROUSEL AREA -->
 				<div class="carousel-section">
 					<div class="carousel-wrapper">
 						<div class="carousel-track" id="carouselTrack">
@@ -192,7 +193,7 @@ const images = [
 
 		<Footer />
 
-		<!-- Client-Side Script to Drive Single-Image Slider -->
+		<!-- Client-Side Script for Full Width Slider -->
 		<script>
 			const track = document.getElementById('carouselTrack') as HTMLElement;
 			const dots = document.querySelectorAll('.dot');
@@ -201,7 +202,6 @@ const images = [
 
 			function updateCarousel(index: number) {
 				currentIndex = index;
-				// Moves track by 100% per slide to show one image at a time
 				track.style.transform = `translateX(-${currentIndex * 100}%)`;
 
 				dots.forEach((dot, i) => {
@@ -209,7 +209,7 @@ const images = [
 				});
 			}
 
-			// Auto scroll every 3 seconds across all images
+			// Auto scroll every 3 seconds
 			setInterval(() => {
 				const nextIndex = (currentIndex + 1) % totalSlides;
 				updateCarousel(nextIndex);
