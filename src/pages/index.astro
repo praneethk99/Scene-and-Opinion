@@ -4,14 +4,42 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Poster image array for sidebars & carousel
-const images = [
+// Define side posters and video slides with YouTube links
+const sidebarImages = [
 	'/poster1.jpg',
 	'/poster2.jpg',
 	'/poster3.jpg',
 	'/poster4.jpg',
 	'/poster5.jpg',
 	'/poster6.jpg'
+];
+
+// Carousel items with thumbnails and YouTube video URLs
+const videoSlides = [
+	{
+		img: '/poster1.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster2.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster3.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster4.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster5.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	},
+	{
+		img: '/poster6.jpg',
+		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo'
+	}
 ];
 ---
 
@@ -46,7 +74,7 @@ const images = [
 
 			.main-content {
 				width: 100%;
-				min-width: 0; /* Prevents CSS Grid overflow bugs */
+				min-width: 0;
 			}
 
 			/* Vertical Sidebars */
@@ -71,7 +99,7 @@ const images = [
 			p, li { font-size: 1.05rem; line-height: 1.6; color: #e6edf3; }
 			a { color: #58a6ff; }
 
-			/* Widescreen Full-Width Carousel Component */
+			/* Widescreen Interactive Video Carousel */
 			.carousel-section {
 				margin-top: 2rem;
 				width: 100%;
@@ -79,7 +107,7 @@ const images = [
 
 			.carousel-wrapper {
 				position: relative;
-				width: 100%; /* Spans full width of center column */
+				width: 100%;
 				overflow: hidden;
 				border-radius: 12px;
 			}
@@ -90,14 +118,62 @@ const images = [
 				width: 100%;
 			}
 
-			.carousel-slide {
+			/* Slide Container & Clickable Anchor */
+			.carousel-slide-link {
 				min-width: 100%;
 				width: 100%;
-				aspect-ratio: 16 / 9; /* Landscape widescreen aspect ratio */
+				position: relative;
+				display: block;
+				text-decoration: none;
+				border-radius: 12px;
+				overflow: hidden;
+			}
+
+			.carousel-slide-img {
+				width: 100%;
+				aspect-ratio: 16 / 9;
 				height: auto;
 				max-height: 420px;
-				border-radius: 12px;
 				object-fit: cover;
+				display: block;
+				transition: transform 0.3s ease;
+			}
+
+			/* Play Button Overlay */
+			.play-button-overlay {
+				position: absolute;
+				top: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 68px;
+				height: 68px;
+				background-color: rgba(0, 0, 0, 0.7);
+				border-radius: 50%;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+				transition: all 0.3s ease;
+				backdrop-filter: blur(4px);
+			}
+
+			.play-icon {
+				width: 0;
+				height: 0;
+				border-top: 12px solid transparent;
+				border-bottom: 12px solid transparent;
+				border-left: 20px solid #ffffff;
+				margin-left: 4px; /* Center triangular alignment */
+			}
+
+			/* Hover Effects */
+			.carousel-slide-link:hover .play-button-overlay {
+				background-color: #ff0000; /* YouTube Red on Hover */
+				transform: translate(-50%, -50%) scale(1.15);
+			}
+
+			.carousel-slide-link:hover .carousel-slide-img {
+				transform: scale(1.02);
 			}
 
 			/* Navigation Dots */
@@ -132,6 +208,18 @@ const images = [
 					display: none;
 				}
 			}
+
+			@media (max-width: 600px) {
+				.play-button-overlay {
+					width: 50px;
+					height: 50px;
+				}
+				.play-icon {
+					border-top: 9px solid transparent;
+					border-bottom: 9px solid transparent;
+					border-left: 15px solid #ffffff;
+				}
+			}
 		</style>
 	</head>
 	<body>
@@ -140,9 +228,9 @@ const images = [
 		<div class="page-container">
 			<!-- Left Sidebar Posters -->
 			<aside class="sidebar">
-				<img src={images[0]} alt="Poster 1" />
-				<img src={images[1]} alt="Poster 2" />
-				<img src={images[2]} alt="Poster 3" />
+				<img src={sidebarImages[0]} alt="Poster 1" />
+				<img src={sidebarImages[1]} alt="Poster 2" />
+				<img src={sidebarImages[2]} alt="Poster 3" />
 			</aside>
 
 			<!-- Center Main Content -->
@@ -166,17 +254,28 @@ const images = [
 					and watch full in-depth video analysis on our YouTube channel.
 				</p>
 
-				<!-- FULL WIDTH MOVING IMAGE CAROUSEL AREA -->
+				<!-- VIDEO CAROUSEL WITH PLAY BUTTON -->
 				<div class="carousel-section">
 					<div class="carousel-wrapper">
 						<div class="carousel-track" id="carouselTrack">
-							{images.map((src, index) => (
-								<img src={src} alt={`Movie Slide ${index + 1}`} class="carousel-slide" />
+							{videoSlides.map((slide, index) => (
+								<a 
+									href={slide.videoUrl} 
+									target="_blank" 
+									rel="noopener noreferrer" 
+									class="carousel-slide-link"
+									aria-label={`Watch video ${index + 1} on YouTube`}
+								>
+									<img src={slide.img} alt={`Video Thumbnail ${index + 1}`} class="carousel-slide-img" />
+									<div class="play-button-overlay">
+										<div class="play-icon"></div>
+									</div>
+								</a>
 							))}
 						</div>
 					</div>
 					<div class="carousel-dots" id="carouselDots">
-						{images.map((_, index) => (
+						{videoSlides.map((_, index) => (
 							<span class={`dot ${index === 0 ? 'active' : ''}`} data-index={index}></span>
 						))}
 					</div>
@@ -185,15 +284,15 @@ const images = [
 
 			<!-- Right Sidebar Posters -->
 			<aside class="sidebar">
-				<img src={images[3]} alt="Poster 4" />
-				<img src={images[4]} alt="Poster 5" />
-				<img src={images[5]} alt="Poster 6" />
+				<img src={sidebarImages[3]} alt="Poster 4" />
+				<img src={sidebarImages[4]} alt="Poster 5" />
+				<img src={sidebarImages[5]} alt="Poster 6" />
 			</aside>
 		</div>
 
 		<Footer />
 
-		<!-- Client-Side Script for Full Width Slider -->
+		<!-- Client-Side Carousel Script -->
 		<script>
 			const track = document.getElementById('carouselTrack') as HTMLElement;
 			const dots = document.querySelectorAll('.dot');
@@ -209,11 +308,11 @@ const images = [
 				});
 			}
 
-			// Auto scroll every 3 seconds
+			// Auto scroll every 4 seconds
 			setInterval(() => {
 				const nextIndex = (currentIndex + 1) % totalSlides;
 				updateCarousel(nextIndex);
-			}, 3000);
+			}, 4000);
 
 			// Click dot to navigate manually
 			dots.forEach((dot) => {
