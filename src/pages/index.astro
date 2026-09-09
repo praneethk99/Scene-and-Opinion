@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// 1 & 2. Left and Right side panels set to poster1.jpg through poster6.jpg
+// Sidebar images (poster1.jpg to poster6.jpg)
 const sidebarImages = [
 	'/poster1.jpg',
 	'/poster2.jpg',
@@ -14,26 +14,31 @@ const sidebarImages = [
 	'/poster6.jpg'
 ];
 
-// 3. Carousel layout with 5 slides accepting any file extension (JPG/PNG)
+// Carousel items with explicit root slashes
 const videoSlides = [
 	{
 		img: '/peddi_discussion.png',
+		altImg: '/peddi_discussion.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo&t=2s'
 	},
 	{
 		img: '/michel_discussion.png',
+		altImg: '/michel_discussion.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=eNOBxueQOJ4'
 	},
 	{
 		img: '/dacoit.png',
+		altImg: '/dacoit.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=ui4_aX5FVNc'
 	},
 	{
 		img: '/vas.png',
+		altImg: '/vas.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=NocBFHwJARQ'
 	},
 	{
 		img: '/peddi.png',
+		altImg: '/peddi.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=zg5gDJFhcyQ'
 	}
 ];
@@ -58,7 +63,6 @@ const videoSlides = [
 				font-family: system-ui, -apple-system, sans-serif;
 			}
 
-			/* 3-Column Page Grid */
 			.page-container {
 				display: grid;
 				grid-template-columns: 240px minmax(0, 1fr) 240px;
@@ -73,7 +77,6 @@ const videoSlides = [
 				min-width: 0;
 			}
 
-			/* Vertical Sidebars */
 			.sidebar {
 				display: flex;
 				flex-direction: column;
@@ -89,13 +92,12 @@ const videoSlides = [
 				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 			}
 
-			/* Content Styling */
 			h1 { font-size: 2.2rem; margin-bottom: 1rem; color: #fff; }
 			h2 { font-size: 1.5rem; color: #58a6ff; margin-top: 1.5rem; }
 			p, li { font-size: 1.05rem; line-height: 1.6; color: #e6edf3; }
 			a { color: #58a6ff; }
 
-			/* Widescreen Interactive Video Carousel */
+			/* Widescreen Carousel */
 			.carousel-section {
 				margin-top: 2rem;
 				width: 100%;
@@ -114,7 +116,6 @@ const videoSlides = [
 				width: 100%;
 			}
 
-			/* Slide Container & Clickable Anchor */
 			.carousel-slide-link {
 				min-width: 100%;
 				width: 100%;
@@ -135,7 +136,6 @@ const videoSlides = [
 				transition: transform 0.3s ease;
 			}
 
-			/* Play Button Overlay */
 			.play-button-overlay {
 				position: absolute;
 				top: 50%;
@@ -159,12 +159,11 @@ const videoSlides = [
 				border-top: 12px solid transparent;
 				border-bottom: 12px solid transparent;
 				border-left: 20px solid #ffffff;
-				margin-left: 4px; /* Center triangular alignment */
+				margin-left: 4px;
 			}
 
-			/* Hover Effects */
 			.carousel-slide-link:hover .play-button-overlay {
-				background-color: #ff0000; /* YouTube Red on Hover */
+				background-color: #ff0000;
 				transform: translate(-50%, -50%) scale(1.15);
 			}
 
@@ -172,7 +171,6 @@ const videoSlides = [
 				transform: scale(1.02);
 			}
 
-			/* Navigation Dots */
 			.carousel-dots {
 				display: flex;
 				justify-content: center;
@@ -195,21 +193,13 @@ const videoSlides = [
 				border-radius: 8px;
 			}
 
-			/* Responsive Rules */
 			@media (max-width: 1024px) {
-				.page-container {
-					grid-template-columns: 1fr;
-				}
-				.sidebar {
-					display: none;
-				}
+				.page-container { grid-template-columns: 1fr; }
+				.sidebar { display: none; }
 			}
 
 			@media (max-width: 600px) {
-				.play-button-overlay {
-					width: 50px;
-					height: 50px;
-				}
+				.play-button-overlay { width: 50px; height: 50px; }
 				.play-icon {
 					border-top: 9px solid transparent;
 					border-bottom: 9px solid transparent;
@@ -222,14 +212,12 @@ const videoSlides = [
 		<Header />
 		
 		<div class="page-container">
-			<!-- Left Sidebar Posters (poster1.jpg to poster3.jpg) -->
 			<aside class="sidebar">
 				<img src={sidebarImages[0]} alt="Poster 1" />
 				<img src={sidebarImages[1]} alt="Poster 2" />
 				<img src={sidebarImages[2]} alt="Poster 3" />
 			</aside>
 
-			<!-- Center Main Content -->
 			<main class="main-content">
 				<h1>Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
 				<p>
@@ -250,7 +238,7 @@ const videoSlides = [
 					and watch full in-depth video analysis on our YouTube channel.
 				</p>
 
-				<!-- 5-SLIDE VIDEO CAROUSEL WITH PLAY BUTTON -->
+				<!-- VIDEO CAROUSEL -->
 				<div class="carousel-section">
 					<div class="carousel-wrapper">
 						<div class="carousel-track" id="carouselTrack">
@@ -262,7 +250,13 @@ const videoSlides = [
 									class="carousel-slide-link"
 									aria-label={`Watch video ${index + 1} on YouTube`}
 								>
-									<img src={slide.img} alt={`Video Thumbnail ${index + 1}`} class="carousel-slide-img" />
+									<img 
+										src={slide.img} 
+										data-fallback={slide.altImg}
+										alt={`Video Thumbnail ${index + 1}`} 
+										class="carousel-slide-img" 
+										onerror="if (this.getAttribute('data-fallback')) { this.src = this.getAttribute('data-fallback'); this.removeAttribute('data-fallback'); }"
+									/>
 									<div class="play-button-overlay">
 										<div class="play-icon"></div>
 									</div>
@@ -278,7 +272,6 @@ const videoSlides = [
 				</div>
 			</main>
 
-			<!-- Right Sidebar Posters (poster4.jpg to poster6.jpg) -->
 			<aside class="sidebar">
 				<img src={sidebarImages[3]} alt="Poster 4" />
 				<img src={sidebarImages[4]} alt="Poster 5" />
@@ -288,7 +281,6 @@ const videoSlides = [
 
 		<Footer />
 
-		<!-- Client-Side Carousel Script -->
 		<script>
 			const track = document.getElementById('carouselTrack') as HTMLElement;
 			const dots = document.querySelectorAll('.dot');
@@ -297,20 +289,20 @@ const videoSlides = [
 
 			function updateCarousel(index: number) {
 				currentIndex = index;
-				track.style.transform = `translateX(-${currentIndex * 100}%)`;
+				if (track) {
+					track.style.transform = `translateX(-${currentIndex * 100}%)`;
+				}
 
 				dots.forEach((dot, i) => {
 					dot.classList.toggle('active', i === currentIndex);
 				});
 			}
 
-			// Auto scroll every 4 seconds
 			setInterval(() => {
 				const nextIndex = (currentIndex + 1) % totalSlides;
 				updateCarousel(nextIndex);
 			}, 4000);
 
-			// Click dot to navigate manually
 			dots.forEach((dot) => {
 				dot.addEventListener('click', (e) => {
 					const target = e.target as HTMLElement;
