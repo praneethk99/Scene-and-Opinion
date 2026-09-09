@@ -1,0 +1,197 @@
+---
+// Sample data for the 6 carousel poster images
+const posters = [
+  { title: "Jana Nayagan", image: "/posters/jana-nayagan.jpg", link: "/read/jana-nayagan" },
+  { title: "Lenin", image: "/posters/lenin.jpg", link: "/read/lenin" },
+  { title: "Evil Dead Burn", image: "/posters/evil-dead-burn.jpg", link: "/read/evil-dead-burn" },
+  { title: "Mukhbir", image: "/posters/mukhbir.jpg", link: "/read/mukhbir" },
+  { title: "Dark Light", image: "/posters/dark-light.jpg", link: "/read/dark-light" },
+  { title: "Vanda Devullu", image: "/posters/vanda-devullu.jpg", link: "/read/vanda-devullu" }
+];
+
+// Sample data for the 4 rows of read posts
+const posts = [
+  { title: "Markdown Style Guide", date: "Jun 19, 2024", image: "/posts/markdown-guide.jpg", link: "/blog/markdown-style-guide" },
+  { title: "Using MDX", date: "Jun 1, 2024", image: "/posts/using-mdx.jpg", link: "/blog/using-mdx" },
+  { title: "Third post", date: "Jul 22, 2022", image: "/posts/third-post.jpg", link: "/blog/third-post" },
+  { title: "Fourth post", date: "May 10, 2022", image: "/posts/fourth-post.jpg", link: "/blog/fourth-post" }
+];
+---
+
+<div class="read-container">
+  <!-- 6-IMAGE CAROUSEL SECTION -->
+  <section class="carousel-wrapper">
+    <button class="nav-btn prev" id="scrollLeft">&#10094;</button>
+
+    <div class="carousel-track" id="carouselTrack">
+      {posters.map((poster) => (
+        <a href={poster.link} class="carousel-card">
+          <img src={poster.image} alt={poster.title} loading="lazy" />
+        </a>
+      ))}
+    </div>
+
+    <button class="nav-btn next" id="scrollRight">&#10095;</button>
+  </section>
+
+  <!-- 4 ROWS OF POST CARDS -->
+  <section class="posts-grid">
+    {posts.map((post) => (
+      <a href={post.link} class="post-card">
+        <div class="post-image-container">
+          <img src={post.image} alt={post.title} class="post-image" loading="lazy" />
+        </div>
+        <h2 class="post-title">{post.title}</h2>
+        <span class="post-date">{post.date}</span>
+      </a>
+    ))}
+  </section>
+</div>
+
+<script>
+  // Astro client-side scroll handling
+  const track = document.getElementById('carouselTrack');
+  const leftBtn = document.getElementById('scrollLeft');
+  const rightBtn = document.getElementById('scrollRight');
+
+  leftBtn?.addEventListener('click', () => {
+    track?.scrollBy({ left: -220, behavior: 'smooth' });
+  });
+
+  rightBtn?.addEventListener('click', () => {
+    track?.scrollBy({ left: 220, behavior: 'smooth' });
+  });
+</script>
+
+<style>
+  /* Container Centered to match Scene and Opinion layout */
+  .read-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* ---------------- CAROUSEL ---------------- */
+  .carousel-wrapper {
+    position: relative;
+    width: 100%;
+    background: #0d1527;
+    border: 1px solid #1a2642;
+    border-radius: 12px;
+    padding: 0.75rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  .carousel-track {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .carousel-track::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+  }
+
+  .carousel-card {
+    flex: 0 0 calc((100% - (5 * 0.75rem)) / 6); /* Displays 6 items in one row */
+    min-width: 90px;
+    aspect-ratio: 2 / 3;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid #1f2d4e;
+    transition: transform 0.25s ease, border-color 0.25s ease;
+  }
+
+  .carousel-card:hover {
+    transform: translateY(-4px) scale(1.03);
+    border-color: #3b82f6;
+  }
+
+  .carousel-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    border: 1px solid #334155;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s;
+  }
+
+  .nav-btn:hover {
+    background: rgba(0, 0, 0, 0.95);
+  }
+
+  .nav-btn.prev { left: -12px; }
+  .nav-btn.next { right: -12px; }
+
+  /* ---------------- 4 POST ROWS ---------------- */
+  .posts-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .post-card {
+    background: #0d1527;
+    border: 1px solid #1a2642;
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-decoration: none;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .post-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+  }
+
+  .post-image-container {
+    width: 100%;
+    height: 240px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #152037;
+    margin-bottom: 0.75rem;
+  }
+
+  .post-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .post-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.25rem 0;
+  }
+
+  .post-date {
+    font-size: 0.8rem;
+    color: #94a3b8;
+  }
+</style>

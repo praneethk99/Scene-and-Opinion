@@ -4,16 +4,17 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Define side posters and video slides with YouTube links
+// 1 & 2. Left and Right side panels set to poster1.jpg through poster6.jpg
 const sidebarImages = [
-	'/peddi_discussion.png',
-	'/michel_discussion.png',
-	'/dacoit.png',
-	'/vas.png',
-	'/peddi.png'
+	'/poster1.jpg',
+	'/poster2.jpg',
+	'/poster3.jpg',
+	'/poster4.jpg',
+	'/poster5.jpg',
+	'/poster6.jpg'
 ];
 
-// Carousel items with thumbnails and YouTube video URLs
+// 3. Carousel layout with 5 slides accepting any file extension (JPG/PNG)
 const videoSlides = [
 	{
 		img: '/peddi_discussion.png',
@@ -21,7 +22,7 @@ const videoSlides = [
 	},
 	{
 		img: '/michel_discussion.png',
-		videoUrl: 'https://www.youtube.com/watch?eNOBxueQOJ4'
+		videoUrl: 'https://www.youtube.com/watch?v=eNOBxueQOJ4'
 	},
 	{
 		img: '/dacoit.png',
@@ -221,11 +222,11 @@ const videoSlides = [
 		<Header />
 		
 		<div class="page-container">
-			<!-- Left Sidebar Posters -->
+			<!-- Left Sidebar Posters (poster1.jpg to poster3.jpg) -->
 			<aside class="sidebar">
-				{sidebarImages[0] && <img src={sidebarImages[0]} alt="Poster 1" />}
-				{sidebarImages[1] && <img src={sidebarImages[1]} alt="Poster 2" />}
-				{sidebarImages[2] && <img src={sidebarImages[2]} alt="Poster 3" />}
+				<img src={sidebarImages[0]} alt="Poster 1" />
+				<img src={sidebarImages[1]} alt="Poster 2" />
+				<img src={sidebarImages[2]} alt="Poster 3" />
 			</aside>
 
 			<!-- Center Main Content -->
@@ -249,7 +250,7 @@ const videoSlides = [
 					and watch full in-depth video analysis on our YouTube channel.
 				</p>
 
-				<!-- VIDEO CAROUSEL WITH PLAY BUTTON -->
+				<!-- 5-SLIDE VIDEO CAROUSEL WITH PLAY BUTTON -->
 				<div class="carousel-section">
 					<div class="carousel-wrapper">
 						<div class="carousel-track" id="carouselTrack">
@@ -277,11 +278,11 @@ const videoSlides = [
 				</div>
 			</main>
 
-			<!-- Right Sidebar Posters -->
+			<!-- Right Sidebar Posters (poster4.jpg to poster6.jpg) -->
 			<aside class="sidebar">
-				{sidebarImages[3] && <img src={sidebarImages[3]} alt="Poster 4" />}
-				{sidebarImages[4] && <img src={sidebarImages[4]} alt="Poster 5" />}
-				{sidebarImages[5] && <img src={sidebarImages[5]} alt="Poster 6" />}
+				<img src={sidebarImages[3]} alt="Poster 4" />
+				<img src={sidebarImages[4]} alt="Poster 5" />
+				<img src={sidebarImages[5]} alt="Poster 6" />
 			</aside>
 		</div>
 
