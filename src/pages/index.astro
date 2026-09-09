@@ -10,8 +10,7 @@ const sidebarImages = [
 	'/michel_discussion.png',
 	'/dacoit.png',
 	'/vas.png',
-	'/peddi.jpg',
-
+	'/peddi.png'
 ];
 
 // Carousel items with thumbnails and YouTube video URLs
@@ -21,15 +20,15 @@ const videoSlides = [
 		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo&t=2s'
 	},
 	{
-		img: 'michel_discussion.png',
-		videoUrl: 'https://www.youtube.com/watch?v=eNOBxueQOJ4'
+		img: '/michel_discussion.png',
+		videoUrl: 'https://www.youtube.com/watch?eNOBxueQOJ4'
 	},
 	{
 		img: '/dacoit.png',
 		videoUrl: 'https://www.youtube.com/watch?v=ui4_aX5FVNc'
 	},
 	{
-		img: 'vas.png',
+		img: '/vas.png',
 		videoUrl: 'https://www.youtube.com/watch?v=NocBFHwJARQ'
 	},
 	{
@@ -224,9 +223,9 @@ const videoSlides = [
 		<div class="page-container">
 			<!-- Left Sidebar Posters -->
 			<aside class="sidebar">
-				<img src={sidebarImages[0]} alt="Poster 1" />
-				<img src={sidebarImages[1]} alt="Poster 2" />
-				<img src={sidebarImages[2]} alt="Poster 3" />
+				{sidebarImages[0] && <img src={sidebarImages[0]} alt="Poster 1" />}
+				{sidebarImages[1] && <img src={sidebarImages[1]} alt="Poster 2" />}
+				{sidebarImages[2] && <img src={sidebarImages[2]} alt="Poster 3" />}
 			</aside>
 
 			<!-- Center Main Content -->
@@ -280,9 +279,9 @@ const videoSlides = [
 
 			<!-- Right Sidebar Posters -->
 			<aside class="sidebar">
-				<img src={sidebarImages[3]} alt="Poster 4" />
-				<img src={sidebarImages[4]} alt="Poster 5" />
-				<img src={sidebarImages[5]} alt="Poster 6" />
+				{sidebarImages[3] && <img src={sidebarImages[3]} alt="Poster 4" />}
+				{sidebarImages[4] && <img src={sidebarImages[4]} alt="Poster 5" />}
+				{sidebarImages[5] && <img src={sidebarImages[5]} alt="Poster 6" />}
 			</aside>
 		</div>
 
