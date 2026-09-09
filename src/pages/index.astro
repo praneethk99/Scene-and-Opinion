@@ -4,36 +4,39 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Side panel posters
-const sidebarImages = [
+// Left and right sidebar posters (poster1.jpg to poster6.jpg)
+const sidebarLeft = [
 	'/poster1.jpg',
 	'/poster2.jpg',
-	'/poster3.jpg',
+	'/poster3.jpg'
+];
+
+const sidebarRight = [
 	'/poster4.jpg',
 	'/poster5.jpg',
 	'/poster6.jpg'
 ];
 
-// Carousel video slides
+// Carousel video slides (poster7.png to poster11.png)
 const videoSlides = [
 	{
-		img: '/peddi_discussion.png',
+		img: '/poster7.png',
 		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo&t=2s'
 	},
 	{
-		img: '/michel_discussion.png',
+		img: '/poster8.png',
 		videoUrl: 'https://www.youtube.com/watch?v=eNOBxueQOJ4'
 	},
 	{
-		img: '/dacoit.png',
+		img: '/poster9.png',
 		videoUrl: 'https://www.youtube.com/watch?v=ui4_aX5FVNc'
 	},
 	{
-		img: '/vas.png',
+		img: '/poster10.png',
 		videoUrl: 'https://www.youtube.com/watch?v=NocBFHwJARQ'
 	},
 	{
-		img: '/peddi.png',
+		img: '/poster11.png',
 		videoUrl: 'https://www.youtube.com/watch?v=zg5gDJFhcyQ'
 	}
 ];
@@ -207,9 +210,9 @@ const videoSlides = [
 		
 		<div class="page-container">
 			<aside class="sidebar">
-				<img src={sidebarImages[0]} alt="Poster 1" />
-				<img src={sidebarImages[1]} alt="Poster 2" />
-				<img src={sidebarImages[2]} alt="Poster 3" />
+				{sidebarLeft.map((src, i) => (
+					<img src={src} alt={`Poster ${i + 1}`} />
+				))}
 			</aside>
 
 			<main class="main-content">
@@ -245,7 +248,7 @@ const videoSlides = [
 								>
 									<img 
 										src={slide.img} 
-										alt={`Video Thumbnail ${index + 1}`} 
+										alt={`Poster ${index + 7}`} 
 										class="carousel-slide-img" 
 									/>
 									<div class="play-button-overlay">
@@ -264,9 +267,9 @@ const videoSlides = [
 			</main>
 
 			<aside class="sidebar">
-				<img src={sidebarImages[3]} alt="Poster 4" />
-				<img src={sidebarImages[4]} alt="Poster 5" />
-				<img src={sidebarImages[5]} alt="Poster 6" />
+				{sidebarRight.map((src, i) => (
+					<img src={src} alt={`Poster ${i + 4}`} />
+				))}
 			</aside>
 		</div>
 
