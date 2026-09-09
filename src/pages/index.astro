@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
-// Sidebar images (poster1.jpg to poster6.jpg)
+// Side panel posters
 const sidebarImages = [
 	'/poster1.jpg',
 	'/poster2.jpg',
@@ -14,31 +14,26 @@ const sidebarImages = [
 	'/poster6.jpg'
 ];
 
-// Carousel items with explicit root slashes
+// Carousel video slides
 const videoSlides = [
 	{
 		img: '/peddi_discussion.png',
-		altImg: '/peddi_discussion.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo&t=2s'
 	},
 	{
 		img: '/michel_discussion.png',
-		altImg: '/michel_discussion.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=eNOBxueQOJ4'
 	},
 	{
 		img: '/dacoit.png',
-		altImg: '/dacoit.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=ui4_aX5FVNc'
 	},
 	{
 		img: '/vas.png',
-		altImg: '/vas.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=NocBFHwJARQ'
 	},
 	{
 		img: '/peddi.png',
-		altImg: '/peddi.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=zg5gDJFhcyQ'
 	}
 ];
@@ -97,7 +92,6 @@ const videoSlides = [
 			p, li { font-size: 1.05rem; line-height: 1.6; color: #e6edf3; }
 			a { color: #58a6ff; }
 
-			/* Widescreen Carousel */
 			.carousel-section {
 				margin-top: 2rem;
 				width: 100%;
@@ -238,7 +232,6 @@ const videoSlides = [
 					and watch full in-depth video analysis on our YouTube channel.
 				</p>
 
-				<!-- VIDEO CAROUSEL -->
 				<div class="carousel-section">
 					<div class="carousel-wrapper">
 						<div class="carousel-track" id="carouselTrack">
@@ -252,10 +245,8 @@ const videoSlides = [
 								>
 									<img 
 										src={slide.img} 
-										data-fallback={slide.altImg}
 										alt={`Video Thumbnail ${index + 1}`} 
 										class="carousel-slide-img" 
-										onerror="if (this.getAttribute('data-fallback')) { this.src = this.getAttribute('data-fallback'); this.removeAttribute('data-fallback'); }"
 									/>
 									<div class="play-button-overlay">
 										<div class="play-icon"></div>
