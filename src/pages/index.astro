@@ -17,26 +17,31 @@ const sidebarRight = [
 	'/poster6.jpg'
 ];
 
-// Carousel video slides (poster7.png to poster11.png)
+// Carousel video slides (poster7 to poster11 from /public)
 const videoSlides = [
 	{
-		img: '/poster7.png',
+		primaryImg: '/poster7.png',
+		fallbackImg: '/poster7.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=0xKAzXh6TWo&t=2s'
 	},
 	{
-		img: '/poster8.png',
+		primaryImg: '/poster8.png',
+		fallbackImg: '/poster8.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=eNOBxueQOJ4'
 	},
 	{
-		img: '/poster9.png',
+		primaryImg: '/poster9.png',
+		fallbackImg: '/poster9.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=ui4_aX5FVNc'
 	},
 	{
-		img: '/poster10.png',
+		primaryImg: '/poster10.png',
+		fallbackImg: '/poster10.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=NocBFHwJARQ'
 	},
 	{
-		img: '/poster11.png',
+		primaryImg: '/poster11.png',
+		fallbackImg: '/poster11.jpg',
 		videoUrl: 'https://www.youtube.com/watch?v=zg5gDJFhcyQ'
 	}
 ];
@@ -61,10 +66,11 @@ const videoSlides = [
 				font-family: system-ui, -apple-system, sans-serif;
 			}
 
+			/* 3-Column Page Grid */
 			.page-container {
 				display: grid;
-				grid-template-columns: 240px minmax(0, 1fr) 240px;
-				gap: 2rem;
+				grid-template-columns: 220px minmax(0, 1fr) 220px;
+				gap: 1.5rem;
 				max-width: 1400px;
 				margin: 0 auto;
 				padding: 2rem 1rem;
@@ -75,26 +81,30 @@ const videoSlides = [
 				min-width: 0;
 			}
 
+			/* Sidebar Panels */
 			.sidebar {
 				display: flex;
 				flex-direction: column;
-				gap: 1.5rem;
+				gap: 1rem;
 			}
 
 			.sidebar img {
 				width: 100%;
-				height: 320px;
-				aspect-ratio: 3 / 4;
+				height: auto;
+				max-height: 220px;
+				aspect-ratio: 2 / 3;
 				object-fit: cover;
-				border-radius: 12px;
-				box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+				border-radius: 8px;
+				box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 			}
 
+			/* Text Content */
 			h1 { font-size: 2.2rem; margin-bottom: 1rem; color: #fff; }
 			h2 { font-size: 1.5rem; color: #58a6ff; margin-top: 1.5rem; }
 			p, li { font-size: 1.05rem; line-height: 1.6; color: #e6edf3; }
 			a { color: #58a6ff; }
 
+			/* Widescreen Interactive Video Carousel */
 			.carousel-section {
 				margin-top: 2rem;
 				width: 100%;
@@ -133,6 +143,7 @@ const videoSlides = [
 				transition: transform 0.3s ease;
 			}
 
+			/* Play Button Overlay */
 			.play-button-overlay {
 				position: absolute;
 				top: 50%;
@@ -168,6 +179,7 @@ const videoSlides = [
 				transform: scale(1.02);
 			}
 
+			/* Navigation Dots */
 			.carousel-dots {
 				display: flex;
 				justify-content: center;
@@ -209,12 +221,14 @@ const videoSlides = [
 		<Header />
 		
 		<div class="page-container">
+			<!-- Left Side Panel (Poster 1 to 3) -->
 			<aside class="sidebar">
 				{sidebarLeft.map((src, i) => (
 					<img src={src} alt={`Poster ${i + 1}`} />
 				))}
 			</aside>
 
+			<!-- Center Main Content -->
 			<main class="main-content">
 				<h1>Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
 				<p>
@@ -231,10 +245,10 @@ const videoSlides = [
 
 				<h2>Follow the Channel</h2>
 				<p>
-					Catch daily takes and quick reviews on our <a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer">Instagram</a> 
-					and watch full in-depth video analysis on our YouTube channel.
+					Catch daily takes and quick reviews on our <a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer">Instagram</a> and watch full in-depth video analysis on our YouTube channel.
 				</p>
 
+				<!-- 5-Slide Carousel picking poster7 through poster11 -->
 				<div class="carousel-section">
 					<div class="carousel-wrapper">
 						<div class="carousel-track" id="carouselTrack">
@@ -247,9 +261,11 @@ const videoSlides = [
 									aria-label={`Watch video ${index + 1} on YouTube`}
 								>
 									<img 
-										src={slide.img} 
+										src={slide.primaryImg} 
+										data-fallback={slide.fallbackImg}
 										alt={`Poster ${index + 7}`} 
 										class="carousel-slide-img" 
+										onerror="if (this.getAttribute('data-fallback')) { this.src = this.getAttribute('data-fallback'); this.removeAttribute('data-fallback'); }"
 									/>
 									<div class="play-button-overlay">
 										<div class="play-icon"></div>
@@ -266,6 +282,7 @@ const videoSlides = [
 				</div>
 			</main>
 
+			<!-- Right Side Panel (Poster 4 to 6) -->
 			<aside class="sidebar">
 				{sidebarRight.map((src, i) => (
 					<img src={src} alt={`Poster ${i + 4}`} />
