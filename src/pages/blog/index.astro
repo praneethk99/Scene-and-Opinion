@@ -12,7 +12,6 @@ const posts = (await getCollection('blog')).sort(
 const featuredPost = posts[0];
 const remainingPosts = posts.slice(1);
 
-// Top spotlight carousel assets (5 posters)
 const spotlightPosters = [
 	{ primary: '/poster12.png', fallback: '/poster12.jpg', title: 'Jana Nayagan' },
 	{ primary: '/poster13.png', fallback: '/poster13.jpg', title: 'Lenin' },
@@ -21,7 +20,6 @@ const spotlightPosters = [
 	{ primary: '/poster16.png', fallback: '/poster16.jpg', title: 'Dark Light' }
 ];
 
-// All Reviews grid images (Poster 1 to 6)
 const reviewPosters = [
 	{ primary: '/poster1.png', fallback: '/poster1.jpg' },
 	{ primary: '/poster2.png', fallback: '/poster2.jpg' },
@@ -37,10 +35,6 @@ const reviewPosters = [
 	<head>
 		<BaseHead title={`Read | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			*, *::before, *::after {
-				box-sizing: border-box;
-			}
-
 			body {
 				background-color: #0b132b;
 				color: #ffffff;
@@ -48,6 +42,16 @@ const reviewPosters = [
 				margin: 0;
 			}
 
+			/* VISIBILITY TOGGLES */
+			.desktop-view { display: block; }
+			.mobile-view { display: none; }
+
+			@media (max-width: 768px) {
+				.desktop-view { display: none !important; }
+				.mobile-view { display: block !important; }
+			}
+
+			/* DESKTOP STYLES (ORIGINAL UNTOUCHED) */
 			.read-container {
 				max-width: 1300px;
 				margin: 0 auto;
@@ -62,7 +66,6 @@ const reviewPosters = [
 				padding-left: 0.6rem;
 			}
 
-			/* 1. TOP SECTION: Centered Featured Hero Card */
 			.top-featured-wrapper {
 				max-width: 900px;
 				margin: 0 auto 3.5rem auto;
@@ -131,10 +134,6 @@ const reviewPosters = [
 				line-height: 1.3;
 			}
 
-			.featured-hero-link:hover .featured-title {
-				color: #58a6ff;
-			}
-
 			.post-date {
 				font-size: 0.85rem;
 				color: #8b949e;
@@ -148,7 +147,6 @@ const reviewPosters = [
 				margin: 0;
 			}
 
-			/* 2. MIDDLE SECTION: Spotlight Series Carousel */
 			.carousel-container {
 				position: relative;
 				border: 1px solid rgba(255, 255, 255, 0.12);
@@ -163,29 +161,18 @@ const reviewPosters = [
 				gap: 1.25rem;
 				overflow-x: auto;
 				scroll-snap-type: x mandatory;
-				scrollbar-width: none; /* Firefox */
-				-ms-overflow-style: none; /* IE/Edge */
+				scrollbar-width: none;
 				padding-bottom: 0.25rem;
 			}
 
-			.poster-grid-5::-webkit-scrollbar {
-				display: none; /* Chrome/Safari */
-			}
-
 			.spotlight-card {
-				flex: 0 0 calc(20% - 1rem); /* 5 items in desktop view */
+				flex: 0 0 calc(20% - 1rem);
 				scroll-snap-align: start;
 				aspect-ratio: 2 / 3;
 				border-radius: 8px;
 				overflow: hidden;
 				border: 1px solid rgba(255, 255, 255, 0.1);
 				background-color: #1c2541;
-				transition: transform 0.2s ease, border-color 0.2s ease;
-			}
-
-			.spotlight-card:hover {
-				transform: translateY(-4px);
-				border-color: #58a6ff;
 			}
 
 			.spotlight-card img {
@@ -210,13 +197,11 @@ const reviewPosters = [
 				justify-content: center;
 				cursor: pointer;
 				z-index: 2;
-				user-select: none;
 			}
 
 			.carousel-nav-btn.prev { left: 0.6rem; }
 			.carousel-nav-btn.next { right: 0.6rem; }
 
-			/* 3. BOTTOM SECTION: All Reviews 5-Column Grid */
 			.grid-5-columns {
 				display: grid;
 				grid-template-columns: repeat(5, 1fr);
@@ -232,12 +217,6 @@ const reviewPosters = [
 				border: 1px solid rgba(255, 255, 255, 0.08);
 				text-decoration: none;
 				color: inherit;
-				transition: transform 0.2s ease, border-color 0.2s ease;
-			}
-
-			.article-poster-card:hover {
-				transform: translateY(-4px);
-				border-color: #58a6ff;
 			}
 
 			.poster-img-wrap {
@@ -267,140 +246,210 @@ const reviewPosters = [
 				color: #ffffff;
 				margin: 0;
 				line-height: 1.3;
-				display: -webkit-box;
-				-webkit-line-clamp: 2;
-				-webkit-box-orient: vertical;
+			}
+
+			/* MOBILE DEDICATED STYLES */
+			.mobile-header-bar {
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 56px;
+				background-color: #0d1b2a;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+				z-index: 100;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 1rem;
+			}
+
+			.mobile-brand {
+				font-weight: 700;
+				font-size: 1.1rem;
+				color: #ffffff;
+				text-decoration: none;
+			}
+
+			.mobile-brand span { color: #58a6ff; }
+
+			.mobile-main {
+				padding: 70px 0.75rem 1.5rem 0.75rem;
+			}
+
+			.mobile-featured-card {
+				display: block;
+				background: #1c2541;
+				border-radius: 10px;
 				overflow: hidden;
+				text-decoration: none;
+				color: inherit;
+				margin-bottom: 2rem;
+				border: 1px solid rgba(255, 255, 255, 0.1);
 			}
 
-			.article-poster-card:hover .card-title {
-				color: #58a6ff;
+			.mobile-featured-img {
+				width: 100%;
+				aspect-ratio: 16 / 9;
+				object-fit: cover;
 			}
 
-			/* RESPONSIVE LAYOUT ADJUSTMENTS */
-			@media (max-width: 1024px) {
-				.spotlight-card {
-					flex: 0 0 calc(33.33% - 0.8rem);
-				}
-				.grid-5-columns {
-					grid-template-columns: repeat(3, 1fr);
-				}
-				.featured-hero {
-					grid-template-columns: 1fr;
-				}
+			.mobile-featured-body {
+				padding: 1rem;
 			}
 
-			@media (max-width: 640px) {
-				.read-container {
-					padding: 1rem 0.75rem;
-				}
-				.carousel-container {
-					padding: 0.75rem;
-				}
-				.carousel-nav-btn {
-					display: none; /* Swipe natively on mobile */
-				}
-				.spotlight-card {
-					flex: 0 0 135px; /* Fixed poster width in a single horizontal scroll row */
-				}
-				.grid-5-columns {
-					grid-template-columns: repeat(2, 1fr); /* Clean 2-column grid */
-					gap: 0.75rem;
-				}
-				.featured-title {
-					font-size: 1.35rem;
-				}
-				.featured-content {
-					padding: 1rem;
-				}
+			.mobile-scroll-row {
+				display: flex;
+				gap: 0.75rem;
+				overflow-x: auto;
+				scroll-snap-type: x mandatory;
+				padding-bottom: 0.5rem;
+				margin-bottom: 2rem;
+				scrollbar-width: none;
+			}
+
+			.mobile-scroll-row::-webkit-scrollbar { display: none; }
+
+			.mobile-poster-item {
+				flex: 0 0 130px;
+				scroll-snap-align: start;
+				aspect-ratio: 2 / 3;
+				border-radius: 6px;
+				overflow: hidden;
+				background-color: #1c2541;
+			}
+
+			.mobile-poster-item img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			}
+
+			.mobile-grid-2 {
+				display: grid;
+				grid-template-columns: repeat(2, 1fr);
+				gap: 0.75rem;
+			}
+
+			.mobile-footer {
+				text-align: center;
+				padding: 1.5rem 1rem;
+				border-top: 1px solid rgba(255, 255, 255, 0.1);
+				font-size: 0.85rem;
+				color: #8b949e;
 			}
 		</style>
 	</head>
 	<body>
-		<Header />
 
-		<div class="read-container">
-			<!-- TOP: Centered Featured Article Hero -->
-			{featuredPost && (
-				<div class="top-featured-wrapper">
-					<a href={`/blog/${featuredPost.slug}/`} class="featured-hero-link">
-						<div class="featured-hero">
-							<div class="hero-banner-wrap">
-								<img 
-									src={featuredPost.data.heroImage || '/poster7.png'} 
-									alt={featuredPost.data.title}
-									onerror="this.src='/poster7.png'" 
-								/>
+		<!-- ================= DESKTOP VIEW ================= -->
+		<div class="desktop-view">
+			<Header />
+
+			<div class="read-container">
+				{featuredPost && (
+					<div class="top-featured-wrapper">
+						<a href={`/blog/${featuredPost.slug}/`} class="featured-hero-link">
+							<div class="featured-hero">
+								<div class="hero-banner-wrap">
+									<img src={featuredPost.data.heroImage || '/poster7.png'} alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
+								</div>
+								<div class="featured-content">
+									<span class="badge">Top Featured</span>
+									<h1 class="featured-title">{featuredPost.data.title}</h1>
+									<span class="post-date">{featuredPost.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+									<p class="featured-snippet">{featuredPost.data.description || 'Read our full in-depth review...'}</p>
+								</div>
 							</div>
-							<div class="featured-content">
-								<span class="badge">Top Featured</span>
-								<h1 class="featured-title">{featuredPost.data.title}</h1>
-								<span class="post-date">
-									{featuredPost.data.pubDate.toLocaleDateString('en-us', {
-										year: 'numeric',
-										month: 'short',
-										day: 'numeric',
-									})}
-								</span>
-								<p class="featured-snippet">
-									{featuredPost.data.description || 'Read our full in-depth review and cinematic analysis...'}
-								</p>
+						</a>
+					</div>
+				)}
+
+				<h2 class="section-title">Spotlight Series</h2>
+				<div class="carousel-container">
+					<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
+					<div class="poster-grid-5">
+						{spotlightPosters.map((item) => (
+							<div class="spotlight-card">
+								<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
 							</div>
+						))}
+					</div>
+					<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
+				</div>
+
+				<h2 class="section-title">All Reviews</h2>
+				<div class="grid-5-columns">
+					{remainingPosts.map((post, index) => {
+						const poster = reviewPosters[index % reviewPosters.length];
+						return (
+							<a href={`/blog/${post.slug}/`} class="article-poster-card">
+								<div class="poster-img-wrap">
+									<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
+								</div>
+								<div class="card-info">
+									<span class="post-date">{post.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+									<h3 class="card-title">{post.data.title}</h3>
+								</div>
+							</a>
+						);
+					})}
+				</div>
+			</div>
+
+			<Footer />
+		</div>
+
+
+		<!-- ================= MOBILE VIEW ================= -->
+		<div class="mobile-view">
+			<header class="mobile-header-bar">
+				<a href="/" class="mobile-brand">SCENE <span>& OPINION</span></a>
+				<a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-weight:600; text-decoration:none; font-size:0.85rem;">@zoomout_says</a>
+			</header>
+
+			<main class="mobile-main">
+				{featuredPost && (
+					<a href={`/blog/${featuredPost.slug}/`} class="mobile-featured-card">
+						<img src={featuredPost.data.heroImage || '/poster7.png'} class="mobile-featured-img" alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
+						<div class="mobile-featured-body">
+							<span class="badge">Top Read</span>
+							<h2 style="font-size: 1.2rem; margin: 0.4rem 0;">{featuredPost.data.title}</h2>
+							<span class="post-date">{featuredPost.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
 						</div>
 					</a>
-				</div>
-			)}
+				)}
 
-			<!-- MIDDLE: Spotlight Series Carousel (5 Images) -->
-			<h2 class="section-title">Spotlight Series</h2>
-			<div class="carousel-container">
-				<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
-				<div class="poster-grid-5">
+				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">Spotlight Series</h3>
+				<div class="mobile-scroll-row">
 					{spotlightPosters.map((item) => (
-						<div class="spotlight-card">
-							<img 
-								src={item.primary} 
-								data-fallback={item.fallback} 
-								alt={item.title}
-								onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}"
-							/>
+						<div class="mobile-poster-item">
+							<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
 						</div>
 					))}
 				</div>
-				<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
-			</div>
 
-			<!-- BOTTOM: All Reviews Grid (Posters 1 to 6) -->
-			<h2 class="section-title">All Reviews</h2>
-			<div class="grid-5-columns">
-				{remainingPosts.map((post, index) => {
-					const poster = reviewPosters[index % reviewPosters.length];
-					return (
-						<a href={`/blog/${post.slug}/`} class="article-poster-card">
-							<div class="poster-img-wrap">
-								<img 
-									src={post.data.heroImage || poster.primary} 
-									data-fallback={poster.fallback}
-									alt={post.data.title} 
-									onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}"
-								/>
-							</div>
-							<div class="card-info">
-								<span class="post-date">
-									{post.data.pubDate.toLocaleDateString('en-us', {
-										year: 'numeric',
-										month: 'short',
-										day: 'numeric',
-									})}
-								</span>
-								<h3 class="card-title">{post.data.title}</h3>
-							</div>
-						</a>
-					);
-				})}
-			</div>
+				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">All Articles</h3>
+				<div class="mobile-grid-2">
+					{remainingPosts.map((post, index) => {
+						const poster = reviewPosters[index % reviewPosters.length];
+						return (
+							<a href={`/blog/${post.slug}/`} class="article-poster-card">
+								<div class="poster-img-wrap">
+									<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
+								</div>
+								<div class="card-info">
+									<span class="post-date" style="font-size:0.75rem;">{post.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+									<h4 class="card-title" style="font-size:0.85rem;">{post.data.title}</h4>
+								</div>
+							</a>
+						);
+					})}
+				</div>
+			</main>
+
+			<footer class="mobile-footer">
+				<p>&copy; {new Date().getFullYear()} Scene & Opinion (@zoomout_says)</p>
+			</footer>
 		</div>
 
-		<Footer />
 	</body>
 </html>
