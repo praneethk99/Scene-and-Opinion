@@ -29,6 +29,15 @@ const reviewPosters = [
 	{ primary: '/poster6.png', fallback: '/poster6.jpg' }
 ];
 
+const watchPosters = [
+	{ primary: '/poster7.png', fallback: '/poster7.jpg', title: 'Watch Review 1', youtubeUrl: 'https://youtube.com/@zoomout_says' },
+	{ primary: '/poster8.png', fallback: '/poster8.jpg', title: 'Watch Review 2', youtubeUrl: 'https://youtube.com/@zoomout_says' },
+	{ primary: '/poster9.png', fallback: '/poster9.jpg', title: 'Watch Review 3', youtubeUrl: 'https://youtube.com/@zoomout_says' },
+	{ primary: '/poster10.png', fallback: '/poster10.jpg', title: 'Watch Review 4', youtubeUrl: 'https://youtube.com/@zoomout_says' },
+	{ primary: '/poster11.png', fallback: '/poster11.jpg', title: 'Watch Review 5', youtubeUrl: 'https://youtube.com/@zoomout_says' },
+	{ primary: '/poster12.png', fallback: '/poster12.jpg', title: 'Watch Review 6', youtubeUrl: 'https://youtube.com/@zoomout_says' }
+];
+
 const socialLinks = {
 	instagram: "https://instagram.com/zoomout_says",
 	youtube: "https://youtube.com/@zoomout_says",
@@ -54,6 +63,63 @@ const socialLinks = {
 			@media (max-width: 768px) {
 				.desktop-view { display: none !important; }
 				.mobile-view { display: block !important; }
+			}
+
+			/* SHARED INTRO SECTION STYLES */
+			.intro-section {
+				background: #101a36;
+				border: 1px solid rgba(255, 255, 255, 0.12);
+				border-radius: 12px;
+				padding: 2rem;
+				margin-bottom: 3.5rem;
+			}
+
+			.intro-title {
+				font-size: 2rem;
+				font-weight: 700;
+				color: #ffffff;
+				margin: 0 0 0.5rem 0;
+				display: flex;
+				align-items: center;
+				gap: 0.5rem;
+			}
+
+			.intro-subtitle {
+				font-size: 1.1rem;
+				color: #c9d1d9;
+				margin-bottom: 1.5rem;
+				line-height: 1.5;
+			}
+
+			.intro-heading {
+				font-size: 1.25rem;
+				color: #58a6ff;
+				margin: 1.5rem 0 0.75rem 0;
+				font-weight: 600;
+			}
+
+			.intro-list {
+				list-style-type: disc;
+				padding-left: 1.25rem;
+				margin: 0 0 1.5rem 0;
+				color: #c9d1d9;
+			}
+
+			.intro-list li {
+				margin-bottom: 0.4rem;
+				font-size: 1rem;
+			}
+
+			.intro-footer-text {
+				color: #c9d1d9;
+				font-size: 1rem;
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			.intro-footer-text a {
+				color: #58a6ff;
+				text-decoration: underline;
 			}
 
 			/* DESKTOP STYLES */
@@ -161,7 +227,7 @@ const socialLinks = {
 				margin-bottom: 3.5rem;
 			}
 
-			.poster-grid-5 {
+			.poster-grid-carousel {
 				display: flex;
 				gap: 1.25rem;
 				overflow-x: auto;
@@ -178,9 +244,27 @@ const socialLinks = {
 				overflow: hidden;
 				border: 1px solid rgba(255, 255, 255, 0.1);
 				background-color: #1c2541;
+				display: block;
 			}
 
-			.spotlight-card img {
+			.watch-card {
+				flex: 0 0 calc(16.666% - 1rem);
+				scroll-snap-align: start;
+				aspect-ratio: 2 / 3;
+				border-radius: 8px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				background-color: #1c2541;
+				display: block;
+				transition: transform 0.2s ease, border-color 0.2s ease;
+			}
+
+			.watch-card:hover {
+				transform: scale(1.03);
+				border-color: #58a6ff;
+			}
+
+			.spotlight-card img, .watch-card img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
@@ -211,6 +295,7 @@ const socialLinks = {
 				display: grid;
 				grid-template-columns: repeat(5, 1fr);
 				gap: 1.25rem;
+				margin-bottom: 3.5rem;
 			}
 
 			.article-poster-card {
@@ -303,6 +388,15 @@ const socialLinks = {
 				padding: 105px 0.75rem 1.5rem 0.75rem;
 			}
 
+			.mobile-intro {
+				padding: 1.25rem;
+				margin-bottom: 1.75rem;
+			}
+
+			.mobile-intro .intro-title {
+				font-size: 1.4rem;
+			}
+
 			.mobile-featured-card {
 				display: block;
 				background: #1c2541;
@@ -343,6 +437,7 @@ const socialLinks = {
 				border-radius: 8px;
 				overflow: hidden;
 				background-color: #1c2541;
+				display: block;
 			}
 
 			.mobile-poster-item img {
@@ -355,6 +450,7 @@ const socialLinks = {
 				display: grid;
 				grid-template-columns: repeat(2, 1fr);
 				gap: 0.75rem;
+				margin-bottom: 1.75rem;
 			}
 
 			.mobile-social-links {
@@ -387,6 +483,26 @@ const socialLinks = {
 			<Header />
 
 			<div class="read-container">
+				<!-- INTRO SECTION -->
+				<section class="intro-section">
+					<h1 class="intro-title">Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
+					<p class="intro-subtitle">
+						Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, sharp film breakdowns, and the freshest updates in cinema.
+					</p>
+
+					<h2 class="intro-heading">What We Do</h2>
+					<ul class="intro-list">
+						<li>Honest Movie Reviews</li>
+						<li>Deep-Dive Film Breakdowns</li>
+						<li>Fresh Cinema News & Updates</li>
+					</ul>
+
+					<h2 class="intro-heading">Follow the Channel</h2>
+					<p class="intro-footer-text">
+						Catch daily takes and quick reviews on our <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">Instagram</a> and watch full in-depth video analysis on our <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">YouTube channel</a>.
+					</p>
+				</section>
+
 				{featuredPost && (
 					<div class="top-featured-wrapper">
 						<a href={`/blog/${featuredPost.slug}/`} class="featured-hero-link">
@@ -408,7 +524,7 @@ const socialLinks = {
 				<h2 class="section-title">Spotlight Series</h2>
 				<div class="carousel-container">
 					<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
-					<div class="poster-grid-5">
+					<div class="poster-grid-carousel">
 						{spotlightPosters.map((item) => (
 							<div class="spotlight-card">
 								<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
@@ -435,6 +551,20 @@ const socialLinks = {
 						);
 					})}
 				</div>
+
+				<!-- BOTTOM 6-IMAGE CAROUSEL (POSTER 7 to 12) REDIRECTING TO YOUTUBE -->
+				<h2 class="section-title">Watch Video Reviews</h2>
+				<div class="carousel-container">
+					<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
+					<div class="poster-grid-carousel">
+						{watchPosters.map((item) => (
+							<a href={item.youtubeUrl} target="_blank" rel="noopener noreferrer" class="watch-card">
+								<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
+							</a>
+						))}
+					</div>
+					<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
+				</div>
 			</div>
 
 			<Footer />
@@ -455,6 +585,26 @@ const socialLinks = {
 			</header>
 
 			<main class="mobile-main">
+				<!-- MOBILE INTRO SECTION -->
+				<section class="intro-section mobile-intro">
+					<h1 class="intro-title">Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
+					<p class="intro-subtitle">
+						Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, sharp film breakdowns, and the freshest updates in cinema.
+					</p>
+
+					<h2 class="intro-heading">What We Do</h2>
+					<ul class="intro-list">
+						<li>Honest Movie Reviews</li>
+						<li>Deep-Dive Film Breakdowns</li>
+						<li>Fresh Cinema News & Updates</li>
+					</ul>
+
+					<h2 class="intro-heading">Follow the Channel</h2>
+					<p class="intro-footer-text">
+						Catch daily takes and quick reviews on our <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">Instagram</a> and watch full in-depth video analysis on our <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">YouTube channel</a>.
+					</p>
+				</section>
+
 				{featuredPost && (
 					<a href={`/blog/${featuredPost.slug}/`} class="mobile-featured-card">
 						<img src={featuredPost.data.heroImage || '/poster7.png'} class="mobile-featured-img" alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
@@ -491,6 +641,16 @@ const socialLinks = {
 							</a>
 						);
 					})}
+				</div>
+
+				<!-- MOBILE BOTTOM CAROUSEL FOR YOUTUBE WATCH LINKS -->
+				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">Watch Video Reviews</h3>
+				<div class="mobile-scroll-row">
+					{watchPosters.map((item) => (
+						<a href={item.youtubeUrl} target="_blank" rel="noopener noreferrer" class="mobile-poster-item">
+							<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
+						</a>
+					))}
 				</div>
 			</main>
 
