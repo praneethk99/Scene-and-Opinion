@@ -4,237 +4,357 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
 
-// Fetch all blog posts dynamically from your Astro Content Collection
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-// 6 Carousel Posters Data (Replace image and link URLs with your own)
-const featuredPosters = [
-  { 
-    title: "Jana Nayagan", 
-    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Jana+Nayagan", 
-    link: "/blog/jana-nayagan" 
-  },
-  { 
-    title: "Lenin", 
-    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Lenin", 
-    link: "/blog/lenin" 
-  },
-  { 
-    title: "Evil Dead Burn", 
-    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Evil+Dead", 
-    link: "/blog/evil-dead-burn" 
-  },
-  { 
-    title: "Mukhbir", 
-    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Mukhbir", 
-    link: "/blog/mukhbir" 
-  },
-  { 
-    title: "Dark Light", 
-    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Dark+Light", 
-    link: "/blog/dark-light" 
-  },
-  { 
-    title: "Vanda Devullu", 
-    image: "https://via.placeholder.com/200x300/10172a/ffffff?text=Vanda+Devullu", 
-    link: "/blog/vanda-devullu" 
-  }
+const featuredPost = posts[0];
+const remainingPosts = posts.slice(1);
+
+// Top 5-slide poster carousel using dedicated public assets
+const topCarouselPosters = [
+	{ primary: '/poster12.png', fallback: '/poster12.jpg', title: 'Jana Nayagan' },
+	{ primary: '/poster13.png', fallback: '/poster13.jpg', title: 'Lenin' },
+	{ primary: '/poster14.png', fallback: '/poster14.jpg', title: 'Evil Dead Burn' },
+	{ primary: '/poster15.png', fallback: '/poster15.jpg', title: 'Mukhbir' },
+	{ primary: '/poster16.png', fallback: '/poster16.jpg', title: 'Dark Light' }
 ];
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main class="read-container">
-			
-			<!-- 6-IMAGE CAROUSEL SECTION -->
-			<section class="carousel-wrapper">
-				<button class="nav-btn prev" id="scrollLeft" aria-label="Scroll Left">&#10094;</button>
-
-				<div class="carousel-track" id="carouselTrack">
-					{featuredPosters.map((poster) => (
-						<a href={poster.link} class="carousel-card" title={poster.title}>
-							<img src={poster.image} alt={poster.title} loading="lazy" />
-						</a>
-					))}
-				</div>
-
-				<button class="nav-btn next" id="scrollRight" aria-label="Scroll Right">&#10095;</button>
-			</section>
-
-			<!-- 4 ROWS OF READ POSTS -->
-			<section class="posts-grid">
-				{posts.slice(0, 4).map((post) => (
-					<a href={`/blog/${post.slug}/`} class="post-card">
-						<div class="post-image-container">
-							<img src={post.data.heroImage} alt={post.data.title} class="post-image" loading="lazy" />
-						</div>
-						<h2 class="post-title">{post.data.title}</h2>
-						<span class="post-date">
-							<FormattedDate date={post.data.pubDate} />
-						</span>
-					</a>
-				))}
-			</section>
-
-		</main>
-		<Footer />
-
-		<script>
-			const track = document.getElementById('carouselTrack');
-			const leftBtn = document.getElementById('scrollLeft');
-			const rightBtn = document.getElementById('scrollRight');
-
-			leftBtn?.addEventListener('click', () => {
-				track?.scrollBy({ left: -220, behavior: 'smooth' });
-			});
-
-			rightBtn?.addEventListener('click', () => {
-				track?.scrollBy({ left: 220, behavior: 'smooth' });
-			});
-		</script>
-
+		<BaseHead title={`Read | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<style>
-			/* Centered main container matching Scene and Opinion layout */
+			*, *::before, *::after {
+				box-sizing: border-box;
+			}
+
+			body {
+				background-color: #0b132b;
+				color: #ffffff;
+				font-family: system-ui, -apple-system, sans-serif;
+				margin: 0;
+			}
+
 			.read-container {
-				max-width: 680px;
+				max-width: 1400px;
 				margin: 0 auto;
 				padding: 2rem 1rem;
-				display: flex;
-				flex-direction: column;
-				gap: 2.5rem;
 			}
 
-			/* ---------------- 6 CAROUSEL POSTERS ---------------- */
-			.carousel-wrapper {
+			.section-title {
+				font-size: 1.3rem;
+				color: #58a6ff;
+				margin-bottom: 1rem;
+				border-left: 4px solid #58a6ff;
+				padding-left: 0.6rem;
+			}
+
+			/* 1. Top 5-Slide Poster Carousel Container */
+			.carousel-container {
 				position: relative;
-				width: 100%;
-				background: #0d1527;
-				border: 1px solid #1a2642;
-				border-radius: 12px;
-				padding: 0.75rem;
-				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-			}
-
-			.carousel-track {
 				display: flex;
-				gap: 0.65rem;
-				overflow-x: auto;
-				scroll-behavior: smooth;
-				scrollbar-width: none; /* Firefox */
+				align-items: center;
+				border: 1px solid rgba(255, 255, 255, 0.15);
+				border-radius: 12px;
+				padding: 1rem 2.5rem;
+				background: #101a36;
+				margin-bottom: 2.5rem;
 			}
 
-			.carousel-track::-webkit-scrollbar {
-				display: none; /* Chrome & Safari */
+			.poster-grid-top {
+				display: grid;
+				grid-template-columns: repeat(5, 1fr);
+				gap: 1rem;
+				width: 100%;
 			}
 
-			.carousel-card {
-				flex: 0 0 calc((100% - (5 * 0.65rem)) / 6);
-				min-width: 85px;
+			.top-poster-card {
+				display: block;
+				position: relative;
 				aspect-ratio: 2 / 3;
-				border-radius: 6px;
+				border-radius: 8px;
 				overflow: hidden;
-				border: 1px solid #1f2d4e;
-				transition: transform 0.25s ease, border-color 0.25s ease;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				background-color: #1c2541;
+				transition: transform 0.2s ease, border-color 0.2s ease;
 			}
 
-			.carousel-card:hover {
-				transform: translateY(-4px) scale(1.03);
-				border-color: #3b82f6;
+			.top-poster-card:hover {
+				transform: translateY(-4px);
+				border-color: #58a6ff;
 			}
 
-			.carousel-card img {
+			.top-poster-card img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
+				display: block;
 			}
 
-			.nav-btn {
+			.carousel-nav-btn {
 				position: absolute;
 				top: 50%;
 				transform: translateY(-50%);
-				background: rgba(0, 0, 0, 0.85);
-				color: #fff;
-				border: 1px solid #334155;
-				width: 28px;
-				height: 28px;
+				width: 32px;
+				height: 32px;
+				background-color: rgba(0, 0, 0, 0.7);
+				border: 1px solid rgba(255, 255, 255, 0.3);
+				color: #ffffff;
 				border-radius: 50%;
-				cursor: pointer;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				z-index: 10;
-				font-size: 0.8rem;
-				transition: background 0.2s, transform 0.2s;
+				cursor: pointer;
+				z-index: 2;
+				user-select: none;
 			}
 
-			.nav-btn:hover {
-				background: rgba(0, 0, 0, 1);
-				transform: translateY(-50%) scale(1.1);
-			}
+			.carousel-nav-btn.prev { left: 0.5rem; }
+			.carousel-nav-btn.next { right: 0.5rem; }
 
-			.nav-btn.prev { left: -10px; }
-			.nav-btn.next { right: -10px; }
-
-			/* ---------------- 4 POST ROWS ---------------- */
-			.posts-grid {
-				display: flex;
-				flex-direction: column;
-				gap: 1.5rem;
-			}
-
-			.post-card {
-				background: #0d1527;
-				border: 1px solid #1a2642;
-				border-radius: 12px;
-				padding: 1.25rem;
+			/* 2. Featured Review Hero Section (Fully Clickable Redirect) */
+			.featured-hero-link {
+				display: block;
 				text-decoration: none;
-				color: #ffffff;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				text-align: center;
-				transition: border-color 0.2s, transform 0.2s;
+				color: inherit;
+				margin-bottom: 3rem;
 			}
 
-			.post-card:hover {
-				border-color: #3b82f6;
-				transform: translateY(-2px);
-			}
-
-			.post-image-container {
-				width: 100%;
-				height: 240px;
-				border-radius: 8px;
+			.featured-hero {
+				display: grid;
+				grid-template-columns: 1.3fr 1fr;
+				gap: 1.5rem;
+				background: #1c2541;
+				border-radius: 12px;
 				overflow: hidden;
-				background-color: #152037;
-				margin-bottom: 0.75rem;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				transition: transform 0.2s ease, box-shadow 0.2s ease;
 			}
 
-			.post-image {
+			.featured-hero-link:hover .featured-hero {
+				transform: translateY(-3px);
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+				border-color: rgba(88, 166, 255, 0.4);
+			}
+
+			.hero-banner-wrap {
+				width: 100%;
+				aspect-ratio: 16 / 9;
+				overflow: hidden;
+				background-color: #101a36;
+			}
+
+			.hero-banner-wrap img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
+				display: block;
 			}
 
-			.post-title {
-				font-size: 1.1rem;
-				font-weight: 600;
-				margin: 0.25rem 0;
+			.featured-content {
+				padding: 2rem;
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.badge {
+				background: #58a6ff;
+				color: #0b132b;
+				font-weight: bold;
+				font-size: 0.75rem;
+				padding: 0.25rem 0.6rem;
+				border-radius: 4px;
+				width: fit-content;
+				margin-bottom: 0.75rem;
+				text-transform: uppercase;
+			}
+
+			.featured-title {
+				font-size: 1.8rem;
+				margin: 0.5rem 0;
+				color: #ffffff;
+				line-height: 1.3;
+			}
+
+			.featured-hero-link:hover .featured-title {
+				color: #58a6ff;
 			}
 
 			.post-date {
-				font-size: 0.8rem;
-				color: #94a3b8;
+				font-size: 0.85rem;
+				color: #8b949e;
+				margin-bottom: 0.75rem;
+			}
+
+			.featured-snippet {
+				font-size: 0.95rem;
+				color: #c9d1d9;
+				line-height: 1.5;
+				margin: 0;
+			}
+
+			/* 3. 5-Column Grid Layout (5 Cards per Row) */
+			.grid-5-columns {
+				display: grid;
+				grid-template-columns: repeat(5, 1fr);
+				gap: 1.25rem;
+			}
+
+			.article-poster-card {
+				display: flex;
+				flex-direction: column;
+				background: #1c2541;
+				border-radius: 8px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				text-decoration: none;
+				color: inherit;
+				transition: transform 0.2s ease, border-color 0.2s ease;
+			}
+
+			.article-poster-card:hover {
+				transform: translateY(-4px);
+				border-color: #58a6ff;
+			}
+
+			.poster-img-wrap {
+				width: 100%;
+				aspect-ratio: 2 / 3;
+				overflow: hidden;
+				background-color: #101a36;
+			}
+
+			.poster-img-wrap img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+				display: block;
+			}
+
+			.card-info {
+				padding: 0.85rem;
+				display: flex;
+				flex-direction: column;
+				gap: 0.35rem;
+			}
+
+			.card-title {
+				font-size: 0.95rem;
+				font-weight: 600;
+				color: #ffffff;
+				margin: 0;
+				line-height: 1.3;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+
+			.article-poster-card:hover .card-title {
+				color: #58a6ff;
+			}
+
+			@media (max-width: 1100px) {
+				.grid-5-columns, .poster-grid-top {
+					grid-template-columns: repeat(3, 1fr);
+				}
+				.featured-hero { grid-template-columns: 1fr; }
+			}
+
+			@media (max-width: 650px) {
+				.grid-5-columns, .poster-grid-top {
+					grid-template-columns: repeat(2, 1fr);
+				}
 			}
 		</style>
+	</head>
+	<body>
+		<Header />
+
+		<div class="read-container">
+			<!-- 1. Top 5-Item Carousel -->
+			<h2 class="section-title">Spotlight Releases</h2>
+			<div class="carousel-container">
+				<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
+				<div class="poster-grid-top">
+					{topCarouselPosters.map((item) => (
+						<div class="top-poster-card">
+							<img 
+								src={item.primary} 
+								data-fallback={item.fallback} 
+								alt={item.title}
+								onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}"
+							/>
+						</div>
+					))}
+				</div>
+				<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
+			</div>
+
+			<!-- 2. Featured Review Hero Section (Clicking redirects to article) -->
+			{featuredPost && (
+				<a href={`/blog/${featuredPost.slug}/`} class="featured-hero-link">
+					<div class="featured-hero">
+						<div class="hero-banner-wrap">
+							<img 
+								src={featuredPost.data.heroImage || '/poster7.png'} 
+								alt={featuredPost.data.title}
+								onerror="this.src='/poster7.png'" 
+							/>
+						</div>
+						<div class="featured-content">
+							<span class="badge">Featured Review</span>
+							<h1 class="featured-title">{featuredPost.data.title}</h1>
+							<span class="post-date">
+								{featuredPost.data.pubDate.toLocaleDateString('en-us', {
+									year: 'numeric',
+									month: 'short',
+									day: 'numeric',
+								})}
+							</span>
+							<p class="featured-snippet">
+								{featuredPost.data.description || 'Read our full in-depth review and cinematic analysis...'}
+							</p>
+						</div>
+					</div>
+				</a>
+			)}
+
+			<!-- 3. Articles Displayed in a 5-Column Grid -->
+			<h2 class="section-title">All Reviews & Articles</h2>
+			<div class="grid-5-columns">
+				{remainingPosts.map((post, index) => {
+					const posterNum = 17 + (index % 10);
+					return (
+						<a href={`/blog/${post.slug}/`} class="article-poster-card">
+							<div class="poster-img-wrap">
+								<img 
+									src={post.data.heroImage || `/poster${posterNum}.png`} 
+									data-fallback={`/poster${posterNum}.jpg`}
+									alt={post.data.title} 
+									onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}"
+								/>
+							</div>
+							<div class="card-info">
+								<span class="post-date">
+									{post.data.pubDate.toLocaleDateString('en-us', {
+										year: 'numeric',
+										month: 'short',
+										day: 'numeric',
+									})}
+								</span>
+								<h3 class="card-title">{post.data.title}</h3>
+							</div>
+						</a>
+					);
+				})}
+			</div>
+		</div>
+
+		<Footer />
 	</body>
 </html>
