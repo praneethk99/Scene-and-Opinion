@@ -9,17 +9,6 @@ const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-const featuredPost = posts[0];
-const remainingPosts = posts.slice(1);
-
-const spotlightPosters = [
-	{ primary: '/poster12.png', fallback: '/poster12.jpg', title: 'Jana Nayagan' },
-	{ primary: '/poster13.png', fallback: '/poster13.jpg', title: 'Lenin' },
-	{ primary: '/poster14.png', fallback: '/poster14.jpg', title: 'Evil Dead Burn' },
-	{ primary: '/poster15.png', fallback: '/poster15.jpg', title: 'Mukhbir' },
-	{ primary: '/poster16.png', fallback: '/poster16.jpg', title: 'Dark Light' }
-];
-
 const reviewPosters = [
 	{ primary: '/poster1.png', fallback: '/poster1.jpg' },
 	{ primary: '/poster2.png', fallback: '/poster2.jpg' },
@@ -28,6 +17,12 @@ const reviewPosters = [
 	{ primary: '/poster5.png', fallback: '/poster5.jpg' },
 	{ primary: '/poster6.png', fallback: '/poster6.jpg' }
 ];
+
+const socialLinks = {
+	instagram: "https://instagram.com/zoomout_says",
+	youtube: "https://youtube.com/@zoomout_says",
+	email: "mailto:contact@sceneandopinion.com"
+};
 ---
 
 <!doctype html>
@@ -42,7 +37,6 @@ const reviewPosters = [
 				margin: 0;
 			}
 
-			/* VISIBILITY TOGGLES */
 			.desktop-view { display: block; }
 			.mobile-view { display: none; }
 
@@ -51,215 +45,110 @@ const reviewPosters = [
 				.mobile-view { display: block !important; }
 			}
 
-			/* DESKTOP STYLES (ORIGINAL UNTOUCHED) */
+			/* DESKTOP READ PAGE LAYOUT */
 			.read-container {
-				max-width: 1300px;
+				max-width: 1200px;
 				margin: 0 auto;
 				padding: 2rem 1rem;
 			}
 
-			.section-title {
-				font-size: 1.3rem;
-				color: #58a6ff;
-				margin-bottom: 1.25rem;
-				border-left: 4px solid #58a6ff;
-				padding-left: 0.6rem;
+			.page-header {
+				margin-bottom: 2rem;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+				padding-bottom: 1rem;
 			}
 
-			.top-featured-wrapper {
-				max-width: 900px;
-				margin: 0 auto 3.5rem auto;
+			.page-title {
+				font-size: 2rem;
+				color: #ffffff;
+				margin: 0 0 0.5rem 0;
 			}
 
-			.featured-hero-link {
-				display: block;
+			.page-description {
+				color: #8b949e;
+				font-size: 1rem;
+				margin: 0;
+			}
+
+			.grid-3-columns {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.5rem;
+			}
+
+			.read-article-card {
+				display: flex;
+				flex-direction: column;
+				background: #1c2541;
+				border-radius: 10px;
+				overflow: hidden;
+				border: 1px solid rgba(255, 255, 255, 0.08);
 				text-decoration: none;
 				color: inherit;
+				transition: transform 0.2s ease, border-color 0.2s ease;
 			}
 
-			.featured-hero {
-				display: grid;
-				grid-template-columns: 1.2fr 1fr;
-				gap: 1.5rem;
-				background: #1c2541;
-				border-radius: 12px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.12);
-				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-			}
-
-			.featured-hero-link:hover .featured-hero {
+			.read-article-card:hover {
 				transform: translateY(-4px);
-				box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
 				border-color: #58a6ff;
 			}
 
-			.hero-banner-wrap {
+			.article-thumb-wrap {
 				width: 100%;
 				aspect-ratio: 16 / 9;
 				overflow: hidden;
 				background-color: #101a36;
 			}
 
-			.hero-banner-wrap img {
+			.article-thumb-wrap img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
 				display: block;
 			}
 
-			.featured-content {
-				padding: 1.75rem;
+			.article-body {
+				padding: 1.25rem;
 				display: flex;
 				flex-direction: column;
-				justify-content: center;
-			}
-
-			.badge {
-				background: #58a6ff;
-				color: #0b132b;
-				font-weight: bold;
-				font-size: 0.75rem;
-				padding: 0.25rem 0.6rem;
-				border-radius: 4px;
-				width: fit-content;
-				margin-bottom: 0.75rem;
-				text-transform: uppercase;
-			}
-
-			.featured-title {
-				font-size: 1.75rem;
-				margin: 0.25rem 0 0.5rem 0;
-				color: #ffffff;
-				line-height: 1.3;
+				gap: 0.5rem;
 			}
 
 			.post-date {
-				font-size: 0.85rem;
+				font-size: 0.8rem;
 				color: #8b949e;
-				margin-bottom: 0.75rem;
-			}
-
-			.featured-snippet {
-				font-size: 0.95rem;
-				color: #c9d1d9;
-				line-height: 1.5;
-				margin: 0;
-			}
-
-			.carousel-container {
-				position: relative;
-				border: 1px solid rgba(255, 255, 255, 0.12);
-				border-radius: 12px;
-				padding: 1.25rem 2.5rem;
-				background: #101a36;
-				margin-bottom: 3.5rem;
-			}
-
-			.poster-grid-5 {
-				display: flex;
-				gap: 1.25rem;
-				overflow-x: auto;
-				scroll-snap-type: x mandatory;
-				scrollbar-width: none;
-				padding-bottom: 0.25rem;
-			}
-
-			.spotlight-card {
-				flex: 0 0 calc(20% - 1rem);
-				scroll-snap-align: start;
-				aspect-ratio: 2 / 3;
-				border-radius: 8px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				background-color: #1c2541;
-			}
-
-			.spotlight-card img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-			}
-
-			.carousel-nav-btn {
-				position: absolute;
-				top: 50%;
-				transform: translateY(-50%);
-				width: 34px;
-				height: 34px;
-				background-color: rgba(0, 0, 0, 0.75);
-				border: 1px solid rgba(255, 255, 255, 0.3);
-				color: #ffffff;
-				border-radius: 50%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				cursor: pointer;
-				z-index: 2;
-			}
-
-			.carousel-nav-btn.prev { left: 0.6rem; }
-			.carousel-nav-btn.next { right: 0.6rem; }
-
-			.grid-5-columns {
-				display: grid;
-				grid-template-columns: repeat(5, 1fr);
-				gap: 1.25rem;
-			}
-
-			.article-poster-card {
-				display: flex;
-				flex-direction: column;
-				background: #1c2541;
-				border-radius: 8px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.08);
-				text-decoration: none;
-				color: inherit;
-			}
-
-			.poster-img-wrap {
-				width: 100%;
-				aspect-ratio: 2 / 3;
-				overflow: hidden;
-				background-color: #101a36;
-			}
-
-			.poster-img-wrap img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-			}
-
-			.card-info {
-				padding: 0.85rem;
-				display: flex;
-				flex-direction: column;
-				gap: 0.35rem;
 			}
 
 			.card-title {
-				font-size: 0.95rem;
+				font-size: 1.1rem;
 				font-weight: 600;
 				color: #ffffff;
 				margin: 0;
 				line-height: 1.3;
 			}
 
+			.card-excerpt {
+				font-size: 0.88rem;
+				color: #c9d1d9;
+				line-height: 1.4;
+				margin: 0;
+			}
+
 			/* MOBILE DEDICATED STYLES */
 			.mobile-header-bar {
 				position: fixed;
 				top: 0; left: 0; right: 0;
-				height: 56px;
 				background-color: #0d1b2a;
 				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 				z-index: 100;
+				padding: 0.75rem 1rem;
+			}
+
+			.mobile-brand-row {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: 0 1rem;
+				margin-bottom: 0.6rem;
 			}
 
 			.mobile-brand {
@@ -271,62 +160,74 @@ const reviewPosters = [
 
 			.mobile-brand span { color: #58a6ff; }
 
-			.mobile-main {
-				padding: 70px 0.75rem 1.5rem 0.75rem;
+			.mobile-nav-tabs {
+				display: flex;
+				gap: 1.25rem;
+				border-top: 1px solid rgba(255, 255, 255, 0.08);
+				padding-top: 0.5rem;
 			}
 
-			.mobile-featured-card {
-				display: block;
+			.mobile-nav-link {
+				color: #8b949e;
+				text-decoration: none;
+				font-size: 0.9rem;
+				font-weight: 600;
+				padding-bottom: 0.2rem;
+			}
+
+			.mobile-nav-link.active {
+				color: #58a6ff;
+				border-bottom: 2px solid #58a6ff;
+			}
+
+			.mobile-main {
+				padding: 105px 0.75rem 1.5rem 0.75rem;
+			}
+
+			.mobile-list {
+				display: flex;
+				flex-direction: column;
+				gap: 1rem;
+			}
+
+			.mobile-read-card {
+				display: flex;
+				gap: 0.85rem;
 				background: #1c2541;
-				border-radius: 10px;
+				border-radius: 8px;
 				overflow: hidden;
 				text-decoration: none;
 				color: inherit;
-				margin-bottom: 2rem;
-				border: 1px solid rgba(255, 255, 255, 0.1);
+				border: 1px solid rgba(255, 255, 255, 0.08);
+				padding: 0.6rem;
 			}
 
-			.mobile-featured-img {
-				width: 100%;
+			.mobile-read-thumb {
+				width: 110px;
 				aspect-ratio: 16 / 9;
 				object-fit: cover;
-			}
-
-			.mobile-featured-body {
-				padding: 1rem;
-			}
-
-			.mobile-scroll-row {
-				display: flex;
-				gap: 0.75rem;
-				overflow-x: auto;
-				scroll-snap-type: x mandatory;
-				padding-bottom: 0.5rem;
-				margin-bottom: 2rem;
-				scrollbar-width: none;
-			}
-
-			.mobile-scroll-row::-webkit-scrollbar { display: none; }
-
-			.mobile-poster-item {
-				flex: 0 0 130px;
-				scroll-snap-align: start;
-				aspect-ratio: 2 / 3;
 				border-radius: 6px;
-				overflow: hidden;
-				background-color: #1c2541;
+				flex-shrink: 0;
 			}
 
-			.mobile-poster-item img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
+			.mobile-read-info {
+				display: flex;
+				flex-direction: column;
+				justify-content: center;
 			}
 
-			.mobile-grid-2 {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 0.75rem;
+			.mobile-social-links {
+				display: flex;
+				justify-content: center;
+				gap: 1.25rem;
+				margin-bottom: 1rem;
+			}
+
+			.mobile-social-links a {
+				color: #58a6ff;
+				text-decoration: none;
+				font-size: 0.85rem;
+				font-weight: 500;
 			}
 
 			.mobile-footer {
@@ -340,54 +241,28 @@ const reviewPosters = [
 	</head>
 	<body>
 
-		<!-- ================= DESKTOP VIEW ================= -->
+		<!-- DESKTOP VIEW -->
 		<div class="desktop-view">
 			<Header />
 
 			<div class="read-container">
-				{featuredPost && (
-					<div class="top-featured-wrapper">
-						<a href={`/blog/${featuredPost.slug}/`} class="featured-hero-link">
-							<div class="featured-hero">
-								<div class="hero-banner-wrap">
-									<img src={featuredPost.data.heroImage || '/poster7.png'} alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
-								</div>
-								<div class="featured-content">
-									<span class="badge">Top Featured</span>
-									<h1 class="featured-title">{featuredPost.data.title}</h1>
-									<span class="post-date">{featuredPost.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-									<p class="featured-snippet">{featuredPost.data.description || 'Read our full in-depth review...'}</p>
-								</div>
-							</div>
-						</a>
-					</div>
-				)}
-
-				<h2 class="section-title">Spotlight Series</h2>
-				<div class="carousel-container">
-					<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
-					<div class="poster-grid-5">
-						{spotlightPosters.map((item) => (
-							<div class="spotlight-card">
-								<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
-							</div>
-						))}
-					</div>
-					<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
+				<div class="page-header">
+					<h1 class="page-title">Articles & Written Reviews</h1>
+					<p class="page-description">Detailed breakdowns, film essays, and written reviews.</p>
 				</div>
 
-				<h2 class="section-title">All Reviews</h2>
-				<div class="grid-5-columns">
-					{remainingPosts.map((post, index) => {
+				<div class="grid-3-columns">
+					{posts.map((post, index) => {
 						const poster = reviewPosters[index % reviewPosters.length];
 						return (
-							<a href={`/blog/${post.slug}/`} class="article-poster-card">
-								<div class="poster-img-wrap">
+							<a href={`/blog/${post.slug}/`} class="read-article-card">
+								<div class="article-thumb-wrap">
 									<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
 								</div>
-								<div class="card-info">
+								<div class="article-body">
 									<span class="post-date">{post.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-									<h3 class="card-title">{post.data.title}</h3>
+									<h2 class="card-title">{post.data.title}</h2>
+									<p class="card-excerpt">{post.data.description || 'Click to read full analysis and breakdown...'}</p>
 								</div>
 							</a>
 						);
@@ -398,47 +273,31 @@ const reviewPosters = [
 			<Footer />
 		</div>
 
-
-		<!-- ================= MOBILE VIEW ================= -->
+		<!-- MOBILE VIEW -->
 		<div class="mobile-view">
 			<header class="mobile-header-bar">
-				<a href="/" class="mobile-brand">SCENE <span>& OPINION</span></a>
-				<a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-weight:600; text-decoration:none; font-size:0.85rem;">@zoomout_says</a>
+				<div class="mobile-brand-row">
+					<a href="/" class="mobile-brand">SCENE <span>& OPINION</span></a>
+					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-weight:600; text-decoration:none; font-size:0.85rem;">@zoomout_says</a>
+				</div>
+				<nav class="mobile-nav-tabs">
+					<a href="/" class="mobile-nav-link">Home</a>
+					<a href="/blog/" class="mobile-nav-link active">Read</a>
+					<a href="/watch/" class="mobile-nav-link">Watch</a>
+				</nav>
 			</header>
 
 			<main class="mobile-main">
-				{featuredPost && (
-					<a href={`/blog/${featuredPost.slug}/`} class="mobile-featured-card">
-						<img src={featuredPost.data.heroImage || '/poster7.png'} class="mobile-featured-img" alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
-						<div class="mobile-featured-body">
-							<span class="badge">Top Read</span>
-							<h2 style="font-size: 1.2rem; margin: 0.4rem 0;">{featuredPost.data.title}</h2>
-							<span class="post-date">{featuredPost.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-						</div>
-					</a>
-				)}
-
-				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">Spotlight Series</h3>
-				<div class="mobile-scroll-row">
-					{spotlightPosters.map((item) => (
-						<div class="mobile-poster-item">
-							<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
-						</div>
-					))}
-				</div>
-
-				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">All Articles</h3>
-				<div class="mobile-grid-2">
-					{remainingPosts.map((post, index) => {
+				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:1rem;">All Articles</h3>
+				<div class="mobile-list">
+					{posts.map((post, index) => {
 						const poster = reviewPosters[index % reviewPosters.length];
 						return (
-							<a href={`/blog/${post.slug}/`} class="article-poster-card">
-								<div class="poster-img-wrap">
-									<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
-								</div>
-								<div class="card-info">
+							<a href={`/blog/${post.slug}/`} class="mobile-read-card">
+								<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} class="mobile-read-thumb" alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
+								<div class="mobile-read-info">
 									<span class="post-date" style="font-size:0.75rem;">{post.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-									<h4 class="card-title" style="font-size:0.85rem;">{post.data.title}</h4>
+									<h4 class="card-title" style="font-size:0.88rem; margin-top:0.2rem;">{post.data.title}</h4>
 								</div>
 							</a>
 						);
@@ -447,6 +306,11 @@ const reviewPosters = [
 			</main>
 
 			<footer class="mobile-footer">
+				<div class="mobile-social-links">
+					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">YouTube</a>
+					<a href={socialLinks.email}>Email</a>
+				</div>
 				<p>&copy; {new Date().getFullYear()} Scene & Opinion (@zoomout_says)</p>
 			</footer>
 		</div>

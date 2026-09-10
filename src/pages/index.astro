@@ -28,6 +28,12 @@ const reviewPosters = [
 	{ primary: '/poster5.png', fallback: '/poster5.jpg' },
 	{ primary: '/poster6.png', fallback: '/poster6.jpg' }
 ];
+
+const socialLinks = {
+	instagram: "https://instagram.com/zoomout_says",
+	youtube: "https://youtube.com/@zoomout_says",
+	email: "mailto:contact@sceneandopinion.com"
+};
 ---
 
 <!doctype html>
@@ -42,7 +48,6 @@ const reviewPosters = [
 				margin: 0;
 			}
 
-			/* VISIBILITY TOGGLES */
 			.desktop-view { display: block; }
 			.mobile-view { display: none; }
 
@@ -51,7 +56,7 @@ const reviewPosters = [
 				.mobile-view { display: block !important; }
 			}
 
-			/* DESKTOP STYLES (ORIGINAL UNTOUCHED) */
+			/* DESKTOP STYLES */
 			.read-container {
 				max-width: 1300px;
 				margin: 0 auto;
@@ -252,14 +257,17 @@ const reviewPosters = [
 			.mobile-header-bar {
 				position: fixed;
 				top: 0; left: 0; right: 0;
-				height: 56px;
 				background-color: #0d1b2a;
 				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 				z-index: 100;
+				padding: 0.75rem 1rem;
+			}
+
+			.mobile-brand-row {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				padding: 0 1rem;
+				margin-bottom: 0.6rem;
 			}
 
 			.mobile-brand {
@@ -271,8 +279,28 @@ const reviewPosters = [
 
 			.mobile-brand span { color: #58a6ff; }
 
+			.mobile-nav-tabs {
+				display: flex;
+				gap: 1.25rem;
+				border-top: 1px solid rgba(255, 255, 255, 0.08);
+				padding-top: 0.5rem;
+			}
+
+			.mobile-nav-link {
+				color: #8b949e;
+				text-decoration: none;
+				font-size: 0.9rem;
+				font-weight: 600;
+				padding-bottom: 0.2rem;
+			}
+
+			.mobile-nav-link.active {
+				color: #58a6ff;
+				border-bottom: 2px solid #58a6ff;
+			}
+
 			.mobile-main {
-				padding: 70px 0.75rem 1.5rem 0.75rem;
+				padding: 105px 0.75rem 1.5rem 0.75rem;
 			}
 
 			.mobile-featured-card {
@@ -282,7 +310,7 @@ const reviewPosters = [
 				overflow: hidden;
 				text-decoration: none;
 				color: inherit;
-				margin-bottom: 2rem;
+				margin-bottom: 1.75rem;
 				border: 1px solid rgba(255, 255, 255, 0.1);
 			}
 
@@ -302,17 +330,17 @@ const reviewPosters = [
 				overflow-x: auto;
 				scroll-snap-type: x mandatory;
 				padding-bottom: 0.5rem;
-				margin-bottom: 2rem;
+				margin-bottom: 1.75rem;
 				scrollbar-width: none;
 			}
 
 			.mobile-scroll-row::-webkit-scrollbar { display: none; }
 
 			.mobile-poster-item {
-				flex: 0 0 130px;
+				flex: 0 0 135px;
 				scroll-snap-align: start;
 				aspect-ratio: 2 / 3;
-				border-radius: 6px;
+				border-radius: 8px;
 				overflow: hidden;
 				background-color: #1c2541;
 			}
@@ -329,6 +357,20 @@ const reviewPosters = [
 				gap: 0.75rem;
 			}
 
+			.mobile-social-links {
+				display: flex;
+				justify-content: center;
+				gap: 1.25rem;
+				margin-bottom: 1rem;
+			}
+
+			.mobile-social-links a {
+				color: #58a6ff;
+				text-decoration: none;
+				font-size: 0.85rem;
+				font-weight: 500;
+			}
+
 			.mobile-footer {
 				text-align: center;
 				padding: 1.5rem 1rem;
@@ -340,7 +382,7 @@ const reviewPosters = [
 	</head>
 	<body>
 
-		<!-- ================= DESKTOP VIEW ================= -->
+		<!-- DESKTOP VIEW -->
 		<div class="desktop-view">
 			<Header />
 
@@ -398,12 +440,18 @@ const reviewPosters = [
 			<Footer />
 		</div>
 
-
-		<!-- ================= MOBILE VIEW ================= -->
+		<!-- MOBILE VIEW -->
 		<div class="mobile-view">
 			<header class="mobile-header-bar">
-				<a href="/" class="mobile-brand">SCENE <span>& OPINION</span></a>
-				<a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-weight:600; text-decoration:none; font-size:0.85rem;">@zoomout_says</a>
+				<div class="mobile-brand-row">
+					<a href="/" class="mobile-brand">SCENE <span>& OPINION</span></a>
+					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-weight:600; text-decoration:none; font-size:0.85rem;">@zoomout_says</a>
+				</div>
+				<nav class="mobile-nav-tabs">
+					<a href="/" class="mobile-nav-link active">Home</a>
+					<a href="/blog/" class="mobile-nav-link">Read</a>
+					<a href="/watch/" class="mobile-nav-link">Watch</a>
+				</nav>
 			</header>
 
 			<main class="mobile-main">
@@ -447,6 +495,11 @@ const reviewPosters = [
 			</main>
 
 			<footer class="mobile-footer">
+				<div class="mobile-social-links">
+					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">YouTube</a>
+					<a href={socialLinks.email}>Email</a>
+				</div>
 				<p>&copy; {new Date().getFullYear()} Scene & Opinion (@zoomout_says)</p>
 			</footer>
 		</div>
