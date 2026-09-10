@@ -148,11 +148,9 @@ const reviewPosters = [
 				margin: 0;
 			}
 
-			/* 2. MIDDLE SECTION: Spotlight Series Carousel (5 Images) */
+			/* 2. MIDDLE SECTION: Spotlight Series Carousel */
 			.carousel-container {
 				position: relative;
-				display: flex;
-				align-items: center;
 				border: 1px solid rgba(255, 255, 255, 0.12);
 				border-radius: 12px;
 				padding: 1.25rem 2.5rem;
@@ -161,15 +159,22 @@ const reviewPosters = [
 			}
 
 			.poster-grid-5 {
-				display: grid;
-				grid-template-columns: repeat(5, 1fr);
+				display: flex;
 				gap: 1.25rem;
-				width: 100%;
+				overflow-x: auto;
+				scroll-snap-type: x mandatory;
+				scrollbar-width: none; /* Firefox */
+				-ms-overflow-style: none; /* IE/Edge */
+				padding-bottom: 0.25rem;
+			}
+
+			.poster-grid-5::-webkit-scrollbar {
+				display: none; /* Chrome/Safari */
 			}
 
 			.spotlight-card {
-				display: block;
-				position: relative;
+				flex: 0 0 calc(20% - 1rem); /* 5 items in desktop view */
+				scroll-snap-align: start;
 				aspect-ratio: 2 / 3;
 				border-radius: 8px;
 				overflow: hidden;
@@ -211,7 +216,7 @@ const reviewPosters = [
 			.carousel-nav-btn.prev { left: 0.6rem; }
 			.carousel-nav-btn.next { right: 0.6rem; }
 
-			/* 3. BOTTOM SECTION: All Reviews (5 Columns, Posters 1 to 6) */
+			/* 3. BOTTOM SECTION: All Reviews 5-Column Grid */
 			.grid-5-columns {
 				display: grid;
 				grid-template-columns: repeat(5, 1fr);
@@ -272,8 +277,12 @@ const reviewPosters = [
 				color: #58a6ff;
 			}
 
+			/* RESPONSIVE LAYOUT ADJUSTMENTS */
 			@media (max-width: 1024px) {
-				.poster-grid-5, .grid-5-columns {
+				.spotlight-card {
+					flex: 0 0 calc(33.33% - 0.8rem);
+				}
+				.grid-5-columns {
 					grid-template-columns: repeat(3, 1fr);
 				}
 				.featured-hero {
@@ -282,8 +291,27 @@ const reviewPosters = [
 			}
 
 			@media (max-width: 640px) {
-				.poster-grid-5, .grid-5-columns {
-					grid-template-columns: repeat(2, 1fr);
+				.read-container {
+					padding: 1rem 0.75rem;
+				}
+				.carousel-container {
+					padding: 0.75rem;
+				}
+				.carousel-nav-btn {
+					display: none; /* Swipe natively on mobile */
+				}
+				.spotlight-card {
+					flex: 0 0 135px; /* Fixed poster width in a single horizontal scroll row */
+				}
+				.grid-5-columns {
+					grid-template-columns: repeat(2, 1fr); /* Clean 2-column grid */
+					gap: 0.75rem;
+				}
+				.featured-title {
+					font-size: 1.35rem;
+				}
+				.featured-content {
+					padding: 1rem;
 				}
 			}
 		</style>
@@ -342,7 +370,7 @@ const reviewPosters = [
 				<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
 			</div>
 
-			<!-- BOTTOM: All Reviews 5-Column Grid (Using poster1 to poster6) -->
+			<!-- BOTTOM: All Reviews Grid (Posters 1 to 6) -->
 			<h2 class="section-title">All Reviews</h2>
 			<div class="grid-5-columns">
 				{remainingPosts.map((post, index) => {
