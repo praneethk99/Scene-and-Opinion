@@ -12,7 +12,6 @@ const posts = (await getCollection('blog')).sort(
 const featuredPost = posts[0];
 const remainingPosts = posts.slice(1);
 
-// Top spotlight carousel assets (5 posters)
 const spotlightPosters = [
 	{ primary: '/poster12.png', fallback: '/poster12.jpg', title: 'Jana Nayagan' },
 	{ primary: '/poster13.png', fallback: '/poster13.jpg', title: 'Lenin' },
@@ -21,7 +20,6 @@ const spotlightPosters = [
 	{ primary: '/poster16.png', fallback: '/poster16.jpg', title: 'Dark Light' }
 ];
 
-// All Reviews grid images (Poster 1 to 6)
 const reviewPosters = [
 	{ primary: '/poster1.png', fallback: '/poster1.jpg' },
 	{ primary: '/poster2.png', fallback: '/poster2.jpg' },
@@ -35,372 +33,162 @@ const reviewPosters = [
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`Read | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
-		<style>
-			*, *::before, *::after {
-				box-sizing: border-box;
-			}
+		<BaseHead title={`Read Reviews | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 
+		<style>
+			*, *::before, *::after { box-sizing: border-box; }
 			body {
 				background-color: #0b132b;
 				color: #ffffff;
-				font-family: system-ui, -apple-system, sans-serif;
+				font-family: 'Inter', system-ui, -apple-system, sans-serif;
 				margin: 0;
+				padding-top: 60px;
+			}
+			h1, h2, h3, h4, .brand-text { font-family: 'Poppins', sans-serif; }
+
+			.site-header {
+				position: fixed; top: 0; left: 0; right: 0; height: 60px;
+				background-color: #0d1b2a; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+				z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 1rem;
 			}
 
-			.read-container {
-				max-width: 1300px;
-				margin: 0 auto;
-				padding: 2rem 1rem;
+			.brand-text { font-size: 1.1rem; font-weight: 700; color: #ffffff; text-decoration: none; }
+			.brand-text span { color: #58a6ff; }
+			.nav-menu { display: flex; gap: 1.5rem; }
+			.nav-link { color: #c9d1d9; text-decoration: none; font-weight: 600; font-size: 0.95rem; }
+			.nav-link.active, .nav-link:hover { color: #58a6ff; }
+			.mobile-toggle { display: none; background: none; border: none; color: #ffffff; font-size: 1.5rem; cursor: pointer; }
+
+			.mobile-drawer {
+				display: none; position: fixed; top: 60px; left: 0; right: 0;
+				background-color: #0d1b2a; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+				padding: 1.25rem 1rem; flex-direction: column; gap: 1rem; z-index: 99;
 			}
+			.mobile-drawer.open { display: flex; }
 
-			.section-title {
-				font-size: 1.3rem;
-				color: #58a6ff;
-				margin-bottom: 1.25rem;
-				border-left: 4px solid #58a6ff;
-				padding-left: 0.6rem;
+			.main-container { max-width: 1200px; margin: 0 auto; padding: 1.5rem 1rem; }
+			.section-header { border-left: 4px solid #58a6ff; padding-left: 0.6rem; margin-bottom: 1rem; }
+			.section-title { font-size: 1.25rem; font-weight: 700; margin: 0; }
+
+			.hero-wrapper { margin-bottom: 2.5rem; }
+			.hero-card {
+				display: grid; grid-template-columns: 1.3fr 1fr; background: #1c2541;
+				border-radius: 12px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1);
+				text-decoration: none; color: inherit; transition: transform 0.2s ease;
 			}
+			.hero-card:hover { transform: translateY(-3px); }
+			.hero-img-wrap { width: 100%; aspect-ratio: 16 / 9; background-color: #101a36; }
+			.hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+			.hero-info { padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; }
+			.badge { background: #58a6ff; color: #0b132b; font-weight: 700; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; width: fit-content; margin-bottom: 0.5rem; text-transform: uppercase; }
+			.hero-title { font-size: 1.5rem; margin: 0.25rem 0 0.5rem 0; line-height: 1.3; }
+			.post-date { font-size: 0.8rem; color: #8b949e; margin-bottom: 0.5rem; }
 
-			/* 1. TOP SECTION: Centered Featured Hero Card */
-			.top-featured-wrapper {
-				max-width: 900px;
-				margin: 0 auto 3.5rem auto;
+			.spotlight-wrapper { margin-bottom: 2.5rem; }
+			.horizontal-scroll-container {
+				display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+				padding-bottom: 0.75rem; -webkit-overflow-scrolling: touch; scrollbar-width: none;
 			}
+			.horizontal-scroll-container::-webkit-scrollbar { display: none; }
+			.poster-card-item { flex: 0 0 160px; scroll-snap-align: start; aspect-ratio: 2 / 3; border-radius: 8px; overflow: hidden; background-color: #1c2541; border: 1px solid rgba(255, 255, 255, 0.1); }
+			.poster-card-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-			.featured-hero-link {
-				display: block;
-				text-decoration: none;
-				color: inherit;
-			}
+			.grid-reviews { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1.25rem; }
+			.review-item-card { display: flex; flex-direction: column; background: #1c2541; border-radius: 8px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08); text-decoration: none; color: inherit; }
+			.review-img-wrap { width: 100%; aspect-ratio: 2 / 3; background-color: #101a36; }
+			.review-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+			.review-card-info { padding: 0.75rem; }
+			.review-card-title { font-size: 0.9rem; font-weight: 600; margin: 0.25rem 0 0 0; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-			.featured-hero {
-				display: grid;
-				grid-template-columns: 1.2fr 1fr;
-				gap: 1.5rem;
-				background: #1c2541;
-				border-radius: 12px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.12);
-				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-			}
+			.site-footer { background-color: #070d1d; border-top: 1px solid rgba(255, 255, 255, 0.1); padding: 2rem 1rem; text-align: center; margin-top: 3rem; }
 
-			.featured-hero-link:hover .featured-hero {
-				transform: translateY(-4px);
-				box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-				border-color: #58a6ff;
-			}
-
-			.hero-banner-wrap {
-				width: 100%;
-				aspect-ratio: 16 / 9;
-				overflow: hidden;
-				background-color: #101a36;
-			}
-
-			.hero-banner-wrap img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-			}
-
-			.featured-content {
-				padding: 1.75rem;
-				display: flex;
-				flex-direction: column;
-				justify-content: center;
-			}
-
-			.badge {
-				background: #58a6ff;
-				color: #0b132b;
-				font-weight: bold;
-				font-size: 0.75rem;
-				padding: 0.25rem 0.6rem;
-				border-radius: 4px;
-				width: fit-content;
-				margin-bottom: 0.75rem;
-				text-transform: uppercase;
-			}
-
-			.featured-title {
-				font-size: 1.75rem;
-				margin: 0.25rem 0 0.5rem 0;
-				color: #ffffff;
-				line-height: 1.3;
-			}
-
-			.featured-hero-link:hover .featured-title {
-				color: #58a6ff;
-			}
-
-			.post-date {
-				font-size: 0.85rem;
-				color: #8b949e;
-				margin-bottom: 0.75rem;
-			}
-
-			.featured-snippet {
-				font-size: 0.95rem;
-				color: #c9d1d9;
-				line-height: 1.5;
-				margin: 0;
-			}
-
-			/* 2. MIDDLE SECTION: Spotlight Series Carousel */
-			.carousel-container {
-				position: relative;
-				border: 1px solid rgba(255, 255, 255, 0.12);
-				border-radius: 12px;
-				padding: 1.25rem 2.5rem;
-				background: #101a36;
-				margin-bottom: 3.5rem;
-			}
-
-			.poster-grid-5 {
-				display: flex;
-				gap: 1.25rem;
-				overflow-x: auto;
-				scroll-snap-type: x mandatory;
-				scrollbar-width: none; /* Firefox */
-				-ms-overflow-style: none; /* IE/Edge */
-				padding-bottom: 0.25rem;
-			}
-
-			.poster-grid-5::-webkit-scrollbar {
-				display: none; /* Chrome/Safari */
-			}
-
-			.spotlight-card {
-				flex: 0 0 calc(20% - 1rem); /* 5 items in desktop view */
-				scroll-snap-align: start;
-				aspect-ratio: 2 / 3;
-				border-radius: 8px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				background-color: #1c2541;
-				transition: transform 0.2s ease, border-color 0.2s ease;
-			}
-
-			.spotlight-card:hover {
-				transform: translateY(-4px);
-				border-color: #58a6ff;
-			}
-
-			.spotlight-card img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-			}
-
-			.carousel-nav-btn {
-				position: absolute;
-				top: 50%;
-				transform: translateY(-50%);
-				width: 34px;
-				height: 34px;
-				background-color: rgba(0, 0, 0, 0.75);
-				border: 1px solid rgba(255, 255, 255, 0.3);
-				color: #ffffff;
-				border-radius: 50%;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				cursor: pointer;
-				z-index: 2;
-				user-select: none;
-			}
-
-			.carousel-nav-btn.prev { left: 0.6rem; }
-			.carousel-nav-btn.next { right: 0.6rem; }
-
-			/* 3. BOTTOM SECTION: All Reviews 5-Column Grid */
-			.grid-5-columns {
-				display: grid;
-				grid-template-columns: repeat(5, 1fr);
-				gap: 1.25rem;
-			}
-
-			.article-poster-card {
-				display: flex;
-				flex-direction: column;
-				background: #1c2541;
-				border-radius: 8px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.08);
-				text-decoration: none;
-				color: inherit;
-				transition: transform 0.2s ease, border-color 0.2s ease;
-			}
-
-			.article-poster-card:hover {
-				transform: translateY(-4px);
-				border-color: #58a6ff;
-			}
-
-			.poster-img-wrap {
-				width: 100%;
-				aspect-ratio: 2 / 3;
-				overflow: hidden;
-				background-color: #101a36;
-			}
-
-			.poster-img-wrap img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-			}
-
-			.card-info {
-				padding: 0.85rem;
-				display: flex;
-				flex-direction: column;
-				gap: 0.35rem;
-			}
-
-			.card-title {
-				font-size: 0.95rem;
-				font-weight: 600;
-				color: #ffffff;
-				margin: 0;
-				line-height: 1.3;
-				display: -webkit-box;
-				-webkit-line-clamp: 2;
-				-webkit-box-orient: vertical;
-				overflow: hidden;
-			}
-
-			.article-poster-card:hover .card-title {
-				color: #58a6ff;
-			}
-
-			/* RESPONSIVE LAYOUT ADJUSTMENTS */
 			@media (max-width: 1024px) {
-				.spotlight-card {
-					flex: 0 0 calc(33.33% - 0.8rem);
-				}
-				.grid-5-columns {
-					grid-template-columns: repeat(3, 1fr);
-				}
-				.featured-hero {
-					grid-template-columns: 1fr;
-				}
+				.grid-reviews { grid-template-columns: repeat(3, 1fr); }
+				.hero-card { grid-template-columns: 1fr; }
 			}
-
 			@media (max-width: 640px) {
-				.read-container {
-					padding: 1rem 0.75rem;
-				}
-				.carousel-container {
-					padding: 0.75rem;
-				}
-				.carousel-nav-btn {
-					display: none; /* Swipe natively on mobile */
-				}
-				.spotlight-card {
-					flex: 0 0 135px; /* Fixed poster width in a single horizontal scroll row */
-				}
-				.grid-5-columns {
-					grid-template-columns: repeat(2, 1fr); /* Clean 2-column grid */
-					gap: 0.75rem;
-				}
-				.featured-title {
-					font-size: 1.35rem;
-				}
-				.featured-content {
-					padding: 1rem;
-				}
+				.nav-menu { display: none; }
+				.mobile-toggle { display: block; }
+				.poster-card-item { flex: 0 0 135px; }
+				.grid-reviews { grid-template-columns: repeat(2, 1fr); gap: 0.75rem; }
+				.hero-info { padding: 1rem; }
+				.hero-title { font-size: 1.25rem; }
 			}
 		</style>
 	</head>
 	<body>
-		<Header />
+		<header class="site-header">
+			<a href="/" class="brand-text">SCENE <span>& OPINION</span></a>
+			<nav class="nav-menu">
+				<a href="/" class="nav-link">Home</a>
+				<a href="/blog" class="nav-link active">Read</a>
+			</nav>
+			<button class="mobile-toggle" id="menuToggleRead">&#9776;</button>
+		</header>
 
-		<div class="read-container">
-			<!-- TOP: Centered Featured Article Hero -->
+		<div class="mobile-drawer" id="mobileDrawerRead">
+			<a href="/" class="nav-link">Home</a>
+			<a href="/blog" class="nav-link active">Read</a>
+			<a href="https://instagram.com/zoomout_says" target="_blank" rel="noopener noreferrer" class="nav-link">Instagram (@zoomout_says)</a>
+		</div>
+
+		<main class="main-container">
 			{featuredPost && (
-				<div class="top-featured-wrapper">
-					<a href={`/blog/${featuredPost.slug}/`} class="featured-hero-link">
-						<div class="featured-hero">
-							<div class="hero-banner-wrap">
-								<img 
-									src={featuredPost.data.heroImage || '/poster7.png'} 
-									alt={featuredPost.data.title}
-									onerror="this.src='/poster7.png'" 
-								/>
-							</div>
-							<div class="featured-content">
-								<span class="badge">Top Featured</span>
-								<h1 class="featured-title">{featuredPost.data.title}</h1>
-								<span class="post-date">
-									{featuredPost.data.pubDate.toLocaleDateString('en-us', {
-										year: 'numeric',
-										month: 'short',
-										day: 'numeric',
-									})}
-								</span>
-								<p class="featured-snippet">
-									{featuredPost.data.description || 'Read our full in-depth review and cinematic analysis...'}
-								</p>
-							</div>
+				<div class="hero-wrapper">
+					<a href={`/blog/${featuredPost.slug}/`} class="hero-card">
+						<div class="hero-img-wrap">
+							<img src={featuredPost.data.heroImage || '/poster7.png'} alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
+						</div>
+						<div class="hero-info">
+							<span class="badge">Top Read</span>
+							<h1 class="hero-title">{featuredPost.data.title}</h1>
+							<span class="post-date">{featuredPost.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
 						</div>
 					</a>
 				</div>
 			)}
 
-			<!-- MIDDLE: Spotlight Series Carousel (5 Images) -->
-			<h2 class="section-title">Spotlight Series</h2>
-			<div class="carousel-container">
-				<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
-				<div class="poster-grid-5">
+			<div class="spotlight-wrapper">
+				<div class="section-header"><h2 class="section-title">Spotlight Series</h2></div>
+				<div class="horizontal-scroll-container">
 					{spotlightPosters.map((item) => (
-						<div class="spotlight-card">
-							<img 
-								src={item.primary} 
-								data-fallback={item.fallback} 
-								alt={item.title}
-								onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}"
-							/>
+						<div class="poster-card-item">
+							<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
 						</div>
 					))}
 				</div>
-				<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
 			</div>
 
-			<!-- BOTTOM: All Reviews Grid (Posters 1 to 6) -->
-			<h2 class="section-title">All Reviews</h2>
-			<div class="grid-5-columns">
+			<div class="section-header"><h2 class="section-title">All Film Articles</h2></div>
+			<div class="grid-reviews">
 				{remainingPosts.map((post, index) => {
 					const poster = reviewPosters[index % reviewPosters.length];
 					return (
-						<a href={`/blog/${post.slug}/`} class="article-poster-card">
-							<div class="poster-img-wrap">
-								<img 
-									src={post.data.heroImage || poster.primary} 
-									data-fallback={poster.fallback}
-									alt={post.data.title} 
-									onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}"
-								/>
+						<a href={`/blog/${post.slug}/`} class="review-item-card">
+							<div class="review-img-wrap">
+								<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
 							</div>
-							<div class="card-info">
-								<span class="post-date">
-									{post.data.pubDate.toLocaleDateString('en-us', {
-										year: 'numeric',
-										month: 'short',
-										day: 'numeric',
-									})}
-								</span>
-								<h3 class="card-title">{post.data.title}</h3>
+							<div class="review-card-info">
+								<span class="post-date">{post.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
+								<h3 class="review-card-title">{post.data.title}</h3>
 							</div>
 						</a>
 					);
 				})}
 			</div>
-		</div>
+		</main>
 
-		<Footer />
+		<footer class="site-footer">
+			<p>&copy; {new Date().getFullYear()} Scene & Opinion (@zoomout_says). All rights reserved.</p>
+		</footer>
+
+		<script>
+			const toggleBtn = document.getElementById('menuToggleRead');
+			const drawer = document.getElementById('mobileDrawerRead');
+			toggleBtn?.addEventListener('click', () => drawer?.classList.toggle('open'));
+		</script>
 	</body>
 </html>
