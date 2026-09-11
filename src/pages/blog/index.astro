@@ -56,7 +56,7 @@ const carouselItems = [
 				text-decoration: none;
 			}
 
-			/* HEADER WITH TOP-LEFT LOGO */
+			/* NAVBAR */
 			.navbar {
 				background-color: var(--bg-nav);
 				border-bottom: 1px solid var(--border-color);
@@ -277,7 +277,13 @@ const carouselItems = [
 		<!-- NAVBAR -->
 		<header class="navbar">
 			<div class="brand-container">
-				<img src="/logo.jpg" alt="Scene and Opinion Logo" class="brand-logo-img" />
+				<!-- Tries logo.png first; falls back to logo.jpg if missing -->
+				<img 
+					src="/logo.png" 
+					alt="Scene and Opinion Logo" 
+					class="brand-logo-img" 
+					onerror="if (this.src.endsWith('.png')) { this.src = '/logo.jpg'; }"
+				/>
 				<div class="brand-text-wrap">
 					<a href="/" class="brand-title">Scene and Opinion</a>
 					<span class="brand-caption">Fresh reviews before the popcorn cools!</span>
@@ -312,7 +318,11 @@ const carouselItems = [
 				<div class="carousel-track">
 					{carouselItems.map((item) => (
 						<div class="carousel-item">
-							<img src={item.image} alt={item.title} onerror={`this.src='${item.fallback}'`} />
+							<img 
+								src={item.image} 
+								alt={item.title} 
+								onerror={`if (this.src.endsWith('.png')) { this.src = '${item.fallback}'; }`} 
+							/>
 						</div>
 					))}
 				</div>

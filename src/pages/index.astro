@@ -53,7 +53,7 @@ const rightPosters = [
 				text-decoration: none;
 			}
 
-			/* HEADER WITH TOP-LEFT LOGO */
+			/* NAVBAR */
 			.navbar {
 				background-color: var(--bg-nav);
 				border-bottom: 1px solid var(--border-color);
@@ -324,7 +324,13 @@ const rightPosters = [
 		<!-- NAVBAR -->
 		<header class="navbar">
 			<div class="brand-container">
-				<img src="/logo.png" alt="Scene and Opinion Logo" class="brand-logo-img" />
+				<!-- Tries logo.png first; falls back to logo.jpg if missing -->
+				<img 
+					src="/logo.png" 
+					alt="Scene and Opinion Logo" 
+					class="brand-logo-img" 
+					onerror="if (this.src.endsWith('.png')) { this.src = '/logo.jpg'; }"
+				/>
 				<div class="brand-text-wrap">
 					<a href="/" class="brand-title">Scene and Opinion</a>
 					<span class="brand-caption">Fresh reviews before the popcorn cools!</span>
@@ -357,7 +363,11 @@ const rightPosters = [
 			<div class="poster-column">
 				{leftPosters.map((poster) => (
 					<div class="poster-card">
-						<img src={poster.image} alt={poster.title} onerror={`this.src='${poster.fallback}'`} />
+						<img 
+							src={poster.image} 
+							alt={poster.title} 
+							onerror={`if (this.src.endsWith('.png')) { this.src = '${poster.fallback}'; }`} 
+						/>
 					</div>
 				))}
 			</div>
@@ -384,7 +394,11 @@ const rightPosters = [
 				<!-- FEATURED VIDEO -->
 				<div class="featured-video-container">
 					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="video-banner">
-						<img src="/poster12.png" alt="Movie, Music, & More" onerror="this.src='/poster12.jpg'" />
+						<img 
+							src="/poster12.png" 
+							alt="Movie, Music, & More" 
+							onerror="if (this.src.endsWith('.png')) { this.src = '/poster12.jpg'; }" 
+						/>
 						<div class="play-overlay"></div>
 					</a>
 					<div class="pagination-dots">
@@ -400,7 +414,11 @@ const rightPosters = [
 			<div class="poster-column">
 				{rightPosters.map((poster) => (
 					<div class="poster-card">
-						<img src={poster.image} alt={poster.title} onerror={`this.src='${poster.fallback}'`} />
+						<img 
+							src={poster.image} 
+							alt={poster.title} 
+							onerror={`if (this.src.endsWith('.png')) { this.src = '${poster.fallback}'; }`} 
+						/>
 					</div>
 				))}
 			</div>
