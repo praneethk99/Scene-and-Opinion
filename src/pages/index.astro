@@ -143,14 +143,15 @@ const rightPosters = [
 				opacity: 1;
 			}
 
-			/* LAYOUT GRID */
+			/* UPDATED FULL-WIDTH GRID LAYOUT */
 			.main-layout {
-				max-width: 1150px;
-				margin: 2.5rem auto;
-				padding: 0 1.5rem;
+				width: 100%;
+				max-width: 100%;
+				margin: 2rem 0;
+				padding: 0 2rem 0 1rem;
 				display: grid;
-				grid-template-columns: 210px 1fr 210px;
-				gap: 2rem;
+				grid-template-columns: 180px 1fr 180px;
+				gap: 2.5rem;
 				align-items: start;
 			}
 
@@ -176,14 +177,14 @@ const rightPosters = [
 				object-fit: cover;
 			}
 
-			/* CENTER CONTENT */
+			/* CENTER CONTENT AREA */
 			.center-content {
 				display: flex;
 				flex-direction: column;
 			}
 
 			.main-heading {
-				font-size: 1.85rem;
+				font-size: 2rem;
 				font-weight: 800;
 				margin: 0 0 1rem 0;
 				color: #ffffff;
@@ -191,14 +192,14 @@ const rightPosters = [
 			}
 
 			.welcome-text {
-				font-size: 0.92rem;
-				line-height: 1.5;
+				font-size: 1rem;
+				line-height: 1.6;
 				color: #cbd5e1;
 				margin: 0 0 1.75rem 0;
 			}
 
 			.section-title {
-				font-size: 1.2rem;
+				font-size: 1.25rem;
 				font-weight: 700;
 				color: var(--accent-blue);
 				margin: 0 0 0.75rem 0;
@@ -207,7 +208,7 @@ const rightPosters = [
 			.feature-list {
 				margin: 0 0 1.75rem 1.25rem;
 				padding: 0;
-				font-size: 0.92rem;
+				font-size: 0.95rem;
 				color: #cbd5e1;
 				line-height: 1.6;
 			}
@@ -217,8 +218,8 @@ const rightPosters = [
 			}
 
 			.channel-info-text {
-				font-size: 0.92rem;
-				line-height: 1.5;
+				font-size: 0.95rem;
+				line-height: 1.6;
 				color: #cbd5e1;
 				margin: 0 0 1.5rem 0;
 			}
@@ -305,6 +306,7 @@ const rightPosters = [
 			@media (max-width: 900px) {
 				.main-layout {
 					grid-template-columns: 1fr;
+					padding: 0 1rem;
 				}
 				.poster-column {
 					display: grid;
@@ -324,7 +326,6 @@ const rightPosters = [
 		<!-- NAVBAR -->
 		<header class="navbar">
 			<div class="brand-container">
-				<!-- Tries logo.png first; falls back to logo.jpg if missing -->
 				<img 
 					src="/logo.png" 
 					alt="Scene and Opinion Logo" 
