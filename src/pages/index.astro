@@ -13,15 +13,24 @@ const leftPosters = [
 	{ title: 'Varanasi', image: '/poster1.png', fallback: '/poster1.jpg' },
 	{ title: 'Kudumbam', image: '/poster2.png', fallback: '/poster2.jpg' },
 	{ title: 'Fauzi', image: '/poster3.png', fallback: '/poster3.jpg' },
-	{ title: 'Movie 7', image: '/poster7.png', fallback: '/poster7.jpg' }
+	{ title: 'Movie 4', image: '/poster4.png', fallback: '/poster4.jpg' }
 ];
 
 // 4 posters on the right
 const rightPosters = [
-	{ title: 'Spider-Man', image: '/poster4.png', fallback: '/poster4.jpg' },
-	{ title: 'Gladiator', image: '/poster5.png', fallback: '/poster5.jpg' },
-	{ title: 'Obsession', image: '/poster6.png', fallback: '/poster6.jpg' },
-	{ title: 'Movie 8', image: '/poster8.png', fallback: '/poster8.jpg' }
+	{ title: 'Spider-Man', image: '/poster5.png', fallback: '/poster5.jpg' },
+	{ title: 'Gladiator', image: '/poster6.png', fallback: '/poster6.jpg' },
+	{ title: 'Movie 12', image: '/poster12.png', fallback: '/poster12.jpg' },
+	{ title: 'Movie 13', image: '/poster13.png', fallback: '/poster13.jpg' }
+];
+
+// 5 Carousel posters placed at the top (Posters 7 to 11) with YouTube links
+const carouselPosters = [
+	{ title: 'Poster 7', image: '/poster7.png', fallback: '/poster7.jpg', link: socialLinks.youtube },
+	{ title: 'Poster 8', image: '/poster8.png', fallback: '/poster8.jpg', link: socialLinks.youtube },
+	{ title: 'Poster 9', image: '/poster9.png', fallback: '/poster9.jpg', link: socialLinks.youtube },
+	{ title: 'Poster 10', image: '/poster10.png', fallback: '/poster10.jpg', link: socialLinks.youtube },
+	{ title: 'Poster 11', image: '/poster11.png', fallback: '/poster11.jpg', link: socialLinks.youtube }
 ];
 ---
 
@@ -156,7 +165,7 @@ const rightPosters = [
 				transform: scale(1.1);
 			}
 
-			/* MAIN GRID - EXPANDED SIDE PANELS TO 220px */
+			/* MAIN GRID - 220px SIDE PANELS */
 			.main-layout {
 				width: 100%;
 				max-width: 100%;
@@ -194,58 +203,12 @@ const rightPosters = [
 			.center-content {
 				display: flex;
 				flex-direction: column;
+				gap: 1.75rem;
 			}
 
-			.main-heading {
-				font-size: 2rem;
-				font-weight: 800;
-				margin: 0 0 1rem 0;
-				color: #ffffff;
-				line-height: 1.25;
-			}
-
-			.welcome-text {
-				font-size: 1rem;
-				line-height: 1.6;
-				color: #cbd5e1;
-				margin: 0 0 1.75rem 0;
-			}
-
-			.section-title {
-				font-size: 1.25rem;
-				font-weight: 700;
-				color: var(--accent-blue);
-				margin: 0 0 0.75rem 0;
-			}
-
-			.feature-list {
-				margin: 0 0 1.75rem 1.25rem;
-				padding: 0;
-				font-size: 0.95rem;
-				color: #cbd5e1;
-				line-height: 1.6;
-			}
-
-			.feature-list li {
-				margin-bottom: 0.35rem;
-			}
-
-			.channel-info-text {
-				font-size: 0.95rem;
-				line-height: 1.6;
-				color: #cbd5e1;
-				margin: 0 0 1.5rem 0;
-			}
-
-			.text-link {
-				color: var(--accent-blue);
-				text-decoration: underline;
-			}
-
-			/* FEATURED VIDEO BANNER */
+			/* CAROUSEL BANNER AT THE TOP */
 			.featured-video-container {
 				width: 100%;
-				margin-top: 0.5rem;
 			}
 
 			.video-banner {
@@ -307,12 +270,61 @@ const rightPosters = [
 				height: 8px;
 				border-radius: 50%;
 				background-color: #334155;
+				cursor: pointer;
+				transition: background-color 0.2s, width 0.2s;
 			}
 
 			.dot.active {
 				background-color: var(--accent-blue);
 				width: 18px;
 				border-radius: 4px;
+			}
+
+			/* TEXT CONTENT BELOW CAROUSEL */
+			.main-heading {
+				font-size: 2rem;
+				font-weight: 800;
+				margin: 0 0 1rem 0;
+				color: #ffffff;
+				line-height: 1.25;
+			}
+
+			.welcome-text {
+				font-size: 1rem;
+				line-height: 1.6;
+				color: #cbd5e1;
+				margin: 0 0 1.5rem 0;
+			}
+
+			.section-title {
+				font-size: 1.25rem;
+				font-weight: 700;
+				color: var(--accent-blue);
+				margin: 0 0 0.75rem 0;
+			}
+
+			.feature-list {
+				margin: 0 0 1.5rem 1.25rem;
+				padding: 0;
+				font-size: 0.95rem;
+				color: #cbd5e1;
+				line-height: 1.6;
+			}
+
+			.feature-list li {
+				margin-bottom: 0.35rem;
+			}
+
+			.channel-info-text {
+				font-size: 0.95rem;
+				line-height: 1.6;
+				color: #cbd5e1;
+				margin: 0;
+			}
+
+			.text-link {
+				color: var(--accent-blue);
+				text-decoration: underline;
 			}
 
 			/* RESPONSIVE */
@@ -389,40 +401,46 @@ const rightPosters = [
 
 			<!-- CENTER CONTENT AREA -->
 			<div class="center-content">
-				<h1 class="main-heading">Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
-				<p class="welcome-text">
-					Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, sharp film breakdowns, and the freshest updates in cinema.
-				</p>
 
-				<h2 class="section-title">What We Do</h2>
-				<ul class="feature-list">
-					<li>Honest Movie Reviews</li>
-					<li>Deep-Dive Film Breakdowns</li>
-					<li>Fresh Cinema News & Updates</li>
-				</ul>
-
-				<h2 class="section-title">Follow the Channel</h2>
-				<p class="channel-info-text">
-					Catch daily takes and quick reviews on our <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="text-link">Instagram</a> and watch full in-depth video analysis on our <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="text-link">YouTube channel</a>.
-				</p>
-
-				<!-- FEATURED VIDEO -->
+				<!-- 1. CAROUSEL BANNER AT TOP (POSTERS 7 TO 11 WITH REDIRECTION) -->
 				<div class="featured-video-container">
-					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="video-banner">
+					<a href={carouselPosters[0].link} target="_blank" rel="noopener noreferrer" class="video-banner">
 						<img 
-							src="/poster12.png" 
-							alt="Movie, Music, & More" 
-							onerror="if (this.src.endsWith('.png')) { this.src = '/poster12.jpg'; }" 
+							src={carouselPosters[0].image} 
+							alt={carouselPosters[0].title} 
+							onerror={`if (this.src.endsWith('.png')) { this.src = '${carouselPosters[0].fallback}'; }`} 
 						/>
 						<div class="play-overlay"></div>
 					</a>
 					<div class="pagination-dots">
-						<span class="dot"></span>
 						<span class="dot active"></span>
+						<span class="dot"></span>
+						<span class="dot"></span>
 						<span class="dot"></span>
 						<span class="dot"></span>
 					</div>
 				</div>
+
+				<!-- 2. TEXT CONTENT BELOW THE CAROUSEL -->
+				<div class="text-block">
+					<h1 class="main-heading">Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
+					<p class="welcome-text">
+						Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, sharp film breakdowns, and the freshest updates in cinema.
+					</p>
+
+					<h2 class="section-title">What We Do</h2>
+					<ul class="feature-list">
+						<li>Honest Movie Reviews</li>
+						<li>Deep-Dive Film Breakdowns</li>
+						<li>Fresh Cinema News & Updates</li>
+					</ul>
+
+					<h2 class="section-title">Follow the Channel</h2>
+					<p class="channel-info-text">
+						Catch daily takes and quick reviews on our <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="text-link">Instagram</a> and watch full in-depth video analysis on our <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="text-link">YouTube channel</a>.
+					</p>
+				</div>
+
 			</div>
 
 			<!-- RIGHT COLUMN POSTERS (4 ITEMS) -->
