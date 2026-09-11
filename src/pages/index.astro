@@ -556,7 +556,7 @@ const communityFeatures = {
 				font-weight: 600;
 			}
 
-			/* COMMUNITY FEATURES (QUOTE & MEME) */
+			/* COMMUNITY FEATURES (QUOTE & MEME OF THE WEEK) */
 			.community-features {
 				display: grid;
 				grid-template-columns: 1fr 1fr;
@@ -722,7 +722,7 @@ const communityFeatures = {
 					</div>
 				</div>
 
-				<!-- 2. TEXT CONTENT BELOW THE CAROUSEL -->
+				<!-- 2. FIRST SEGMENT (WELCOME & WHAT WE DO) -->
 				<div class="text-block">
 					<h1 class="main-heading">Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
 					<p class="welcome-text">
@@ -741,7 +741,34 @@ const communityFeatures = {
 					</p>
 				</div>
 
-				<!-- 3. POLL SECTION -->
+				<!-- 3. CENTER HUB & COMMUNITY FEATURES -->
+				<div class="trending-hub">
+					<div class="hub-card">
+						<span class="hub-card-label">#1 Movie This Week</span>
+						<span class="hub-card-title">{trendingHub.topMovie.title}</span>
+						<span class="hub-card-sub">{trendingHub.topMovie.revenue} • {trendingHub.topMovie.verdict}</span>
+					</div>
+					<div class="hub-card">
+						<span class="hub-card-label">Fan Favorite Pick</span>
+						<span class="hub-card-title">{trendingHub.fanFavorite.title}</span>
+						<span class="hub-card-sub">{trendingHub.fanFavorite.tag}</span>
+					</div>
+				</div>
+
+				<div class="community-features">
+					<div class="community-card">
+						<span class="community-badge">Cinephile Quote of the Day</span>
+						<p class="community-text">{communityFeatures.quoteOfTheDay.text}</p>
+						<span class="community-sub">{communityFeatures.quoteOfTheDay.source}</span>
+					</div>
+					<div class="community-card">
+						<span class="community-badge">{communityFeatures.memeOfTheWeek.title}</span>
+						<p class="community-text" style="font-style: normal;">{communityFeatures.memeOfTheWeek.caption}</p>
+						<span class="community-sub">Community Laughs 🎭</span>
+					</div>
+				</div>
+
+				<!-- 4. POLL SECTION MOVED TO THE BOTTOM -->
 				<div class="poll-container">
 					<div class="poll-header">
 						<span class="poll-badge">Weekly Audience Poll</span>
@@ -765,34 +792,6 @@ const communityFeatures = {
 					<div class="poll-footer">
 						<span id="poll-total-votes">Total Votes: 1,049</span>
 						<span>Updated Weekly</span>
-					</div>
-				</div>
-
-				<!-- 4. BOX OFFICE & TRENDING HUB -->
-				<div class="trending-hub">
-					<div class="hub-card">
-						<span class="hub-card-label">#1 Movie This Week</span>
-						<span class="hub-card-title">{trendingHub.topMovie.title}</span>
-						<span class="hub-card-sub">{trendingHub.topMovie.revenue} • {trendingHub.topMovie.verdict}</span>
-					</div>
-					<div class="hub-card">
-						<span class="hub-card-label">Fan Favorite Pick</span>
-						<span class="hub-card-title">{trendingHub.fanFavorite.title}</span>
-						<span class="hub-card-sub">{trendingHub.fanFavorite.tag}</span>
-					</div>
-				</div>
-
-				<!-- 5. COMMUNITY FEATURES (QUOTE & MEME OF THE WEEK) -->
-				<div class="community-features">
-					<div class="community-card">
-						<span class="community-badge">Cinephile Quote of the Day</span>
-						<p class="community-text">{communityFeatures.quoteOfTheDay.text}</p>
-						<span class="community-sub">{communityFeatures.quoteOfTheDay.source}</span>
-					</div>
-					<div class="community-card">
-						<span class="community-badge">{communityFeatures.memeOfTheWeek.title}</span>
-						<p class="community-text" style="font-style: normal;">{communityFeatures.memeOfTheWeek.caption}</p>
-						<span class="community-sub">Community Laughs 🎭</span>
 					</div>
 				</div>
 
