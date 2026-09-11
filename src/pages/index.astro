@@ -8,16 +8,20 @@ const socialLinks = {
 	email: "mailto:sceneandopinion69@gmail.com"
 };
 
+// 4 posters on the left
 const leftPosters = [
 	{ title: 'Varanasi', image: '/poster1.png', fallback: '/poster1.jpg' },
 	{ title: 'Kudumbam', image: '/poster2.png', fallback: '/poster2.jpg' },
-	{ title: 'Fauzi', image: '/poster3.png', fallback: '/poster3.jpg' }
+	{ title: 'Fauzi', image: '/poster3.png', fallback: '/poster3.jpg' },
+	{ title: 'Movie 7', image: '/poster7.png', fallback: '/poster7.jpg' }
 ];
 
+// 4 posters on the right
 const rightPosters = [
 	{ title: 'Spider-Man', image: '/poster4.png', fallback: '/poster4.jpg' },
 	{ title: 'Gladiator', image: '/poster5.png', fallback: '/poster5.jpg' },
-	{ title: 'Obsession', image: '/poster6.png', fallback: '/poster6.jpg' }
+	{ title: 'Obsession', image: '/poster6.png', fallback: '/poster6.jpg' },
+	{ title: 'Movie 8', image: '/poster8.png', fallback: '/poster8.jpg' }
 ];
 ---
 
@@ -53,7 +57,7 @@ const rightPosters = [
 				text-decoration: none;
 			}
 
-			/* NAVBAR - 3-COLUMN GRID FOR PERFECT CENTERING */
+			/* NAVBAR */
 			.navbar {
 				background-color: var(--bg-nav);
 				border-bottom: 1px solid var(--border-color);
@@ -66,16 +70,15 @@ const rightPosters = [
 				z-index: 100;
 			}
 
-			/* LEFT: LOGO & TITLE */
 			.brand-container {
 				display: flex;
 				align-items: center;
-				gap: 1.25rem; /* Moves title and subtitle rightward */
+				gap: 1.25rem;
 				justify-self: start;
 			}
 
 			.brand-logo-img {
-				height: 64px; /* Scaled up logo size */
+				height: 64px;
 				width: 64px;
 				object-fit: contain;
 				background-color: #ffffff;
@@ -102,7 +105,6 @@ const rightPosters = [
 				margin-top: 0.15rem;
 			}
 
-			/* CENTER: NAVIGATION LINKS */
 			.nav-links {
 				display: flex;
 				gap: 2.5rem;
@@ -128,7 +130,6 @@ const rightPosters = [
 				padding-bottom: 0.2rem;
 			}
 
-			/* RIGHT: SOCIAL MEDIA ICONS */
 			.header-socials {
 				display: flex;
 				align-items: center;
@@ -146,7 +147,7 @@ const rightPosters = [
 			}
 
 			.social-icon-btn svg {
-				width: 26px; /* Scaled up social icons */
+				width: 26px;
 				height: 26px;
 			}
 
@@ -155,15 +156,15 @@ const rightPosters = [
 				transform: scale(1.1);
 			}
 
-			/* FULL-WIDTH GRID LAYOUT */
+			/* MAIN GRID - EXPANDED SIDE PANELS TO 220px */
 			.main-layout {
 				width: 100%;
 				max-width: 100%;
 				margin: 2rem 0;
-				padding: 0 2rem 0 1rem;
+				padding: 0 1.5rem;
 				display: grid;
-				grid-template-columns: 180px 1fr 180px;
-				gap: 2.5rem;
+				grid-template-columns: 220px 1fr 220px;
+				gap: 2rem;
 				align-items: start;
 			}
 
@@ -322,7 +323,7 @@ const rightPosters = [
 				}
 				.poster-column {
 					display: grid;
-					grid-template-columns: repeat(3, 1fr);
+					grid-template-columns: repeat(4, 1fr);
 				}
 				.navbar {
 					display: flex;
@@ -373,7 +374,7 @@ const rightPosters = [
 		<!-- MAIN CONTENT LAYOUT -->
 		<main class="main-layout">
 			
-			<!-- LEFT COLUMN POSTERS -->
+			<!-- LEFT COLUMN POSTERS (4 ITEMS) -->
 			<div class="poster-column">
 				{leftPosters.map((poster) => (
 					<div class="poster-card">
@@ -424,7 +425,7 @@ const rightPosters = [
 				</div>
 			</div>
 
-			<!-- RIGHT COLUMN POSTERS -->
+			<!-- RIGHT COLUMN POSTERS (4 ITEMS) -->
 			<div class="poster-column">
 				{rightPosters.map((poster) => (
 					<div class="poster-card">
