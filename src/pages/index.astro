@@ -1,48 +1,18 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
-import { getCollection } from 'astro:content';
-
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-
-const featuredPost = posts[0];
-const remainingPosts = posts.slice(1);
-
-const spotlightPosters = [
-	{ primary: '/poster12.png', fallback: '/poster12.jpg', title: 'Jana Nayagan' },
-	{ primary: '/poster13.png', fallback: '/poster13.jpg', title: 'Lenin' },
-	{ primary: '/poster14.png', fallback: '/poster14.jpg', title: 'Evil Dead Burn' },
-	{ primary: '/poster15.png', fallback: '/poster15.jpg', title: 'Mukhbir' },
-	{ primary: '/poster16.png', fallback: '/poster16.jpg', title: 'Dark Light' }
-];
-
-const reviewPosters = [
-	{ primary: '/poster1.png', fallback: '/poster1.jpg' },
-	{ primary: '/poster2.png', fallback: '/poster2.jpg' },
-	{ primary: '/poster3.png', fallback: '/poster3.jpg' },
-	{ primary: '/poster4.png', fallback: '/poster4.jpg' },
-	{ primary: '/poster5.png', fallback: '/poster5.jpg' },
-	{ primary: '/poster6.png', fallback: '/poster6.jpg' }
-];
-
-const watchPosters = [
-	{ primary: '/poster7.png', fallback: '/poster7.jpg', title: 'Watch Review 1', youtubeUrl: 'https://youtube.com/@zoomout_says' },
-	{ primary: '/poster8.png', fallback: '/poster8.jpg', title: 'Watch Review 2', youtubeUrl: 'https://youtube.com/@zoomout_says' },
-	{ primary: '/poster9.png', fallback: '/poster9.jpg', title: 'Watch Review 3', youtubeUrl: 'https://youtube.com/@zoomout_says' },
-	{ primary: '/poster10.png', fallback: '/poster10.jpg', title: 'Watch Review 4', youtubeUrl: 'https://youtube.com/@zoomout_says' },
-	{ primary: '/poster11.png', fallback: '/poster11.jpg', title: 'Watch Review 5', youtubeUrl: 'https://youtube.com/@zoomout_says' },
-	{ primary: '/poster12.png', fallback: '/poster12.jpg', title: 'Watch Review 6', youtubeUrl: 'https://youtube.com/@zoomout_says' }
-];
 
 const socialLinks = {
 	instagram: "https://instagram.com/zoomout_says",
 	youtube: "https://youtube.com/@zoomout_says",
-	email: "mailto:contact@sceneandopinion.com"
+	x: "https://x.com"
 };
+
+const latestVideos = [
+	{ title: 'Kalki 2898 AD', image: '/poster1.png', fallback: '/poster1.jpg', url: socialLinks.youtube },
+	{ title: 'Pushpa 2', image: '/poster2.png', fallback: '/poster2.jpg', url: socialLinks.youtube },
+	{ title: 'Devara', image: '/poster3.png', fallback: '/poster3.jpg', url: socialLinks.youtube }
+];
 ---
 
 <!doctype html>
@@ -50,619 +20,522 @@ const socialLinks = {
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
 		<style>
+			:root {
+				--bg-main: #060d19;
+				--card-bg: #0b172a;
+				--card-border: rgba(255, 255, 255, 0.08);
+				--accent-gold: #ffb800;
+				--text-muted: #94a3b8;
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
 			body {
-				background-color: #0b132b;
+				background-color: var(--bg-main);
 				color: #ffffff;
-				font-family: system-ui, -apple-system, sans-serif;
+				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 				margin: 0;
+				padding: 0;
 			}
 
-			.desktop-view { display: block; }
-			.mobile-view { display: none; }
-
-			@media (max-width: 768px) {
-				.desktop-view { display: none !important; }
-				.mobile-view { display: block !important; }
+			a {
+				color: inherit;
+				text-decoration: none;
 			}
 
-			/* SHARED INTRO SECTION STYLES */
-			.intro-section {
-				background: #101a36;
-				border: 1px solid rgba(255, 255, 255, 0.12);
-				border-radius: 12px;
-				padding: 2rem;
-				margin-bottom: 3.5rem;
+			/* HEADER STYLES */
+			.navbar {
+				background-color: var(--bg-main);
+				border-bottom: 1px solid var(--card-border);
+				padding: 1rem 2rem;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				position: sticky;
+				top: 0;
+				z-index: 100;
 			}
 
-			.intro-title {
-				font-size: 2rem;
-				font-weight: 700;
-				color: #ffffff;
-				margin: 0 0 0.5rem 0;
+			.brand-logo {
+				font-size: 1.5rem;
+				font-weight: 800;
+				font-style: italic;
 				display: flex;
 				align-items: center;
 				gap: 0.5rem;
 			}
 
-			.intro-subtitle {
-				font-size: 1.1rem;
-				color: #c9d1d9;
-				margin-bottom: 1.5rem;
-				line-height: 1.5;
+			.brand-logo span {
+				color: var(--accent-gold);
 			}
 
-			.intro-heading {
-				font-size: 1.25rem;
-				color: #58a6ff;
-				margin: 1.5rem 0 0.75rem 0;
-				font-weight: 600;
-			}
-
-			.intro-list {
-				list-style-type: disc;
-				padding-left: 1.25rem;
-				margin: 0 0 1.5rem 0;
-				color: #c9d1d9;
-			}
-
-			.intro-list li {
-				margin-bottom: 0.4rem;
-				font-size: 1rem;
-			}
-
-			.intro-footer-text {
-				color: #c9d1d9;
-				font-size: 1rem;
-				line-height: 1.5;
-				margin: 0;
-			}
-
-			.intro-footer-text a {
-				color: #58a6ff;
-				text-decoration: underline;
-			}
-
-			/* DESKTOP STYLES */
-			.read-container {
-				max-width: 1300px;
-				margin: 0 auto;
-				padding: 2rem 1rem;
-			}
-
-			.section-title {
-				font-size: 1.3rem;
-				color: #58a6ff;
-				margin-bottom: 1.25rem;
-				border-left: 4px solid #58a6ff;
-				padding-left: 0.6rem;
-			}
-
-			.top-featured-wrapper {
-				max-width: 900px;
-				margin: 0 auto 3.5rem auto;
-			}
-
-			.featured-hero-link {
-				display: block;
-				text-decoration: none;
-				color: inherit;
-			}
-
-			.featured-hero {
-				display: grid;
-				grid-template-columns: 1.2fr 1fr;
-				gap: 1.5rem;
-				background: #1c2541;
-				border-radius: 12px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.12);
-				transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-			}
-
-			.featured-hero-link:hover .featured-hero {
-				transform: translateY(-4px);
-				box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
-				border-color: #58a6ff;
-			}
-
-			.hero-banner-wrap {
-				width: 100%;
-				aspect-ratio: 16 / 9;
-				overflow: hidden;
-				background-color: #101a36;
-			}
-
-			.hero-banner-wrap img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-			}
-
-			.featured-content {
-				padding: 1.75rem;
+			.nav-links {
 				display: flex;
-				flex-direction: column;
-				justify-content: center;
+				gap: 2rem;
+				align-items: center;
 			}
 
-			.badge {
-				background: #58a6ff;
-				color: #0b132b;
-				font-weight: bold;
-				font-size: 0.75rem;
-				padding: 0.25rem 0.6rem;
-				border-radius: 4px;
-				width: fit-content;
-				margin-bottom: 0.75rem;
-				text-transform: uppercase;
-			}
-
-			.featured-title {
-				font-size: 1.75rem;
-				margin: 0.25rem 0 0.5rem 0;
-				color: #ffffff;
-				line-height: 1.3;
-			}
-
-			.post-date {
+			.nav-link {
 				font-size: 0.85rem;
-				color: #8b949e;
-				margin-bottom: 0.75rem;
+				font-weight: 700;
+				letter-spacing: 0.05em;
+				text-transform: uppercase;
+				color: var(--text-muted);
+				transition: color 0.2s;
 			}
 
-			.featured-snippet {
-				font-size: 0.95rem;
-				color: #c9d1d9;
-				line-height: 1.5;
-				margin: 0;
+			.nav-link.active, .nav-link:hover {
+				color: #ffffff;
 			}
 
-			.carousel-container {
-				position: relative;
-				border: 1px solid rgba(255, 255, 255, 0.12);
-				border-radius: 12px;
-				padding: 1.25rem 2.5rem;
-				background: #101a36;
-				margin-bottom: 3.5rem;
-			}
-
-			.poster-grid-carousel {
-				display: flex;
-				gap: 1.25rem;
-				overflow-x: auto;
-				scroll-snap-type: x mandatory;
-				scrollbar-width: none;
+			.nav-link.active {
+				border-bottom: 2px solid var(--accent-gold);
 				padding-bottom: 0.25rem;
 			}
 
-			.spotlight-card {
-				flex: 0 0 calc(20% - 1rem);
-				scroll-snap-align: start;
-				aspect-ratio: 2 / 3;
-				border-radius: 8px;
+			.search-btn, .menu-toggle {
+				background: none;
+				border: none;
+				color: #ffffff;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+			}
+
+			.mobile-only {
+				display: none;
+			}
+
+			/* PAGE CONTAINER */
+			.container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 2rem 1.5rem;
+			}
+
+			/* HERO SECTION */
+			.hero-card {
+				background-color: var(--card-bg);
+				border: 1px solid var(--card-border);
+				border-radius: 16px;
+				padding: 1.5rem;
+				display: grid;
+				grid-template-columns: 1.2fr 1fr;
+				gap: 2rem;
+				align-items: center;
+				margin-bottom: 3rem;
+			}
+
+			.hero-media {
+				position: relative;
+				width: 100%;
+				aspect-ratio: 16 / 9;
+				border-radius: 12px;
 				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				background-color: #1c2541;
-				display: block;
+				background-color: #000000;
 			}
 
-			.watch-card {
-				flex: 0 0 calc(16.666% - 1rem);
-				scroll-snap-align: start;
-				aspect-ratio: 2 / 3;
-				border-radius: 8px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-				background-color: #1c2541;
-				display: block;
-				transition: transform 0.2s ease, border-color 0.2s ease;
-			}
-
-			.watch-card:hover {
-				transform: scale(1.03);
-				border-color: #58a6ff;
-			}
-
-			.spotlight-card img, .watch-card img {
+			.hero-media img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
-				display: block;
 			}
 
-			.carousel-nav-btn {
+			.play-button {
 				position: absolute;
 				top: 50%;
-				transform: translateY(-50%);
-				width: 34px;
-				height: 34px;
-				background-color: rgba(0, 0, 0, 0.75);
-				border: 1px solid rgba(255, 255, 255, 0.3);
-				color: #ffffff;
-				border-radius: 50%;
+				left: 50%;
+				transform: translate(-50%, -50%);
+				width: 60px;
+				height: 40px;
+				background-color: #ff0000;
+				border-radius: 10px;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				cursor: pointer;
-				z-index: 2;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 			}
 
-			.carousel-nav-btn.prev { left: 0.6rem; }
-			.carousel-nav-btn.next { right: 0.6rem; }
+			.play-button::after {
+				content: '';
+				width: 0;
+				height: 0;
+				border-top: 8px solid transparent;
+				border-bottom: 8px solid transparent;
+				border-left: 14px solid #ffffff;
+			}
 
-			.grid-5-columns {
+			.hero-content {
+				display: flex;
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.tag {
+				background-color: var(--accent-gold);
+				color: #000000;
+				font-size: 0.7rem;
+				font-weight: 800;
+				text-transform: uppercase;
+				padding: 0.35rem 0.75rem;
+				border-radius: 20px;
+				margin-bottom: 1rem;
+				letter-spacing: 0.05em;
+			}
+
+			.hero-title {
+				font-size: 2.2rem;
+				font-weight: 800;
+				margin: 0 0 1rem 0;
+				line-height: 1.2;
+			}
+
+			.hero-desc {
+				color: var(--text-muted);
+				font-size: 0.95rem;
+				line-height: 1.6;
+				margin: 0 0 1.5rem 0;
+			}
+
+			.btn-primary {
+				background-color: var(--accent-gold);
+				color: #000000;
+				font-weight: 700;
+				font-size: 0.9rem;
+				padding: 0.75rem 1.5rem;
+				border-radius: 25px;
+				display: inline-flex;
+				align-items: center;
+				gap: 0.5rem;
+				transition: transform 0.2s;
+			}
+
+			.btn-primary:hover {
+				transform: translateY(-2px);
+			}
+
+			/* WHAT WE DO SECTION */
+			.section-header {
+				text-align: center;
+				font-size: 1.5rem;
+				font-weight: 700;
+				margin-bottom: 2rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 0.75rem;
+				color: #ffffff;
+			}
+
+			.section-header::before, .section-header::after {
+				content: '—';
+				color: var(--text-muted);
+			}
+
+			.features-grid {
 				display: grid;
-				grid-template-columns: repeat(5, 1fr);
+				grid-template-columns: repeat(3, 1fr);
 				gap: 1.25rem;
 				margin-bottom: 3.5rem;
 			}
 
-			.article-poster-card {
+			.feature-card {
+				background-color: var(--card-bg);
+				border: 1px solid var(--card-border);
+				border-radius: 12px;
+				padding: 1.5rem;
 				display: flex;
-				flex-direction: column;
-				background: #1c2541;
+				align-items: flex-start;
+				gap: 1rem;
+			}
+
+			.feature-icon {
+				width: 44px;
+				height: 44px;
 				border-radius: 8px;
-				overflow: hidden;
-				border: 1px solid rgba(255, 255, 255, 0.08);
-				text-decoration: none;
-				color: inherit;
-			}
-
-			.poster-img-wrap {
-				width: 100%;
-				aspect-ratio: 2 / 3;
-				overflow: hidden;
-				background-color: #101a36;
-			}
-
-			.poster-img-wrap img {
-				width: 100%;
-				height: 100%;
-				object-fit: cover;
-				display: block;
-			}
-
-			.card-info {
-				padding: 0.85rem;
+				background: rgba(255, 184, 0, 0.1);
+				border: 1px solid var(--accent-gold);
 				display: flex;
-				flex-direction: column;
-				gap: 0.35rem;
+				align-items: center;
+				justify-content: center;
+				color: var(--accent-gold);
+				flex-shrink: 0;
 			}
 
-			.card-title {
-				font-size: 0.95rem;
-				font-weight: 600;
-				color: #ffffff;
+			.feature-title {
+				font-size: 1rem;
+				font-weight: 700;
+				margin: 0 0 0.35rem 0;
+			}
+
+			.feature-desc {
+				font-size: 0.85rem;
+				color: var(--text-muted);
 				margin: 0;
-				line-height: 1.3;
 			}
 
-			/* MOBILE DEDICATED STYLES */
-			.mobile-header-bar {
-				position: fixed;
-				top: 0; left: 0; right: 0;
-				background-color: #0d1b2a;
-				border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-				z-index: 100;
-				padding: 0.75rem 1rem;
-			}
-
-			.mobile-brand-row {
+			/* LATEST FROM CHANNEL */
+			.channel-header {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				margin-bottom: 0.6rem;
+				margin-bottom: 1.5rem;
 			}
 
-			.mobile-brand {
+			.channel-title {
+				font-size: 1.3rem;
 				font-weight: 700;
-				font-size: 1.1rem;
-				color: #ffffff;
-				text-decoration: none;
+				margin: 0;
 			}
 
-			.mobile-brand span { color: #58a6ff; }
-
-			.mobile-nav-tabs {
-				display: flex;
-				gap: 1.25rem;
-				border-top: 1px solid rgba(255, 255, 255, 0.08);
-				padding-top: 0.5rem;
-			}
-
-			.mobile-nav-link {
-				color: #8b949e;
-				text-decoration: none;
-				font-size: 0.9rem;
+			.view-all {
+				font-size: 0.85rem;
+				color: var(--text-muted);
 				font-weight: 600;
-				padding-bottom: 0.2rem;
 			}
 
-			.mobile-nav-link.active {
-				color: #58a6ff;
-				border-bottom: 2px solid #58a6ff;
+			.video-grid {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				gap: 1.25rem;
+				margin-bottom: 3.5rem;
 			}
 
-			.mobile-main {
-				padding: 105px 0.75rem 1.5rem 0.75rem;
-			}
-
-			.mobile-intro {
-				padding: 1.25rem;
-				margin-bottom: 1.75rem;
-			}
-
-			.mobile-intro .intro-title {
-				font-size: 1.4rem;
-			}
-
-			.mobile-featured-card {
-				display: block;
-				background: #1c2541;
-				border-radius: 10px;
+			.video-card {
+				background-color: var(--card-bg);
+				border: 1px solid var(--card-border);
+				border-radius: 12px;
 				overflow: hidden;
-				text-decoration: none;
-				color: inherit;
-				margin-bottom: 1.75rem;
-				border: 1px solid rgba(255, 255, 255, 0.1);
-			}
-
-			.mobile-featured-img {
-				width: 100%;
 				aspect-ratio: 16 / 9;
-				object-fit: cover;
-			}
-
-			.mobile-featured-body {
-				padding: 1rem;
-			}
-
-			.mobile-scroll-row {
-				display: flex;
-				gap: 0.75rem;
-				overflow-x: auto;
-				scroll-snap-type: x mandatory;
-				padding-bottom: 0.5rem;
-				margin-bottom: 1.75rem;
-				scrollbar-width: none;
-			}
-
-			.mobile-scroll-row::-webkit-scrollbar { display: none; }
-
-			.mobile-poster-item {
-				flex: 0 0 135px;
-				scroll-snap-align: start;
-				aspect-ratio: 2 / 3;
-				border-radius: 8px;
-				overflow: hidden;
-				background-color: #1c2541;
 				display: block;
+				transition: transform 0.2s, border-color 0.2s;
 			}
 
-			.mobile-poster-item img {
+			.video-card:hover {
+				transform: translateY(-4px);
+				border-color: var(--accent-gold);
+			}
+
+			.video-card img {
 				width: 100%;
 				height: 100%;
 				object-fit: cover;
 			}
 
-			.mobile-grid-2 {
-				display: grid;
-				grid-template-columns: repeat(2, 1fr);
-				gap: 0.75rem;
-				margin-bottom: 1.75rem;
+			/* FOOTER / FOLLOW SECTION */
+			.footer-section {
+				text-align: center;
+				padding-top: 1rem;
+				border-top: 1px solid var(--card-border);
 			}
 
-			.mobile-social-links {
-				display: flex;
-				justify-content: center;
-				gap: 1.25rem;
+			.follow-title {
+				font-size: 0.95rem;
+				font-weight: 600;
+				color: var(--text-muted);
 				margin-bottom: 1rem;
 			}
 
-			.mobile-social-links a {
-				color: #58a6ff;
-				text-decoration: none;
-				font-size: 0.85rem;
-				font-weight: 500;
+			.social-icons {
+				display: flex;
+				justify-content: center;
+				gap: 1rem;
 			}
 
-			.mobile-footer {
-				text-align: center;
-				padding: 1.5rem 1rem;
-				border-top: 1px solid rgba(255, 255, 255, 0.1);
-				font-size: 0.85rem;
-				color: #8b949e;
+			.social-btn {
+				width: 36px;
+				height: 36px;
+				border-radius: 8px;
+				background: #e1306c;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #ffffff;
+			}
+
+			.social-btn.youtube { background: #ff0000; }
+			.social-btn.x { background: #000000; border: 1px solid var(--card-border); }
+
+			/* RESPONSIVE / MOBILE STYLES (MATCHES SECOND IMAGE) */
+			@media (max-width: 768px) {
+				.desktop-only {
+					display: none !important;
+				}
+
+				.mobile-only {
+					display: flex;
+				}
+
+				.navbar {
+					padding: 0.85rem 1rem;
+					flex-wrap: wrap;
+				}
+
+				.mobile-nav-scroll {
+					width: 100%;
+					display: flex;
+					gap: 1.25rem;
+					overflow-x: auto;
+					padding-top: 0.75rem;
+					margin-top: 0.5rem;
+					border-top: 1px solid var(--card-border);
+					scrollbar-width: none;
+				}
+
+				.mobile-nav-scroll::-webkit-scrollbar {
+					display: none;
+				}
+
+				.container {
+					padding: 1.25rem 1rem;
+				}
+
+				.hero-card {
+					grid-template-columns: 1fr;
+					gap: 1.25rem;
+					padding: 1rem;
+				}
+
+				.hero-title {
+					font-size: 1.6rem;
+				}
+
+				.features-grid {
+					grid-template-columns: 1fr;
+					gap: 0.85rem;
+				}
+
+				.video-grid {
+					grid-template-columns: 1fr;
+					gap: 1rem;
+				}
 			}
 		</style>
 	</head>
 	<body>
 
-		<!-- DESKTOP VIEW -->
-		<div class="desktop-view">
-			<Header />
+		<!-- NAVBAR -->
+		<header class="navbar">
+			<a href="/" class="brand-logo">
+				🎬 Movie<span>Luxe</span>
+			</a>
 
-			<div class="read-container">
-				<!-- INTRO SECTION -->
-				<section class="intro-section">
-					<h1 class="intro-title">Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
-					<p class="intro-subtitle">
-						Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, sharp film breakdowns, and the freshest updates in cinema.
-					</p>
-
-					<h2 class="intro-heading">What We Do</h2>
-					<ul class="intro-list">
-						<li>Honest Movie Reviews</li>
-						<li>Deep-Dive Film Breakdowns</li>
-						<li>Fresh Cinema News & Updates</li>
-					</ul>
-
-					<h2 class="intro-heading">Follow the Channel</h2>
-					<p class="intro-footer-text">
-						Catch daily takes and quick reviews on our <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">Instagram</a> and watch full in-depth video analysis on our <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">YouTube channel</a>.
-					</p>
-				</section>
-
-				{featuredPost && (
-					<div class="top-featured-wrapper">
-						<a href={`/blog/${featuredPost.slug}/`} class="featured-hero-link">
-							<div class="featured-hero">
-								<div class="hero-banner-wrap">
-									<img src={featuredPost.data.heroImage || '/poster7.png'} alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
-								</div>
-								<div class="featured-content">
-									<span class="badge">Top Featured</span>
-									<h1 class="featured-title">{featuredPost.data.title}</h1>
-									<span class="post-date">{featuredPost.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-									<p class="featured-snippet">{featuredPost.data.description || 'Read our full in-depth review...'}</p>
-								</div>
-							</div>
-						</a>
-					</div>
-				)}
-
-				<h2 class="section-title">Spotlight Series</h2>
-				<div class="carousel-container">
-					<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
-					<div class="poster-grid-carousel">
-						{spotlightPosters.map((item) => (
-							<div class="spotlight-card">
-								<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
-							</div>
-						))}
-					</div>
-					<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
-				</div>
-
-				<h2 class="section-title">All Reviews</h2>
-				<div class="grid-5-columns">
-					{remainingPosts.map((post, index) => {
-						const poster = reviewPosters[index % reviewPosters.length];
-						return (
-							<a href={`/blog/${post.slug}/`} class="article-poster-card">
-								<div class="poster-img-wrap">
-									<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
-								</div>
-								<div class="card-info">
-									<span class="post-date">{post.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-									<h3 class="card-title">{post.data.title}</h3>
-								</div>
-							</a>
-						);
-					})}
-				</div>
-
-				<!-- BOTTOM 6-IMAGE CAROUSEL (POSTER 7 to 12) REDIRECTING TO YOUTUBE -->
-				<h2 class="section-title">Watch Video Reviews</h2>
-				<div class="carousel-container">
-					<button class="carousel-nav-btn prev" aria-label="Previous">&#10094;</button>
-					<div class="poster-grid-carousel">
-						{watchPosters.map((item) => (
-							<a href={item.youtubeUrl} target="_blank" rel="noopener noreferrer" class="watch-card">
-								<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
-							</a>
-						))}
-					</div>
-					<button class="carousel-nav-btn next" aria-label="Next">&#10095;</button>
-				</div>
+			<div class="nav-links desktop-only">
+				<a href="/" class="nav-link active">Home</a>
+				<a href="/reviews" class="nav-link">Reviews</a>
+				<a href="/breakdowns" class="nav-link">Breakdowns</a>
+				<a href="/news" class="nav-link">News</a>
+				<a href="/about" class="nav-link">About</a>
 			</div>
 
-			<Footer />
-		</div>
+			<div style="display: flex; gap: 1rem; align-items: center;">
+				<button class="search-btn" aria-label="Search">
+					<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+				</button>
+				<button class="menu-toggle mobile-only" aria-label="Open Menu">
+					<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+				</button>
+			</div>
 
-		<!-- MOBILE VIEW -->
-		<div class="mobile-view">
-			<header class="mobile-header-bar">
-				<div class="mobile-brand-row">
-					<a href="/" class="mobile-brand">SCENE <span>& OPINION</span></a>
-					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" style="color:#58a6ff; font-weight:600; text-decoration:none; font-size:0.85rem;">@zoomout_says</a>
+			<!-- Mobile Horizontal Nav Links Bar -->
+			<nav class="mobile-nav-scroll mobile-only">
+				<a href="/" class="nav-link active">Home</a>
+				<a href="/reviews" class="nav-link">Reviews</a>
+				<a href="/breakdowns" class="nav-link">Breakdowns</a>
+				<a href="/news" class="nav-link">News</a>
+				<a href="/about" class="nav-link">About</a>
+			</nav>
+		</header>
+
+		<main class="container">
+			<!-- HERO FEATURED VIDEO CARD -->
+			<section class="hero-card">
+				<div class="hero-media">
+					<img src="/poster12.png" alt="Featured Video" onerror="this.src='/poster12.jpg'" />
+					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="play-button" aria-label="Play Video"></a>
 				</div>
-				<nav class="mobile-nav-tabs">
-					<a href="/" class="mobile-nav-link active">Home</a>
-					<a href="/blog/" class="mobile-nav-link">Read</a>
-					<a href="/watch/" class="mobile-nav-link">Watch</a>
-				</nav>
-			</header>
-
-			<main class="mobile-main">
-				<!-- MOBILE INTRO SECTION -->
-				<section class="intro-section mobile-intro">
-					<h1 class="intro-title">Scenes, Hot Takes, and Cinematic Breaks 🎬 🍿</h1>
-					<p class="intro-subtitle">
-						Welcome to <strong>Scene and Opinion</strong>—your go-to spot for unfiltered movie reviews, sharp film breakdowns, and the freshest updates in cinema.
+				<div class="hero-content">
+					<span class="tag">Featured Video</span>
+					<h1 class="hero-title">Movie, Music & More</h1>
+					<p class="hero-desc">
+						Catch daily takes and quick reviews on our Instagram and watch full in-depth video analysis on our YouTube channel.
 					</p>
-
-					<h2 class="intro-heading">What We Do</h2>
-					<ul class="intro-list">
-						<li>Honest Movie Reviews</li>
-						<li>Deep-Dive Film Breakdowns</li>
-						<li>Fresh Cinema News & Updates</li>
-					</ul>
-
-					<h2 class="intro-heading">Follow the Channel</h2>
-					<p class="intro-footer-text">
-						Catch daily takes and quick reviews on our <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">Instagram</a> and watch full in-depth video analysis on our <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">YouTube channel</a>.
-					</p>
-				</section>
-
-				{featuredPost && (
-					<a href={`/blog/${featuredPost.slug}/`} class="mobile-featured-card">
-						<img src={featuredPost.data.heroImage || '/poster7.png'} class="mobile-featured-img" alt={featuredPost.data.title} onerror="this.src='/poster7.png'" />
-						<div class="mobile-featured-body">
-							<span class="badge">Featured</span>
-							<h2 style="font-size: 1.2rem; margin: 0.4rem 0;">{featuredPost.data.title}</h2>
-							<span class="post-date">{featuredPost.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-						</div>
+					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="btn-primary">
+						<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+						Watch Now
 					</a>
-				)}
+				</div>
+			</section>
 
-				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">Spotlight Series</h3>
-				<div class="mobile-scroll-row">
-					{spotlightPosters.map((item) => (
-						<div class="mobile-poster-item">
-							<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
+			<!-- WHAT WE DO SECTION -->
+			<section>
+				<h2 class="section-header">What We Do</h2>
+				<div class="features-grid">
+					<div class="feature-card">
+						<div class="feature-icon">
+							<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h18M3 16h18"></path></svg>
 						</div>
-					))}
-				</div>
+						<div>
+							<h3 class="feature-title">Honest Movie Reviews</h3>
+							<p class="feature-desc">Real opinions. No filters.</p>
+						</div>
+					</div>
 
-				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">All Reviews</h3>
-				<div class="mobile-grid-2">
-					{remainingPosts.map((post, index) => {
-						const poster = reviewPosters[index % reviewPosters.length];
-						return (
-							<a href={`/blog/${post.slug}/`} class="article-poster-card">
-								<div class="poster-img-wrap">
-									<img src={post.data.heroImage || poster.primary} data-fallback={poster.fallback} alt={post.data.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
-								</div>
-								<div class="card-info">
-									<span class="post-date" style="font-size:0.75rem;">{post.data.pubDate.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' })}</span>
-									<h4 class="card-title" style="font-size:0.85rem;">{post.data.title}</h4>
-								</div>
-							</a>
-						);
-					})}
-				</div>
+					<div class="feature-card">
+						<div class="feature-icon">
+							<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+						</div>
+						<div>
+							<h3 class="feature-title">Deep-Dive Film Breakdowns</h3>
+							<p class="feature-desc">Go deeper into your favourite films.</p>
+						</div>
+					</div>
 
-				<!-- MOBILE BOTTOM CAROUSEL FOR YOUTUBE WATCH LINKS -->
-				<h3 style="color:#58a6ff; font-size: 1.05rem; margin-bottom:0.75rem;">Watch Video Reviews</h3>
-				<div class="mobile-scroll-row">
-					{watchPosters.map((item) => (
-						<a href={item.youtubeUrl} target="_blank" rel="noopener noreferrer" class="mobile-poster-item">
-							<img src={item.primary} data-fallback={item.fallback} alt={item.title} onerror="if(this.getAttribute('data-fallback')){this.src=this.getAttribute('data-fallback');this.removeAttribute('data-fallback');}" />
+					<div class="feature-card">
+						<div class="feature-icon">
+							<svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2"></path></svg>
+						</div>
+						<div>
+							<h3 class="feature-title">Fresh Cinema News & Updates</h3>
+							<p class="feature-desc">Stay updated with the latest in the world of cinema.</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- LATEST FROM CHANNEL -->
+			<section>
+				<div class="channel-header">
+					<h3 class="channel-title">Latest from the Channel</h3>
+					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="view-all">View All &rarr;</a>
+				</div>
+				<div class="video-grid">
+					{latestVideos.map((video) => (
+						<a href={video.url} target="_blank" rel="noopener noreferrer" class="video-card">
+							<img src={video.image} alt={video.title} onerror={`this.src='${video.fallback}'`} />
 						</a>
 					))}
 				</div>
-			</main>
+			</section>
 
-			<footer class="mobile-footer">
-				<div class="mobile-social-links">
-					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
-					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer">YouTube</a>
-					<a href={socialLinks.email}>Email</a>
+			<!-- FOLLOW THE CHANNEL FOOTER -->
+			<footer class="footer-section">
+				<div class="follow-title">Follow the Channel</div>
+				<div class="social-icons">
+					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram">
+						<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+					</a>
+					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="social-btn youtube" aria-label="YouTube">
+						<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+					</a>
+					<a href={socialLinks.x} target="_blank" rel="noopener noreferrer" class="social-btn x" aria-label="X">
+						<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+					</a>
 				</div>
-				<p>&copy; {new Date().getFullYear()} Scene & Opinion (@zoomout_says)</p>
 			</footer>
-		</div>
+		</main>
 
 	</body>
 </html>
