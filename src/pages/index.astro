@@ -49,10 +49,10 @@ const pollData = {
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<!-- Google Font for Serif Cinema Headline -->
+		<!-- Modern Sans Font -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,800;1,600&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
 
 		<style>
 			:root {
@@ -60,8 +60,8 @@ const pollData = {
 				--bg-nav: #081226;
 				--bg-card: #0d1933;
 				--accent-blue: #3b82f6;
-				--accent-gold: #f59e0b;
-				--accent-gold-dark: #d97706;
+				--accent-cyan: #06b6d4;
+				--accent-purple: #8b5cf6;
 				--text-light: #ffffff;
 				--text-muted: #94a3b8;
 				--border-color: rgba(255, 255, 255, 0.08);
@@ -74,7 +74,7 @@ const pollData = {
 			body {
 				background-color: var(--bg-main);
 				color: var(--text-light);
-				font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+				font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 				margin: 0;
 				padding: 0;
 			}
@@ -222,6 +222,8 @@ const pollData = {
 				display: flex;
 				flex-direction: column;
 				gap: 1.75rem;
+				width: 100%;
+				max-width: 100%;
 			}
 
 			/* CAROUSEL BANNER AT THE TOP */
@@ -346,76 +348,76 @@ const pollData = {
 				text-decoration: underline;
 			}
 
-			/* PREMIUM CINEMA DARK (MINIMALIST LUXURY) POLL DESIGN */
+			/* NEW STYLED POLL SECTION (IMAGE SIZE LIMITED & NEON GLASS THEME) */
 			.poll-container {
-				background: #0b0d12;
-				border: 1px solid rgba(245, 158, 11, 0.25);
-				border-radius: 16px;
-				padding: 1.85rem;
-				box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px rgba(245, 158, 11, 0.05);
-				margin-top: 0.5rem;
+				width: 100%;
+				max-width: 100%;
+				background: linear-gradient(145deg, #091328, #0e1b38);
+				border: 1px solid rgba(59, 130, 246, 0.25);
+				border-radius: 12px;
+				padding: 1.25rem 1.5rem;
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+				box-sizing: border-box;
 			}
 
 			.poll-header {
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				margin-bottom: 1rem;
+				margin-bottom: 0.75rem;
 			}
 
 			.poll-badge {
-				background: rgba(245, 158, 11, 0.1);
-				border: 1px solid rgba(245, 158, 11, 0.3);
-				color: #fbbf24;
-				font-size: 0.7rem;
-				font-weight: 700;
-				padding: 0.3rem 0.75rem;
-				border-radius: 4px;
+				background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(139, 92, 246, 0.2));
+				border: 1px solid rgba(6, 182, 212, 0.4);
+				color: #38bdf8;
+				font-size: 0.68rem;
+				font-weight: 800;
+				padding: 0.25rem 0.65rem;
+				border-radius: 20px;
 				text-transform: uppercase;
-				letter-spacing: 1.5px;
+				letter-spacing: 0.8px;
 			}
 
 			.poll-user-status {
 				font-size: 0.85rem;
-				color: #d97706;
-				font-weight: 600;
-				letter-spacing: 0.5px;
+				color: #a7f3d0;
+				font-weight: 700;
 			}
 
 			.poll-question {
-				font-family: 'Playfair Display', Georgia, serif;
-				font-size: 1.4rem;
-				font-weight: 600;
-				color: #f8fafc;
-				margin: 0 0 1.5rem 0;
-				line-height: 1.35;
+				font-size: 1.15rem;
+				font-weight: 800;
+				color: #ffffff;
+				margin: 0 0 1rem 0;
+				line-height: 1.3;
 			}
 
 			.poll-options {
 				display: flex;
 				flex-direction: column;
-				gap: 0.85rem;
+				gap: 0.6rem;
 			}
 
 			.poll-option-btn {
 				position: relative;
 				width: 100%;
-				background-color: #12151e;
-				border: 1px solid rgba(255, 255, 255, 0.07);
+				background: rgba(255, 255, 255, 0.03);
+				border: 1px solid rgba(255, 255, 255, 0.09);
 				border-radius: 8px;
-				padding: 1rem 1.25rem;
+				padding: 0.75rem 1rem;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 				cursor: pointer;
 				overflow: hidden;
-				transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, background-color 0.3s ease;
+				transition: border-color 0.2s, transform 0.2s, background-color 0.2s;
 			}
 
 			.poll-option-btn:hover {
-				border-color: rgba(245, 158, 11, 0.4);
-				transform: translateX(4px);
-				background-color: #161a26;
+				border-color: #38bdf8;
+				background-color: rgba(56, 189, 248, 0.05);
+				transform: translateX(3px);
 			}
 
 			.poll-progress-bar {
@@ -424,9 +426,9 @@ const pollData = {
 				left: 0;
 				bottom: 0;
 				width: 0%;
-				background: linear-gradient(90deg, rgba(245, 158, 11, 0.3), rgba(217, 119, 6, 0.35));
-				border-right: 2px solid #f59e0b;
-				transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+				background: linear-gradient(90deg, rgba(139, 92, 246, 0.45), rgba(6, 182, 212, 0.45));
+				border-right: 2px solid #38bdf8;
+				transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 				z-index: 1;
 			}
 
@@ -435,55 +437,53 @@ const pollData = {
 				z-index: 2;
 				display: flex;
 				align-items: center;
-				gap: 0.75rem;
+				gap: 0.65rem;
 			}
 
 			.poll-check-pill {
-				width: 18px;
-				height: 18px;
+				width: 16px;
+				height: 16px;
 				border-radius: 50%;
-				border: 1.5px solid rgba(255, 255, 255, 0.2);
+				border: 1.5px solid rgba(255, 255, 255, 0.3);
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				font-size: 0.65rem;
+				font-size: 0.6rem;
 				color: transparent;
-				transition: all 0.3s ease;
+				transition: all 0.2s ease;
 				flex-shrink: 0;
 			}
 
 			.poll-option-btn.selected-option .poll-check-pill {
-				background-color: #f59e0b;
-				border-color: #f59e0b;
-				color: #0b0d12;
-				box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+				background-color: #38bdf8;
+				border-color: #38bdf8;
+				color: #060e20;
+				box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
 			}
 
 			.poll-option-text {
-				font-size: 0.95rem;
-				font-weight: 600;
-				color: #e2e8f0;
-				letter-spacing: 0.2px;
+				font-size: 0.9rem;
+				font-weight: 700;
+				color: #f1f5f9;
 			}
 
 			.poll-option-percent {
 				position: relative;
 				z-index: 2;
-				font-size: 0.95rem;
-				font-weight: 700;
-				color: #fbbf24;
+				font-size: 0.9rem;
+				font-weight: 800;
+				color: #38bdf8;
 				display: none;
 			}
 
 			.poll-footer {
-				margin-top: 1.35rem;
+				margin-top: 1rem;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				font-size: 0.8rem;
-				color: #64748b;
-				text-transform: uppercase;
-				letter-spacing: 1px;
+				font-size: 0.78rem;
+				color: #94a3b8;
+				font-weight: 500;
 			}
 
 			/* RESPONSIVE */
@@ -599,7 +599,7 @@ const pollData = {
 					</p>
 				</div>
 
-				<!-- 3. PREMIUM CINEMA DARK INTERACTIVE POLL -->
+				<!-- 3. INTERACTIVE POLL SECTION -->
 				<div class="poll-container">
 					<div class="poll-header">
 						<span class="poll-badge">Weekly Audience Poll</span>
@@ -735,15 +735,15 @@ const pollData = {
 						btn.style.cursor = 'default';
 						if (btn.getAttribute('data-id') === userSelection) {
 							btn.classList.add('selected-option');
-							btn.style.borderColor = '#f59e0b';
-							btn.style.backgroundColor = 'rgba(245, 158, 11, 0.08)';
+							btn.style.borderColor = '#38bdf8';
+							btn.style.backgroundColor = 'rgba(56, 189, 248, 0.08)';
 						}
 					}
 				});
 
 				if (hasVoted) {
 					statusText.textContent = 'Thanks for voting!';
-					statusText.style.color = '#fbbf24';
+					statusText.style.color = '#38bdf8';
 				}
 			}
 
