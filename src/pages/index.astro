@@ -19,15 +19,14 @@ const latestVideos = [
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 		<style>
 			:root {
-				--bg-main: #141414;
-				--bg-card: #181818;
-				--accent-red: #E50914;
-				--text-muted: #aaaaaa;
+				--bg-main: #0b132b;
+				--bg-card: #1c2541;
+				--bg-card-alt: #101a36;
+				--accent-blue: #58a6ff;
+				--text-muted: #8b949e;
+				--border-color: rgba(255, 255, 255, 0.12);
 			}
 
 			* {
@@ -37,7 +36,7 @@ const latestVideos = [
 			body {
 				background-color: var(--bg-main);
 				color: #ffffff;
-				font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+				font-family: system-ui, -apple-system, sans-serif;
 				margin: 0;
 				padding: 0;
 			}
@@ -47,17 +46,24 @@ const latestVideos = [
 				text-decoration: none;
 			}
 
-			/* NETFLIX-STYLE HEADER */
+			/* HEADER SECTION */
 			.navbar {
-				background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(20,20,20,0.8) 70%, rgba(20,20,20,0) 100%);
+				background-color: var(--bg-main);
+				border-bottom: 1px solid var(--border-color);
 				padding: 1.25rem 2rem;
 				display: flex;
-				align-items: center;
-				justify-content: space-between;
+				flex-direction: column;
+				gap: 1rem;
 				position: sticky;
 				top: 0;
 				z-index: 100;
-				backdrop-filter: blur(8px);
+			}
+
+			.header-top-row {
+				width: 100%;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
 			}
 
 			.brand-container {
@@ -78,42 +84,19 @@ const latestVideos = [
 			}
 
 			.brand-title {
-				font-family: 'Bebas Neue', 'Inter', sans-serif;
-				font-size: 1.8rem;
-				letter-spacing: 1px;
+				font-size: 1.6rem;
+				font-weight: 800;
+				letter-spacing: 0.5px;
 				color: #ffffff;
-				line-height: 1;
+				line-height: 1.1;
 				text-transform: uppercase;
 			}
 
 			.brand-caption {
-				font-size: 0.72rem;
-				color: var(--accent-red);
+				font-size: 0.78rem;
+				color: var(--accent-blue);
 				font-weight: 600;
 				margin-top: 0.2rem;
-				letter-spacing: 0.02em;
-			}
-
-			.nav-links {
-				display: flex;
-				gap: 2rem;
-				align-items: center;
-			}
-
-			.nav-link {
-				font-size: 0.9rem;
-				font-weight: 600;
-				color: #e5e5e5;
-				transition: color 0.2s;
-			}
-
-			.nav-link.active, .nav-link:hover {
-				color: #ffffff;
-			}
-
-			.nav-link.active {
-				color: var(--accent-red);
-				font-weight: 700;
 			}
 
 			.header-socials {
@@ -123,7 +106,7 @@ const latestVideos = [
 			}
 
 			.social-icon-btn {
-				color: #e5e5e5;
+				color: #c9d1d9;
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -131,8 +114,33 @@ const latestVideos = [
 			}
 
 			.social-icon-btn:hover {
-				color: var(--accent-red);
+				color: var(--accent-blue);
 				transform: scale(1.1);
+			}
+
+			.nav-links {
+				display: flex;
+				gap: 2rem;
+				align-items: center;
+				border-top: 1px solid rgba(255, 255, 255, 0.08);
+				padding-top: 0.75rem;
+			}
+
+			.nav-link {
+				font-size: 0.95rem;
+				font-weight: 600;
+				color: var(--text-muted);
+				transition: color 0.2s;
+			}
+
+			.nav-link.active, .nav-link:hover {
+				color: #ffffff;
+			}
+
+			.nav-link.active {
+				color: var(--accent-blue);
+				border-bottom: 2px solid var(--accent-blue);
+				padding-bottom: 0.2rem;
 			}
 
 			/* PAGE CONTAINER */
@@ -145,14 +153,14 @@ const latestVideos = [
 			/* HERO SECTION */
 			.hero-card {
 				background-color: var(--bg-card);
+				border: 1px solid var(--border-color);
 				border-radius: 12px;
 				padding: 1.5rem;
 				display: grid;
 				grid-template-columns: 1.2fr 1fr;
 				gap: 2rem;
 				align-items: center;
-				margin-bottom: 3rem;
-				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+				margin-bottom: 3.5rem;
 			}
 
 			.hero-media {
@@ -161,7 +169,7 @@ const latestVideos = [
 				aspect-ratio: 16 / 9;
 				border-radius: 8px;
 				overflow: hidden;
-				background-color: #000000;
+				background-color: var(--bg-card-alt);
 			}
 
 			.hero-media img {
@@ -177,7 +185,7 @@ const latestVideos = [
 				transform: translate(-50%, -50%);
 				width: 60px;
 				height: 40px;
-				background-color: var(--accent-red);
+				background-color: #ff0000;
 				border-radius: 8px;
 				display: flex;
 				align-items: center;
@@ -201,65 +209,57 @@ const latestVideos = [
 			}
 
 			.tag {
-				background-color: var(--accent-red);
-				color: #ffffff;
-				font-size: 0.7rem;
-				font-weight: 800;
+				background-color: var(--accent-blue);
+				color: #0b132b;
+				font-size: 0.75rem;
+				font-weight: 700;
 				text-transform: uppercase;
-				padding: 0.35rem 0.75rem;
+				padding: 0.25rem 0.6rem;
 				border-radius: 4px;
-				margin-bottom: 1rem;
-				letter-spacing: 0.05em;
+				margin-bottom: 0.75rem;
 			}
 
 			.hero-title {
-				font-size: 2.2rem;
-				font-weight: 800;
-				margin: 0 0 1rem 0;
+				font-size: 2rem;
+				font-weight: 700;
+				margin: 0 0 0.75rem 0;
 				line-height: 1.2;
+				color: #ffffff;
 			}
 
 			.hero-desc {
-				color: var(--text-muted);
+				color: #c9d1d9;
 				font-size: 0.95rem;
-				line-height: 1.6;
+				line-height: 1.5;
 				margin: 0 0 1.5rem 0;
 			}
 
 			.btn-primary {
-				background-color: var(--accent-red);
-				color: #ffffff;
+				background-color: var(--accent-blue);
+				color: #0b132b;
 				font-weight: 700;
 				font-size: 0.9rem;
-				padding: 0.75rem 1.5rem;
-				border-radius: 4px;
+				padding: 0.65rem 1.25rem;
+				border-radius: 6px;
 				display: inline-flex;
 				align-items: center;
 				gap: 0.5rem;
-				transition: background-color 0.2s, transform 0.2s;
+				transition: opacity 0.2s, transform 0.2s;
 			}
 
 			.btn-primary:hover {
-				background-color: #b80710;
+				opacity: 0.9;
 				transform: translateY(-2px);
 			}
 
 			/* WHAT WE DO SECTION */
 			.section-header {
-				text-align: center;
-				font-size: 1.5rem;
+				font-size: 1.3rem;
+				color: var(--accent-blue);
+				margin-bottom: 1.25rem;
+				border-left: 4px solid var(--accent-blue);
+				padding-left: 0.6rem;
 				font-weight: 700;
-				margin-bottom: 2rem;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				gap: 0.75rem;
-				color: #ffffff;
-			}
-
-			.section-header::before, .section-header::after {
-				content: '—';
-				color: var(--text-muted);
 			}
 
 			.features-grid {
@@ -271,7 +271,8 @@ const latestVideos = [
 
 			.feature-card {
 				background-color: var(--bg-card);
-				border-radius: 8px;
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
 				padding: 1.5rem;
 				display: flex;
 				align-items: flex-start;
@@ -282,23 +283,25 @@ const latestVideos = [
 				width: 44px;
 				height: 44px;
 				border-radius: 8px;
-				background: rgba(229, 9, 20, 0.15);
+				background: rgba(88, 166, 255, 0.1);
+				border: 1px solid var(--accent-blue);
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				color: var(--accent-red);
+				color: var(--accent-blue);
 				flex-shrink: 0;
 			}
 
 			.feature-title {
 				font-size: 1rem;
-				font-weight: 700;
+				font-weight: 600;
 				margin: 0 0 0.35rem 0;
+				color: #ffffff;
 			}
 
 			.feature-desc {
 				font-size: 0.85rem;
-				color: var(--text-muted);
+				color: #c9d1d9;
 				margin: 0;
 			}
 
@@ -307,18 +310,21 @@ const latestVideos = [
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
-				margin-bottom: 1.5rem;
+				margin-bottom: 1.25rem;
 			}
 
 			.channel-title {
 				font-size: 1.3rem;
+				color: var(--accent-blue);
+				border-left: 4px solid var(--accent-blue);
+				padding-left: 0.6rem;
 				font-weight: 700;
 				margin: 0;
 			}
 
 			.view-all {
 				font-size: 0.85rem;
-				color: var(--text-muted);
+				color: var(--accent-blue);
 				font-weight: 600;
 			}
 
@@ -331,15 +337,17 @@ const latestVideos = [
 
 			.video-card {
 				background-color: var(--bg-card);
+				border: 1px solid var(--border-color);
 				border-radius: 8px;
 				overflow: hidden;
 				aspect-ratio: 16 / 9;
 				display: block;
-				transition: transform 0.2s;
+				transition: transform 0.2s, border-color 0.2s;
 			}
 
 			.video-card:hover {
-				transform: scale(1.03);
+				transform: translateY(-4px);
+				border-color: var(--accent-blue);
 			}
 
 			.video-card img {
@@ -352,7 +360,7 @@ const latestVideos = [
 			.footer-section {
 				text-align: center;
 				padding-top: 1.5rem;
-				border-top: 1px solid rgba(255, 255, 255, 0.1);
+				border-top: 1px solid var(--border-color);
 				color: var(--text-muted);
 				font-size: 0.85rem;
 			}
@@ -361,23 +369,10 @@ const latestVideos = [
 			@media (max-width: 768px) {
 				.navbar {
 					padding: 1rem;
-					flex-direction: column;
-					align-items: flex-start;
-					gap: 0.75rem;
-				}
-
-				.header-top-row {
-					display: flex;
-					width: 100%;
-					justify-content: space-between;
-					align-items: center;
 				}
 
 				.nav-links {
-					width: 100%;
 					justify-content: space-around;
-					border-top: 1px solid rgba(255, 255, 255, 0.1);
-					padding-top: 0.5rem;
 				}
 
 				.hero-card {
@@ -401,7 +396,7 @@ const latestVideos = [
 
 		<!-- NAVBAR -->
 		<header class="navbar">
-			<div class="header-top-row" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+			<div class="header-top-row">
 				<div class="brand-container">
 					<img src="/logo.png" alt="Scene and Opinion Logo" class="brand-logo-img" onerror="this.style.display='none'" />
 					<div class="brand-text-wrap">
