@@ -3,9 +3,9 @@ import BaseHead from '../components/BaseHead.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 
 const socialLinks = {
-	instagram: "https://instagram.com/zoomout_says",
-	youtube: "https://youtube.com/@zoomout_says",
-	x: "https://x.com"
+	youtube: "https://www.youtube.com/@Sceneandopinion",
+	instagram: "https://www.instagram.com/sceneandopinion/",
+	email: "mailto:sceneandopinion69@gmail.com"
 };
 
 const latestVideos = [
@@ -19,13 +19,15 @@ const latestVideos = [
 <html lang="en">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 		<style>
 			:root {
-				--bg-main: #060d19;
-				--card-bg: #0b172a;
-				--card-border: rgba(255, 255, 255, 0.08);
-				--accent-gold: #ffb800;
-				--text-muted: #94a3b8;
+				--bg-main: #141414;
+				--bg-card: #181818;
+				--accent-red: #E50914;
+				--text-muted: #aaaaaa;
 			}
 
 			* {
@@ -35,7 +37,7 @@ const latestVideos = [
 			body {
 				background-color: var(--bg-main);
 				color: #ffffff;
-				font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+				font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 				margin: 0;
 				padding: 0;
 			}
@@ -45,30 +47,51 @@ const latestVideos = [
 				text-decoration: none;
 			}
 
-			/* HEADER STYLES */
+			/* NETFLIX-STYLE HEADER */
 			.navbar {
-				background-color: var(--bg-main);
-				border-bottom: 1px solid var(--card-border);
-				padding: 1rem 2rem;
+				background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(20,20,20,0.8) 70%, rgba(20,20,20,0) 100%);
+				padding: 1.25rem 2rem;
 				display: flex;
 				align-items: center;
 				justify-content: space-between;
 				position: sticky;
 				top: 0;
 				z-index: 100;
+				backdrop-filter: blur(8px);
 			}
 
-			.brand-logo {
-				font-size: 1.5rem;
-				font-weight: 800;
-				font-style: italic;
+			.brand-container {
 				display: flex;
 				align-items: center;
-				gap: 0.5rem;
+				gap: 0.85rem;
 			}
 
-			.brand-logo span {
-				color: var(--accent-gold);
+			.brand-logo-img {
+				height: 48px;
+				width: auto;
+				object-fit: contain;
+			}
+
+			.brand-text-wrap {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.brand-title {
+				font-family: 'Bebas Neue', 'Inter', sans-serif;
+				font-size: 1.8rem;
+				letter-spacing: 1px;
+				color: #ffffff;
+				line-height: 1;
+				text-transform: uppercase;
+			}
+
+			.brand-caption {
+				font-size: 0.72rem;
+				color: var(--accent-red);
+				font-weight: 600;
+				margin-top: 0.2rem;
+				letter-spacing: 0.02em;
 			}
 
 			.nav-links {
@@ -78,11 +101,9 @@ const latestVideos = [
 			}
 
 			.nav-link {
-				font-size: 0.85rem;
-				font-weight: 700;
-				letter-spacing: 0.05em;
-				text-transform: uppercase;
-				color: var(--text-muted);
+				font-size: 0.9rem;
+				font-weight: 600;
+				color: #e5e5e5;
 				transition: color 0.2s;
 			}
 
@@ -91,21 +112,27 @@ const latestVideos = [
 			}
 
 			.nav-link.active {
-				border-bottom: 2px solid var(--accent-gold);
-				padding-bottom: 0.25rem;
+				color: var(--accent-red);
+				font-weight: 700;
 			}
 
-			.search-btn, .menu-toggle {
-				background: none;
-				border: none;
-				color: #ffffff;
-				cursor: pointer;
+			.header-socials {
 				display: flex;
 				align-items: center;
+				gap: 1rem;
 			}
 
-			.mobile-only {
-				display: none;
+			.social-icon-btn {
+				color: #e5e5e5;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: color 0.2s, transform 0.2s;
+			}
+
+			.social-icon-btn:hover {
+				color: var(--accent-red);
+				transform: scale(1.1);
 			}
 
 			/* PAGE CONTAINER */
@@ -117,22 +144,22 @@ const latestVideos = [
 
 			/* HERO SECTION */
 			.hero-card {
-				background-color: var(--card-bg);
-				border: 1px solid var(--card-border);
-				border-radius: 16px;
+				background-color: var(--bg-card);
+				border-radius: 12px;
 				padding: 1.5rem;
 				display: grid;
 				grid-template-columns: 1.2fr 1fr;
 				gap: 2rem;
 				align-items: center;
 				margin-bottom: 3rem;
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
 			}
 
 			.hero-media {
 				position: relative;
 				width: 100%;
 				aspect-ratio: 16 / 9;
-				border-radius: 12px;
+				border-radius: 8px;
 				overflow: hidden;
 				background-color: #000000;
 			}
@@ -150,12 +177,12 @@ const latestVideos = [
 				transform: translate(-50%, -50%);
 				width: 60px;
 				height: 40px;
-				background-color: #ff0000;
-				border-radius: 10px;
+				background-color: var(--accent-red);
+				border-radius: 8px;
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
 			}
 
 			.play-button::after {
@@ -174,13 +201,13 @@ const latestVideos = [
 			}
 
 			.tag {
-				background-color: var(--accent-gold);
-				color: #000000;
+				background-color: var(--accent-red);
+				color: #ffffff;
 				font-size: 0.7rem;
 				font-weight: 800;
 				text-transform: uppercase;
 				padding: 0.35rem 0.75rem;
-				border-radius: 20px;
+				border-radius: 4px;
 				margin-bottom: 1rem;
 				letter-spacing: 0.05em;
 			}
@@ -200,19 +227,20 @@ const latestVideos = [
 			}
 
 			.btn-primary {
-				background-color: var(--accent-gold);
-				color: #000000;
+				background-color: var(--accent-red);
+				color: #ffffff;
 				font-weight: 700;
 				font-size: 0.9rem;
 				padding: 0.75rem 1.5rem;
-				border-radius: 25px;
+				border-radius: 4px;
 				display: inline-flex;
 				align-items: center;
 				gap: 0.5rem;
-				transition: transform 0.2s;
+				transition: background-color 0.2s, transform 0.2s;
 			}
 
 			.btn-primary:hover {
+				background-color: #b80710;
 				transform: translateY(-2px);
 			}
 
@@ -242,9 +270,8 @@ const latestVideos = [
 			}
 
 			.feature-card {
-				background-color: var(--card-bg);
-				border: 1px solid var(--card-border);
-				border-radius: 12px;
+				background-color: var(--bg-card);
+				border-radius: 8px;
 				padding: 1.5rem;
 				display: flex;
 				align-items: flex-start;
@@ -255,12 +282,11 @@ const latestVideos = [
 				width: 44px;
 				height: 44px;
 				border-radius: 8px;
-				background: rgba(255, 184, 0, 0.1);
-				border: 1px solid var(--accent-gold);
+				background: rgba(229, 9, 20, 0.15);
 				display: flex;
 				align-items: center;
 				justify-content: center;
-				color: var(--accent-gold);
+				color: var(--accent-red);
 				flex-shrink: 0;
 			}
 
@@ -304,18 +330,16 @@ const latestVideos = [
 			}
 
 			.video-card {
-				background-color: var(--card-bg);
-				border: 1px solid var(--card-border);
-				border-radius: 12px;
+				background-color: var(--bg-card);
+				border-radius: 8px;
 				overflow: hidden;
 				aspect-ratio: 16 / 9;
 				display: block;
-				transition: transform 0.2s, border-color 0.2s;
+				transition: transform 0.2s;
 			}
 
 			.video-card:hover {
-				transform: translateY(-4px);
-				border-color: var(--accent-gold);
+				transform: scale(1.03);
 			}
 
 			.video-card img {
@@ -324,72 +348,36 @@ const latestVideos = [
 				object-fit: cover;
 			}
 
-			/* FOOTER / FOLLOW SECTION */
+			/* FOOTER */
 			.footer-section {
 				text-align: center;
-				padding-top: 1rem;
-				border-top: 1px solid var(--card-border);
-			}
-
-			.follow-title {
-				font-size: 0.95rem;
-				font-weight: 600;
+				padding-top: 1.5rem;
+				border-top: 1px solid rgba(255, 255, 255, 0.1);
 				color: var(--text-muted);
-				margin-bottom: 1rem;
+				font-size: 0.85rem;
 			}
 
-			.social-icons {
-				display: flex;
-				justify-content: center;
-				gap: 1rem;
-			}
-
-			.social-btn {
-				width: 36px;
-				height: 36px;
-				border-radius: 8px;
-				background: #e1306c;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: #ffffff;
-			}
-
-			.social-btn.youtube { background: #ff0000; }
-			.social-btn.x { background: #000000; border: 1px solid var(--card-border); }
-
-			/* RESPONSIVE / MOBILE STYLES (MATCHES SECOND IMAGE) */
+			/* MOBILE STYLES */
 			@media (max-width: 768px) {
-				.desktop-only {
-					display: none !important;
-				}
-
-				.mobile-only {
-					display: flex;
-				}
-
 				.navbar {
-					padding: 0.85rem 1rem;
-					flex-wrap: wrap;
+					padding: 1rem;
+					flex-direction: column;
+					align-items: flex-start;
+					gap: 0.75rem;
 				}
 
-				.mobile-nav-scroll {
-					width: 100%;
+				.header-top-row {
 					display: flex;
-					gap: 1.25rem;
-					overflow-x: auto;
-					padding-top: 0.75rem;
-					margin-top: 0.5rem;
-					border-top: 1px solid var(--card-border);
-					scrollbar-width: none;
+					width: 100%;
+					justify-content: space-between;
+					align-items: center;
 				}
 
-				.mobile-nav-scroll::-webkit-scrollbar {
-					display: none;
-				}
-
-				.container {
-					padding: 1.25rem 1rem;
+				.nav-links {
+					width: 100%;
+					justify-content: space-around;
+					border-top: 1px solid rgba(255, 255, 255, 0.1);
+					padding-top: 0.5rem;
 				}
 
 				.hero-card {
@@ -402,12 +390,7 @@ const latestVideos = [
 					font-size: 1.6rem;
 				}
 
-				.features-grid {
-					grid-template-columns: 1fr;
-					gap: 0.85rem;
-				}
-
-				.video-grid {
+				.features-grid, .video-grid {
 					grid-template-columns: 1fr;
 					gap: 1rem;
 				}
@@ -418,34 +401,32 @@ const latestVideos = [
 
 		<!-- NAVBAR -->
 		<header class="navbar">
-			<a href="/" class="brand-logo">
-				🎬 Movie<span>Luxe</span>
-			</a>
+			<div class="header-top-row" style="width: 100%; display: flex; justify-content: space-between; align-items: center;">
+				<div class="brand-container">
+					<img src="/logo.png" alt="Scene and Opinion Logo" class="brand-logo-img" onerror="this.style.display='none'" />
+					<div class="brand-text-wrap">
+						<a href="/" class="brand-title">SCENE AND OPINION</a>
+						<span class="brand-caption">Fresh reviews before the popcorn cools !</span>
+					</div>
+				</div>
 
-			<div class="nav-links desktop-only">
-				<a href="/" class="nav-link active">Home</a>
-				<a href="/reviews" class="nav-link">Reviews</a>
-				<a href="/breakdowns" class="nav-link">Breakdowns</a>
-				<a href="/news" class="nav-link">News</a>
-				<a href="/about" class="nav-link">About</a>
+				<div class="header-socials">
+					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="YouTube">
+						<svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+					</a>
+					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Instagram">
+						<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+					</a>
+					<a href={socialLinks.email} class="social-icon-btn" aria-label="Email">
+						<svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+					</a>
+				</div>
 			</div>
 
-			<div style="display: flex; gap: 1rem; align-items: center;">
-				<button class="search-btn" aria-label="Search">
-					<svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-				</button>
-				<button class="menu-toggle mobile-only" aria-label="Open Menu">
-					<svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-				</button>
-			</div>
-
-			<!-- Mobile Horizontal Nav Links Bar -->
-			<nav class="mobile-nav-scroll mobile-only">
+			<nav class="nav-links">
 				<a href="/" class="nav-link active">Home</a>
-				<a href="/reviews" class="nav-link">Reviews</a>
-				<a href="/breakdowns" class="nav-link">Breakdowns</a>
-				<a href="/news" class="nav-link">News</a>
-				<a href="/about" class="nav-link">About</a>
+				<a href="/blog" class="nav-link">Read</a>
+				<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="nav-link">Watch</a>
 			</nav>
 		</header>
 
@@ -520,20 +501,8 @@ const latestVideos = [
 				</div>
 			</section>
 
-			<!-- FOLLOW THE CHANNEL FOOTER -->
 			<footer class="footer-section">
-				<div class="follow-title">Follow the Channel</div>
-				<div class="social-icons">
-					<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="social-btn" aria-label="Instagram">
-						<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-					</a>
-					<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="social-btn youtube" aria-label="YouTube">
-						<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
-					</a>
-					<a href={socialLinks.x} target="_blank" rel="noopener noreferrer" class="social-btn x" aria-label="X">
-						<svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
-					</a>
-				</div>
+				<p>&copy; {new Date().getFullYear()} SCENE AND OPINION. All rights reserved.</p>
 			</footer>
 		</main>
 
