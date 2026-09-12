@@ -1,0 +1,89 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+
+export async function getStaticPaths() {
+    // Generates routes for story-1 up to story-20
+    const paths = Array.from({ length: 20 }, (_, i) => ({
+        params: { id: `story-${i + 1}` },
+        props: { title: `Kathalu Story #${i + 1}` }
+    }));
+    return paths;
+}
+
+const { id } = Astro.params;
+const { title } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <BaseHead title={`${title} - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --bg-main: #060e20;
+                --text-light: #ffffff;
+                --text-muted: #94a3b8;
+                --accent-blue: #3b82f6;
+            }
+
+            body {
+                background-color: var(--bg-main);
+                color: var(--text-light);
+                font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+                margin: 0;
+                padding: 2.5rem;
+            }
+
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .back-link {
+                color: var(--accent-blue);
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.95rem;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.4rem;
+                transition: opacity 0.2s;
+            }
+
+            .back-link:hover {
+                opacity: 0.8;
+            }
+
+            h1 {
+                font-size: 2.5rem;
+                font-weight: 800;
+                margin: 0;
+                color: var(--text-light);
+            }
+
+            .article-content {
+                font-size: 1.05rem;
+                color: var(--text-muted);
+                line-height: 1.6;
+                background-color: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                padding: 2rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <a href="/blog" class="back-link">← Back to Kathalu</a>
+            <h1>{title}</h1>
+            <div class="article-content">
+                <p>Welcome to the full article page for <strong>{id}</strong>. Here you can read deep dives into Telugu culture, stories, mindset, and cinematic insights.</p>
+            </div>
+        </div>
+    </body>
+</html>
