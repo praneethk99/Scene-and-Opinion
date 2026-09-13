@@ -1,0 +1,40 @@
+{
+  "trendingHub": [
+    {
+      "label": "#Top Grosser of the Week",
+      "title": "Irumudi",
+      "Starring": "Mahesh Babu, Priyanka Chopra, Prithviraj Sukumaran",
+      "Director": "S.S.Rajamouli",
+      "Rating": "4.5/5",
+      "readMoreUrl": "/blog/varanasi-review",
+      "Verdict": "Blockbuster 🔥",
+      "image": "/public_trending_hub_posters/irumudi"
+      
+    },
+    {
+      "label": "Fan Favorite Pick",
+      "title": "Spider-Man: Beyond the Spider-Verse",
+      "tag": "Highest Hype Ratio"
+    }
+  ],
+  "communityFeatures": {
+    "quoteOfTheDay": {
+      "text": "Cinema is a matter of what's in the frame and what's out.",
+      "source": "Martin Scorsese"
+    },
+    "memeOfTheWeek": {
+      "title": "Meme of the Week",
+      "caption": "Waiting for a good plot twist like..."
+    }
+  },
+  "pollData": {
+    "question": "Which upcoming 2026 movie are you most excited for?",
+    "options": [
+      { "id": "opt1", "text": "Paradise", "votes": 0 },
+      { "id": "opt2", "text": "Fauzi", "votes": 0 },
+      { "id": "opt3", "text": "Ramayana", "votes": 0 },
+      { "id": "opt4", "text": "Ranabali", "votes": 0 },
+      { "id": "opt5", "text": "Jailer-2", "votes": 0 }
+    ]
+  }
+}

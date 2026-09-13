@@ -1,0 +1,27 @@
+[
+  {
+    "posterBase": "/public_carouselPosters/poster1",
+    "youtubeLink": "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_1",
+    "title": "Poster 1 Video"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster2",
+    "youtubeLink": "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_2",
+    "title": "Poster 2 Video"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster3",
+    "youtubeLink": "https://www.youtube.com/watch?v=-7Pw9UbOJyA",
+    "title": "Poster 3 Video"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster4",
+    "youtubeLink": "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_4",
+    "title": "Poster 4 Video"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster5",
+    "youtubeLink": "https://www.youtube.com/watch?v=YOUR_VIDEO_ID_5",
+    "title": "Poster 5 Video"
+  }
+]
