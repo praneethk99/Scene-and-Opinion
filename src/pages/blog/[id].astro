@@ -1,244 +1,1278 @@
 ---
 import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import reviewsData from '../../data/reviews.json';
+import reviewsData from '../../data/json/reviews.json';
 
-export async function getStaticPaths() {
-	return reviewsData.map((review) => ({
-		params: { id: review.slug },
-		props: { review }
-	}));
+export function getStaticPaths() {
+	return reviewsData.map((review, index) => {
+		const id = String(review.title || '')
+			.toLowerCase()
+			.trim()
+			.replace(/[^a-z0-9\s-]/g, '')
+			.replace(/\s+/g, '-')
+			.replace(/-+/g, '-');
+
+		return {
+			params: {
+				id: id,
+			},
+			props: {
+				review: review,
+				previousReview: reviewsData[index - 1] || null,
+				nextReview: reviewsData[index + 1] || null,
+			},
+		};
+	});
 }
 
-const { review } = Astro.props;
+const { review, previousReview, nextReview } = Astro.props;
 
 const socialLinks = {
-	youtube: "https://www.youtube.com/@Sceneandopinion",
-	instagram: "https://www.instagram.com/sceneandopinion/",
-	email: "mailto:sceneandopinion69@gmail.com"
+	youtube: 'https://www.youtube.com/@Sceneandopinion',
+	instagram: 'https://www.instagram.com/sceneandopinion/',
+	email: 'mailto:sceneandopinion69@gmail.com',
 };
+
+const rating = Math.min(
+	5,
+	Math.max(0, Number(review.Rating ?? 0))
+);
+
+const fullStars = Math.floor(rating);
+const hasHalfStar = rating % 1 >= 0.5;
+const emptyStars =
+	5 - fullStars - (hasHalfStar ? 1 : 0);
+
+const getReviewUrl = (review) => {
+	const id = String(review?.title || '')
+		.toLowerCase()
+		.trim()
+		.replace(/[^a-z0-9\s-]/g, '')
+		.replace(/\s+/g, '-')
+		.replace(/-+/g, '-');
+
+	return `/blog/${id}`;
+};
+
+const previousUrl = previousReview
+	? getReviewUrl(previousReview)
+	: null;
+
+const nextUrl = nextReview
+	? getReviewUrl(nextReview)
+	: null;
 ---
 
 <!doctype html>
 <html lang="en">
 	<head>
-		<BaseHead title={`${review.title} - ${SITE_TITLE}`} description={review.snippet} />
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+		<BaseHead
+			title={`${review.title} - ${SITE_TITLE}`}
+			description={review.Plot || SITE_DESCRIPTION}
+		/>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin
+		/>
+
+		<link
+			href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+			rel="stylesheet"
+		/>
 
 		<style>
 			:root {
-				--bg-main: #060e20;
-				--bg-nav: #081226;
-				--bg-card: #0d1933;
-				--accent-blue: #3b82f6;
-				--text-light: #ffffff;
-				--text-muted: #94a3b8;
-				--border-color: rgba(255, 255, 255, 0.08);
+				--bg: #0b0b0b;
+				--surface: #0b1422;
+				--surface-2: #0f1b2d;
+				--text: #f8fafc;
+				--muted: #9aa9bd;
+				--line: rgba(255, 255, 255, 0.09);
+				--accent: #38bdf8;
+				--gold: #fbbf24;
 			}
 
-			* { box-sizing: border-box; }
+			* {
+				box-sizing: border-box;
+			}
+
+			html {
+				background: var(--bg);
+				scroll-behavior: smooth;
+			}
 
 			body {
-				background-color: var(--bg-main);
-				color: var(--text-light);
-				font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 				margin: 0;
-				padding: 0;
+				min-height: 100vh;
+				color: var(--text);
+				font-family:
+					'Manrope',
+					system-ui,
+					-apple-system,
+					BlinkMacSystemFont,
+					'Segoe UI',
+					sans-serif;
+				background:
+					radial-gradient(
+						circle at 50% -10%,
+						rgba(56, 189, 248, 0.08),
+						transparent 32%
+					),
+					var(--bg);
 			}
 
-			a { color: inherit; text-decoration: none; }
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
 
-			/* NAVBAR */
+			/* =========================
+			   NAVIGATION
+			========================= */
+
 			.navbar {
-				background-color: var(--bg-nav);
-				border-bottom: 1px solid var(--border-color);
-				padding: 0.75rem 2.5rem;
-				display: grid;
-				grid-template-columns: 1fr auto 1fr;
-				align-items: center;
 				position: sticky;
 				top: 0;
 				z-index: 100;
+				display: grid;
+				grid-template-columns: 1fr auto 1fr;
+				align-items: center;
+				padding: 0.75rem 2.5rem;
+				background: rgba(5, 9, 20, 0.9);
+				border-bottom: 1px solid rgba(56, 189, 248, 0.18);
+				backdrop-filter: blur(18px);
+				-webkit-backdrop-filter: blur(18px);
 			}
 
 			.brand-container {
 				display: flex;
 				align-items: center;
-				gap: 1rem;
+				gap: 0.85rem;
 				justify-self: start;
 			}
 
 			.brand-logo-img {
-				height: 56px;
-				width: 56px;
-				object-fit: contain;
-				background-color: #ffffff;
-				border-radius: 8px;
+				width: 52px;
+				height: 52px;
 				padding: 4px;
-				flex-shrink: 0;
+				object-fit: contain;
+				background: #fff;
+				border-radius: 8px;
 			}
 
-			.brand-text-wrap { display: flex; flex-direction: column; }
-			.brand-title { font-size: 1.25rem; font-weight: 700; color: #ffffff; line-height: 1.2; }
-			.brand-caption { font-size: 0.8rem; color: #a0aec0; margin-top: 0.1rem; }
+			.brand-text-wrap {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.brand-title {
+				font-size: 1.18rem;
+				font-weight: 800;
+				line-height: 1.2;
+			}
+
+			.brand-caption {
+				margin-top: 0.12rem;
+				color: var(--muted);
+				font-size: 0.72rem;
+			}
 
 			.nav-links {
 				display: flex;
-				gap: 2rem;
 				align-items: center;
+				gap: 2rem;
 				justify-self: center;
 			}
 
-			.nav-link { font-size: 1rem; font-weight: 600; color: #cbd5e1; transition: color 0.2s; }
-			.nav-link:hover { color: #ffffff; }
-			.nav-link.active { color: #ffffff; font-weight: 700; border-bottom: 2px solid #ffffff; padding-bottom: 0.15rem; }
+			.nav-link {
+				color: #aab8ca;
+				font-size: 0.94rem;
+				font-weight: 700;
+				transition: color 0.2s ease;
+			}
 
-			.header-socials { display: flex; align-items: center; gap: 1rem; justify-self: end; }
-			.social-icon-btn { color: #ffffff; display: flex; align-items: center; justify-content: center; opacity: 0.9; transition: opacity 0.2s, transform 0.2s; }
-			.social-icon-btn svg { width: 24px; height: 24px; }
-			.social-icon-btn:hover { opacity: 1; transform: scale(1.1); }
+			.nav-link:hover,
+			.nav-link.active {
+				color: #fff;
+			}
 
-			/* MAIN CONTAINER */
-			.main-container {
-				max-width: 900px;
-				margin: 2.5rem auto;
-				padding: 0 1.5rem;
+			.nav-link.active {
+				padding-bottom: 0.2rem;
+				border-bottom: 2px solid var(--accent);
+			}
+
+			.header-socials {
 				display: flex;
-				flex-direction: column;
-				gap: 2rem;
+				gap: 0.55rem;
+				justify-self: end;
+			}
+
+			.social-link {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				min-width: 34px;
+				height: 31px;
+				padding: 0 0.45rem;
+				border: 1px solid var(--line);
+				border-radius: 7px;
+				color: #cbd5e1;
+				font-size: 0.65rem;
+				font-weight: 800;
+			}
+
+			.social-link:hover {
+				color: #fff;
+				border-color: rgba(56, 189, 248, 0.5);
+				background: rgba(56, 189, 248, 0.1);
+			}
+
+			/* =========================
+			   MAIN
+			========================= */
+
+			.main-container {
+				width: min(1080px, calc(100% - 2rem));
+				margin: 0 auto;
+				padding: 1.5rem 0 4rem;
+			}
+
+			.back-row {
+				margin-bottom: 1rem;
 			}
 
 			.back-link {
-				color: var(--accent-blue);
-				font-weight: 600;
-				font-size: 0.95rem;
 				display: inline-flex;
 				align-items: center;
-				gap: 0.4rem;
-				transition: opacity 0.2s;
+				gap: 0.45rem;
+				color: var(--accent);
+				font-size: 0.82rem;
+				font-weight: 800;
+				transition:
+					transform 0.2s ease,
+					opacity 0.2s ease;
 			}
-			.back-link:hover { opacity: 0.8; }
 
-			.article-header { display: flex; flex-direction: column; gap: 1rem; text-align: center; }
-			.article-title { font-size: 2.5rem; font-weight: 800; color: #ffffff; margin: 0; line-height: 1.2; }
-			.article-snippet { font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; line-height: 1.5; }
+			.back-link:hover {
+				transform: translateX(-3px);
+				opacity: 0.82;
+			}
 
-			.featured-image-box {
+			/* =========================
+			   PREMIUM HERO
+			========================= */
+
+			.article-hero {
+				overflow: hidden;
+				border: 1px solid var(--line);
+				border-radius: 16px;
+				background:
+					radial-gradient(
+						circle at 50% 0%,
+						rgba(56, 189, 248, 0.06),
+						transparent 42%
+					),
+					linear-gradient(
+						145deg,
+						rgba(16, 28, 47, 0.96),
+						rgba(6, 12, 23, 0.98)
+					);
+				box-shadow: 0 20px 55px rgba(0, 0, 0, 0.24);
+			}
+
+			.article-heading {
+				padding: 1.35rem 1.5rem 1.2rem;
+				text-align: center;
+			}
+
+			.article-kicker {
+				margin: 0 0 0.45rem;
+				color: var(--accent);
+				font-size: 0.62rem;
+				font-weight: 800;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+			}
+
+			.article-title {
+				max-width: 850px;
+				margin: 0 auto;
+				font-family:
+					'Playfair Display',
+					Georgia,
+					serif;
+				font-size: clamp(1.85rem, 4vw, 2.75rem);
+				font-weight: 800;
+				line-height: 1.08;
+				letter-spacing: -0.025em;
+			}
+
+			.hero-meta {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 0.45rem;
+				margin-top: 0.75rem;
+			}
+
+			.genre-pill,
+			.rating-pill {
+				display: inline-flex;
+				align-items: center;
+				padding: 0.32rem 0.65rem;
+				border-radius: 999px;
+				font-size: 0.65rem;
+				font-weight: 800;
+			}
+
+			.genre-pill {
+				border: 1px solid rgba(56, 189, 248, 0.25);
+				background: rgba(56, 189, 248, 0.07);
+				color: var(--accent);
+			}
+
+			.rating-pill {
+				border: 1px solid rgba(251, 191, 36, 0.22);
+				background: rgba(251, 191, 36, 0.05);
+				color: #fcd34d;
+			}
+
+			/* =========================
+			   POSTER
+			========================= */
+
+			.poster-frame {
+				position: relative;
+				width: 100%;
+				background: #020611;
+				border-top: 1px solid var(--line);
+				border-bottom: 1px solid var(--line);
+			}
+
+			.poster-frame img {
+				display: block;
 				width: 100%;
 				max-height: 500px;
-				border-radius: 12px;
-				overflow: hidden;
-				border: 1px solid var(--border-color);
-				background-color: var(--bg-card);
+				margin: 0 auto;
+				object-fit: contain;
 			}
-			.featured-image-box img { width: 100%; height: 100%; object-fit: cover; }
 
-			.article-content {
-				background-color: var(--bg-card);
-				border: 1px solid var(--border-color);
-				border-radius: 12px;
-				padding: 2.5rem;
+			/* =========================
+			   MOVIE DETAILS
+			========================= */
+
+			.movie-details {
+				padding: 1.5rem 2rem 1.75rem;
+			}
+
+			.section-heading {
 				display: flex;
-				flex-direction: column;
-				gap: 1.5rem;
+				align-items: center;
+				gap: 0.65rem;
+				margin: 0 0 0.9rem;
+				font-size: 1rem;
+				font-weight: 800;
+			}
+
+			.section-heading::before {
+				width: 3px;
+				height: 1rem;
+				flex: 0 0 3px;
+				border-radius: 99px;
+				background: var(--accent);
+				content: '';
+			}
+
+			.details-grid {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 0.65rem;
+			}
+
+			.detail-item {
+				padding: 0.8rem 0.9rem;
+				border: 1px solid rgba(255, 255, 255, 0.065);
+				border-radius: 9px;
+				background: rgba(255, 255, 255, 0.025);
+			}
+
+			.detail-label {
+				display: block;
+				margin-bottom: 0.25rem;
+				color: var(--accent);
+				font-size: 0.6rem;
+				font-weight: 800;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+			}
+
+			.detail-value {
+				margin: 0;
+				color: #d9e2ed;
+				font-size: 0.84rem;
+				line-height: 1.45;
+			}
+
+			/* =========================
+			   PLOT / REVIEW
+			========================= */
+
+			.content-section {
+				margin-top: 1rem;
+				padding: 1.5rem 2rem;
+				border: 1px solid var(--line);
+				border-radius: 14px;
+				background: rgba(10, 18, 31, 0.82);
+			}
+
+			.content-section p {
+				margin: 0;
 				color: #cbd5e1;
-				line-height: 1.8;
-				font-size: 1.05rem;
+				font-size: 0.94rem;
+				line-height: 1.85;
 			}
 
-			.article-content h3 { color: #ffffff; margin-top: 1rem; }
+			.review-section {
+				border-color: rgba(56, 189, 248, 0.16);
+				background:
+					linear-gradient(
+						145deg,
+						rgba(13, 27, 45, 0.9),
+						rgba(8, 15, 27, 0.92)
+					);
+			}
 
-			/* FOOTER */
-			.site-footer {
-				background-color: var(--bg-nav);
-				border-top: 1px solid var(--border-color);
-				padding: 2rem 2.5rem;
+			.review-section p {
+				color: #e2e8f0;
+				font-size: 0.98rem;
+			}
+
+			/* =========================
+			   MINIMAL RATING
+			========================= */
+
+			.rating-section {
 				display: flex;
-				flex-direction: column;
 				align-items: center;
-				gap: 0.4rem;
+				justify-content: center;
+				gap: 0.8rem;
+				margin-top: 1rem;
+				padding: 0.85rem 1.1rem;
+				border: 1px solid rgba(251, 191, 36, 0.14);
+				border-radius: 11px;
+				background: rgba(251, 191, 36, 0.025);
+			}
+
+			.rating-section .section-heading {
+				margin: 0;
+				font-size: 0.76rem;
+			}
+
+			.rating-section .section-heading::before {
+				height: 0.85rem;
+			}
+
+			.stars {
+				display: flex;
+				align-items: center;
+				gap: 0.06rem;
+				font-size: 1.2rem;
+				line-height: 1;
+			}
+
+			.star {
+				display: inline-block;
+				color: var(--gold);
+			}
+
+			.star-empty {
+				display: inline-block;
+				color: #303b4d;
+			}
+
+			/*
+			 * Half star:
+			 * The background star is dark.
+			 * The ::before layer displays only 50%
+			 * of the gold star.
+			*/
+
+			.star-half {
+				position: relative;
+				display: inline-block;
+				color: #303b4d;
+				line-height: 1;
+			}
+
+			.star-half::before {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 50%;
+				height: 100%;
+				overflow: hidden;
+				color: var(--gold);
+				content: '★';
+			}
+
+			.rating-number {
+				margin: 0;
+				color: #cbd5e1;
+				font-size: 0.7rem;
+				font-weight: 800;
+				white-space: nowrap;
+			}
+
+			/* =========================
+			   SHARE
+			========================= */
+
+			.share-section {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				margin-top: 1rem;
+				padding: 0.9rem 1rem;
+				border: 1px solid var(--line);
+				border-radius: 11px;
+				background: rgba(255, 255, 255, 0.025);
+			}
+
+			.share-label {
+				color: #dbe5ef;
+				font-size: 0.75rem;
+				font-weight: 800;
+			}
+
+			.share-buttons {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.45rem;
+			}
+
+			.share-btn {
+				border: 1px solid var(--line);
+				border-radius: 7px;
+				padding: 0.42rem 0.65rem;
+				background: #0b1422;
+				color: #cbd5e1;
+				font: inherit;
+				font-size: 0.66rem;
+				font-weight: 800;
+				cursor: pointer;
+			}
+
+			.share-btn:hover {
+				border-color: rgba(56, 189, 248, 0.45);
+				background: rgba(56, 189, 248, 0.1);
+				color: #fff;
+			}
+
+			/* =========================
+			   PREVIOUS / NEXT
+			========================= */
+
+			.article-navigation {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 0.8rem;
+				margin-top: 1.25rem;
+			}
+
+			.article-nav-card {
+				min-width: 0;
+				padding: 0.9rem 1rem;
+				border: 1px solid var(--line);
+				border-radius: 10px;
+				background: rgba(10, 18, 31, 0.78);
+				transition:
+					transform 0.2s ease,
+					border-color 0.2s ease,
+					background 0.2s ease;
+			}
+
+			.article-nav-card:hover {
+				transform: translateY(-2px);
+				border-color: rgba(56, 189, 248, 0.35);
+				background: rgba(14, 28, 46, 0.9);
+			}
+
+			.article-nav-card.next {
+				text-align: right;
+			}
+
+			.nav-direction {
+				display: block;
+				margin-bottom: 0.3rem;
+				color: var(--accent);
+				font-size: 0.58rem;
+				font-weight: 800;
+				letter-spacing: 0.12em;
+				text-transform: uppercase;
+			}
+
+			.nav-movie-title {
+				display: block;
+				overflow: hidden;
+				color: #eef4fa;
+				font-family:
+					'Playfair Display',
+					Georgia,
+					serif;
+				font-size: 0.95rem;
+				font-weight: 700;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			.nav-placeholder {
+				visibility: hidden;
+				pointer-events: none;
+			}
+
+			/* =========================
+			   FOOTER
+			========================= */
+
+			.site-footer {
+				padding: 2rem 1rem;
 				text-align: center;
-				margin-top: 4rem;
+				border-top: 1px solid rgba(56, 189, 248, 0.15);
+				background: #040812;
 			}
 
-			.footer-copyright { font-size: 0.85rem; color: #94a3b8; margin: 0; }
-			.footer-brand { font-size: 0.95rem; font-weight: 800; color: #ffffff; letter-spacing: 0.05em; margin: 0; }
+			.footer-copyright,
+			.footer-brand {
+				margin: 0;
+			}
+
+			.footer-copyright {
+				color: #7f8da0;
+				font-size: 0.75rem;
+			}
+
+			.footer-brand {
+				margin-top: 0.3rem;
+				color: #fff;
+				font-size: 0.88rem;
+				font-weight: 800;
+				letter-spacing: 0.08em;
+			}
+
 			.footer-email {
-				font-size: 0.9rem;
-				color: var(--accent-blue);
-				text-decoration: none;
-				display: inline-flex;
-				align-items: center;
-				gap: 0.5rem;
-				margin-top: 0.2rem;
-				transition: opacity 0.2s;
+				display: inline-block;
+				margin-top: 0.3rem;
+				color: var(--accent);
+				font-size: 0.78rem;
 			}
-			.footer-email:hover { opacity: 0.85; text-decoration: underline; }
-			.footer-mail-icon { width: 18px; height: 18px; color: currentColor; }
 
-			@media (max-width: 600px) {
-				.navbar { display: flex; flex-direction: column; gap: 1rem; padding: 1rem; align-items: flex-start; }
-				.article-title { font-size: 2rem; }
-				.article-content { padding: 1.5rem; }
+			/* =========================
+			   MOBILE
+			========================= */
+
+			@media (max-width: 700px) {
+				.navbar {
+					display: flex;
+					flex-wrap: wrap;
+					gap: 0.7rem;
+					padding: 0.7rem 0.85rem;
+				}
+
+				.brand-container {
+					width: 100%;
+				}
+
+				.brand-logo-img {
+					width: 46px;
+					height: 46px;
+				}
+
+				.nav-links {
+					order: 3;
+					width: 100%;
+					justify-content: space-around;
+					gap: 0.4rem;
+				}
+
+				.header-socials {
+					position: absolute;
+					top: 0.8rem;
+					right: 0.85rem;
+				}
+
+				.main-container {
+					width: calc(100% - 1rem);
+					padding-top: 1rem;
+				}
+
+				.article-heading {
+					padding: 1rem 0.85rem 0.95rem;
+				}
+
+				.article-kicker {
+					font-size: 0.56rem;
+				}
+
+				.article-title {
+					font-size: clamp(1.7rem, 8vw, 2.3rem);
+				}
+
+				.hero-meta {
+					margin-top: 0.6rem;
+				}
+
+				.poster-frame img {
+					max-height: 420px;
+				}
+
+				.movie-details,
+				.content-section {
+					padding: 1.15rem 0.9rem;
+				}
+
+				.details-grid {
+					grid-template-columns: 1fr;
+				}
+
+				.content-section p {
+					font-size: 0.9rem;
+					line-height: 1.75;
+				}
+
+				/* Minimal mobile rating */
+
+				.rating-section {
+					gap: 0.55rem;
+					padding: 0.75rem;
+				}
+
+				.rating-section .section-heading {
+					font-size: 0.68rem;
+				}
+
+				.stars {
+					font-size: 1.05rem;
+				}
+
+				.rating-number {
+					font-size: 0.66rem;
+				}
+
+				/* Share */
+
+				.share-section {
+					align-items: flex-start;
+					flex-direction: column;
+				}
+
+				.share-buttons {
+					width: 100%;
+				}
+
+				.share-btn {
+					flex: 1;
+				}
+
+				/* Navigation */
+
+				.article-navigation {
+					grid-template-columns: 1fr;
+				}
+
+				.article-nav-card.next {
+					text-align: left;
+				}
 			}
 		</style>
 	</head>
+
 	<body>
+		<!-- =========================
+		     NAVIGATION
+		========================= -->
 
-		<header class="navbar">
-			<div class="brand-container">
-				<img src="/logo.png" alt="Scene and Opinion Logo" class="brand-logo-img" onerror="if (this.src.endsWith('.png')) { this.src = '/logo.jpg'; }" />
-				<div class="brand-text-wrap">
-					<a href="/" class="brand-title">Scene and Opinion</a>
-					<span class="brand-caption">Fresh reviews before the popcorn cools!</span>
-				</div>
-			</div>
 
-			<nav class="nav-links">
-				<a href="/" class="nav-link">Home</a>
-				<a href="/blog" class="nav-link active">Read</a>
-				<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="nav-link">Watch</a>
-			</nav>
-
-			<div class="header-socials">
-				<a href={socialLinks.email} class="social-icon-btn" aria-label="Email">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-				</a>
-				<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="YouTube">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-				</a>
-				<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Instagram">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-				</a>
-			</div>
-		</header>
+		<Header />
 
 		<main class="main-container">
-			<a href="/blog" class="back-link">← Back to All Reviews</a>
 
-			<div class="article-header">
-				<h1 class="article-title">{review.title}</h1>
-				<p class="article-snippet">{review.snippet}</p>
+			<!-- BACK BUTTON -->
+
+			<div class="back-row">
+				<a href="/blog" class="back-link">
+					← Back to All Reviews
+				</a>
 			</div>
 
-			<div class="featured-image-box">
-				<img src={review.image} alt={review.title} />
-			</div>
+			<!-- =========================
+			     HERO
+			========================= -->
 
-			<div class="article-content">
-				<p>{review.content}</p>
-			</div>
+			<article class="article-hero">
+
+				<header class="article-heading">
+
+					<p class="article-kicker">
+						Scene &amp; Opinion Review
+					</p>
+
+					<h1 class="article-title">
+						{review.title}
+					</h1>
+
+					<div class="hero-meta">
+
+						{review.genre && (
+							<span class="genre-pill">
+								{review.genre}
+							</span>
+						)}
+
+						{review.Rating !== undefined && (
+							<span class="rating-pill">
+								★ {rating.toFixed(1)} / 5
+							</span>
+						)}
+
+					</div>
+
+				</header>
+
+				<!-- MOVIE POSTER -->
+
+				<div class="poster-frame">
+					<img
+						src={review.image}
+						alt={review.title}
+					/>
+				</div>
+
+				<!-- =========================
+				     MOVIE DETAILS
+				========================= -->
+
+				<section
+					class="movie-details"
+					aria-labelledby="movie-details-title"
+				>
+
+					<h2
+						class="section-heading"
+						id="movie-details-title"
+					>
+						Movie Details
+					</h2>
+
+					<div class="details-grid">
+
+						{review.Cast && (
+							<div class="detail-item">
+								<span class="detail-label">
+									Cast
+								</span>
+
+								<p class="detail-value">
+									{review.Cast}
+								</p>
+							</div>
+						)}
+
+						{review.Director && (
+							<div class="detail-item">
+								<span class="detail-label">
+									Director
+								</span>
+
+								<p class="detail-value">
+									{review.Director}
+								</p>
+							</div>
+						)}
+
+						{review.Music && (
+							<div class="detail-item">
+								<span class="detail-label">
+									Music
+								</span>
+
+								<p class="detail-value">
+									{review.Music}
+								</p>
+							</div>
+						)}
+
+						{review.Production && (
+							<div class="detail-item">
+								<span class="detail-label">
+									Production
+								</span>
+
+								<p class="detail-value">
+									{review.Production}
+								</p>
+							</div>
+						)}
+
+					</div>
+				</section>
+
+			</article>
+
+			<!-- =========================
+			     PLOT
+			========================= -->
+
+			{review.Plot && (
+				<section
+					class="content-section"
+					aria-labelledby="plot-title"
+				>
+
+					<h2
+						class="section-heading"
+						id="plot-title"
+					>
+						Plot
+					</h2>
+
+					<p>
+						{review.Plot}
+					</p>
+
+				</section>
+			)}
+
+			<!-- =========================
+			     REVIEW
+			========================= -->
+
+			{review.Review && (
+				<section
+					class="content-section review-section"
+					aria-labelledby="review-title"
+				>
+
+					<h2
+						class="section-heading"
+						id="review-title"
+					>
+						Review
+					</h2>
+
+					<p>
+						{review.Review}
+					</p>
+
+				</section>
+			)}
+
+			<!-- =========================
+			     MINIMAL RATING
+			========================= -->
+
+			{review.Rating !== undefined && (
+				<section
+					class="rating-section"
+					aria-labelledby="rating-title"
+				>
+
+					<h2
+						class="section-heading"
+						id="rating-title"
+					>
+						Our Rating
+					</h2>
+
+					<div
+						class="stars"
+						aria-label={`Rating ${rating} out of 5`}
+					>
+
+						<!-- FULL STARS -->
+
+						{Array.from({ length: fullStars }).map(() => (
+							<span class="star">
+								★
+							</span>
+						))}
+
+						<!-- HALF STAR -->
+
+						{hasHalfStar && (
+							<span class="star-half">
+								★
+							</span>
+						)}
+
+						<!-- EMPTY STARS -->
+
+						{Array.from({ length: emptyStars }).map(() => (
+							<span class="star-empty">
+								★
+							</span>
+						))}
+
+					</div>
+
+					<p class="rating-number">
+						{rating.toFixed(1)} / 5
+					</p>
+
+				</section>
+			)}
+
+			<!-- =========================
+			     SHARE
+			========================= -->
+
+			<section
+				class="share-section"
+				aria-label="Share this review"
+			>
+
+				<span class="share-label">
+					Enjoyed this review? Share it.
+				</span>
+
+				<div class="share-buttons">
+
+					<button
+						class="share-btn"
+						type="button"
+						data-share="native"
+					>
+						Share
+					</button>
+
+					<button
+						class="share-btn"
+						type="button"
+						data-share="copy"
+					>
+						Copy Link
+					</button>
+
+					<button
+						class="share-btn"
+						type="button"
+						data-share="whatsapp"
+					>
+						WhatsApp
+					</button>
+
+				</div>
+
+			</section>
+
+			<!-- =========================
+			     PREVIOUS / NEXT
+			========================= -->
+
+			<nav
+				class="article-navigation"
+				aria-label="Review navigation"
+			>
+
+				{previousReview ? (
+					<a
+						href={previousUrl}
+						class="article-nav-card"
+					>
+
+						<span class="nav-direction">
+							← Previous Review
+						</span>
+
+						<span class="nav-movie-title">
+							{previousReview.title}
+						</span>
+
+					</a>
+				) : (
+					<div
+						class="article-nav-card nav-placeholder"
+						aria-hidden="true"
+					></div>
+				)}
+
+				{nextReview ? (
+					<a
+						href={nextUrl}
+						class="article-nav-card next"
+					>
+
+						<span class="nav-direction">
+							Next Review →
+						</span>
+
+						<span class="nav-movie-title">
+							{nextReview.title}
+						</span>
+
+					</a>
+				) : (
+					<div
+						class="article-nav-card nav-placeholder"
+						aria-hidden="true"
+					></div>
+				)}
+
+			</nav>
+
 		</main>
 
+		<!-- =========================
+		     FOOTER
+		========================= -->
+
 		<footer class="site-footer">
-			<p class="footer-copyright">© All rights reserved.</p>
-			<p class="footer-brand">SCENE AND OPINION</p>
-			<a href="mailto:sceneandopinion69@gmail.com" class="footer-email">
-				<svg viewBox="0 0 24 24" fill="currentColor" class="footer-mail-icon"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+
+			<p class="footer-copyright">
+				© All rights reserved.
+			</p>
+
+			<p class="footer-brand">
+				SCENE AND OPINION
+			</p>
+
+			<a
+				href={socialLinks.email}
+				class="footer-email"
+			>
 				sceneandopinion69@gmail.com
 			</a>
+
 		</footer>
+
+		<!-- =========================
+		     SHARE SCRIPT
+		========================= -->
+
+		<script>
+			const shareButtons =
+				document.querySelectorAll('.share-btn');
+
+			const shareUrl =
+				window.location.href;
+
+			const shareTitle =
+				document.title;
+
+			shareButtons.forEach((button) => {
+
+				button.addEventListener(
+					'click',
+					async () => {
+
+						const type =
+							button.getAttribute(
+								'data-share'
+							);
+
+						const originalText =
+							button.textContent;
+
+						try {
+
+							/* Native Share */
+
+							if (
+								type === 'native'
+							) {
+
+								if (
+									navigator.share
+								) {
+
+									await navigator.share({
+										title:
+											shareTitle,
+										url:
+											shareUrl,
+									});
+
+								} else {
+
+									await navigator.clipboard.writeText(
+										shareUrl
+									);
+
+									button.textContent =
+										'Link Copied';
+
+								}
+							}
+
+							/* Copy Link */
+
+							if (
+								type === 'copy'
+							) {
+
+								await navigator.clipboard.writeText(
+									shareUrl
+								);
+
+								button.textContent =
+									'Copied ✓';
+
+							}
+
+							/* WhatsApp */
+
+							if (
+								type === 'whatsapp'
+							) {
+
+								const message =
+									encodeURIComponent(
+										`${shareTitle}\n${shareUrl}`
+									);
+
+								window.open(
+									`https://wa.me/?text=${message}`,
+									'_blank',
+									'noopener,noreferrer'
+								);
+
+							}
+
+						} catch (error) {
+
+							console.error(
+								'Share action failed:',
+								error
+							);
+
+						}
+
+						if (
+							type !== 'whatsapp'
+						) {
+
+							window.setTimeout(
+								() => {
+
+									button.textContent =
+										originalText;
+
+								},
+								1600
+							);
+
+						}
+
+					}
+				);
+
+			});
+		</script>
+
 	</body>
 </html>

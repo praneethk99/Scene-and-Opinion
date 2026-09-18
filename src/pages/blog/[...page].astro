@@ -1,17 +1,27 @@
 ---
 import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
-import reviewsData from '../../data/reviews.json';
+import reviewsData from '../../data/json/reviews.json';
 
 export async function getStaticPaths({ paginate }) {
-	// Map your reviews dynamically from your JSON data source
-	const validArticles = reviewsData.map((review) => ({
-		title: review.title,
-		snippet: review.snippet,
-		image: review.image,
-		fallback: review.image,
-		url: `/blog/${review.slug}`
-	}));
+	const validArticles = reviewsData.map((review) => {
+		const slug = String(review.title || '')
+			.toLowerCase()
+			.trim()
+			.replace(/[^a-z0-9\s-]/g, '')
+			.replace(/\s+/g, '-')
+			.replace(/-+/g, '-');
+
+		return {
+			title: review.title,
+			snippet: review.snippet,
+			genre: review.genre,
+			image: review.image,
+			fallback: review.image,
+			url: `/blog/${slug}`,
+		};
+	});
 
 	return paginate(validArticles, { pageSize: 20 });
 }
@@ -24,18 +34,17 @@ const socialLinks = {
 	email: "mailto:sceneandopinion69@gmail.com"
 };
 ---
-
 <!doctype html>
 <html lang="en">
 	<head>
 		<BaseHead title={`Reviews (Page ${page.currentPage}) - ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 		<style>
 			:root {
-				--bg-main: #060e20;
+				--bg-main: #0b0b0b;
 				--bg-nav: #081226;
 				--bg-card: #0d1933;
 				--accent-blue: #3b82f6;
@@ -47,7 +56,7 @@ const socialLinks = {
 			* { box-sizing: border-box; }
 
 			body {
-				background-color: var(--bg-main);
+				background: #0b0b0b;
 				color: var(--text-light);
 				font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
 				margin: 0;
@@ -159,13 +168,13 @@ const socialLinks = {
 				box-shadow: 0 8px 20px rgba(59, 130, 246, 0.2);
 			}
 
-			.article-image-wrap { width: 100%; aspect-ratio: 16 / 10; overflow: hidden; background-color: #040812; }
+			.article-image-wrap { width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background-color: #040812; }
 			.article-image-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease; }
 			.article-card:hover .article-image-wrap img { transform: scale(1.05); }
 
-			.article-info { padding: 1rem; display: flex; flex-direction: column; gap: 0.4rem; flex-grow: 1; }
-			.article-title { font-size: 1.05rem; font-weight: 700; color: #ffffff; margin: 0; line-height: 1.3; }
-			.article-snippet { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; margin: 0; }
+			.article-info { padding: 0.65rem 0.75rem 0.7rem; display: flex; flex-direction: column; gap: 0.3rem; flex-grow: 1; background-color: #ffffff; }
+			.article-title { font-size: 0.95rem; font-weight: 500; color: #172033; margin: 0; line-height: 1.25; letter-spacing: -0.01em; }
+			.article-genre { display: inline-block; width: fit-content; margin: 0; padding: 0.2rem 0.5rem; border-radius: 999px; background-color: #e8f2ff; color: #2563eb; font-size: 0.65rem; font-weight: 600; line-height: 1.15; letter-spacing: 0.01em; }
 
 			/* PAGINATION CONTROLS */
 			.pagination {
@@ -264,33 +273,8 @@ const socialLinks = {
 	</head>
 	<body>
 
-		<header class="navbar">
-			<div class="brand-container">
-				<img src="/logo.png" alt="Scene and Opinion Logo" class="brand-logo-img" onerror="if (this.src.endsWith('.png')) { this.src = '/logo.jpg'; }" />
-				<div class="brand-text-wrap">
-					<a href="/" class="brand-title">Scene and Opinion</a>
-					<span class="brand-caption">Fresh reviews before the popcorn cools!</span>
-				</div>
-			</div>
 
-			<nav class="nav-links">
-				<a href="/" class="nav-link">Home</a>
-				<a href="/blog" class="nav-link active">Read</a>
-				<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="nav-link">Watch</a>
-			</nav>
-
-			<div class="header-socials">
-				<a href={socialLinks.email} class="social-icon-btn" aria-label="Email">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
-				</a>
-				<a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="YouTube">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-				</a>
-				<a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" class="social-icon-btn" aria-label="Instagram">
-					<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-				</a>
-			</div>
-		</header>
+		<Header />
 
 		<main class="main-container">
 			<section class="articles-section">
@@ -307,7 +291,9 @@ const socialLinks = {
 							</div>
 							<div class="article-info">
 								<h3 class="article-title">{item.title}</h3>
-								<p class="article-snippet">{item.snippet}</p>
+								{item.genre && (
+									<p class="article-genre">{item.genre}</p>
+								)}
 							</div>
 						</a>
 					))}
