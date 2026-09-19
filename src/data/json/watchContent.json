@@ -1,0 +1,35 @@
+{
+  "reviews": {
+    "title": "Reviews",
+    "items": [
+      {
+        "title": "Good Bad Ugly — Movie Review",
+        "videoId": "QlD55AaDMjM",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=QlD55AaDMjM"
+      }
+    ]
+  },
+  "breakdowns": {
+    "title": "Breakdowns & Discussions",
+    "items": [
+      {
+        "title": "Good Bad Ugly — Breakdown",
+        "videoId": "2pfye5RtJtI",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=2pfye5RtJtI"
+      }
+    ]
+  },
+  "shorts": {
+    "title": "Shorts",
+    "items": [
+      {
+        "title": "Good Bad Ugly — Short",
+        "videoId": "rjgIU-y23JM",
+        "type": "short",
+        "url": "https://www.youtube.com/shorts/rjgIU-y23JM"
+      }
+    ]
+  }
+}

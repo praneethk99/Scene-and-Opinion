@@ -1,0 +1,679 @@
+---
+import watchContent from '../data/json/watchContent.json';
+
+const sections = [
+	{
+		id: 'watch-reviews',
+		title: watchContent.reviews.title,
+		items: watchContent.reviews.items,
+		className: 'reviews-row',
+	},
+	{
+		id: 'watch-breakdowns',
+		title: watchContent.breakdowns.title,
+		items: watchContent.breakdowns.items,
+		className: 'breakdowns-row',
+	},
+	{
+		id: 'watch-shorts',
+		title: watchContent.shorts.title,
+		items: watchContent.shorts.items,
+		className: 'shorts-row',
+	},
+];
+
+/*
+ * Build the correct YouTube URL from the video ID.
+ *
+ * Normal videos:
+ * https://www.youtube.com/watch?v=VIDEO_ID
+ *
+ * Shorts:
+ * https://www.youtube.com/shorts/VIDEO_ID
+ */
+function getYoutubeUrl(item) {
+	if (!item?.videoId) {
+		return '#';
+	}
+
+	const id = String(item.videoId).trim();
+
+	if (!id || id === 'YOUR_VIDEO_ID' || id === 'YOUR_SHORT_ID') {
+		return '#';
+	}
+
+	if (item.type === 'short') {
+		return `https://www.youtube.com/shorts/${id}`;
+	}
+
+	return `https://www.youtube.com/watch?v=${id}`;
+}
+---
+
+<section
+	class="watch-section"
+	aria-labelledby="watch-section-title"
+>
+	<div class="watch-heading">
+
+		<div>
+			<span class="watch-kicker">
+				Scene &amp; Opinion
+			</span>
+
+			<h2 id="watch-section-title">
+				Watch
+			</h2>
+		</div>
+
+		<a
+			href="https://www.youtube.com/@Sceneandopinion"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="watch-channel-link"
+		>
+			View Channel →
+		</a>
+
+	</div>
+
+	<div class="watch-rows">
+
+		{sections.map((section) => (
+
+			<section
+				class={`watch-row ${section.className}`}
+				aria-labelledby={`${section.id}-title`}
+			>
+
+				<div class="watch-row-heading">
+
+					<h3 id={`${section.id}-title`}>
+						{section.title}
+					</h3>
+
+					<div class="watch-controls">
+
+						<button
+							type="button"
+							class="watch-arrow"
+							data-direction="prev"
+							data-target={section.id}
+							aria-label={`Scroll ${section.title} left`}
+						>
+							<span aria-hidden="true">←</span>
+						</button>
+
+						<button
+							type="button"
+							class="watch-arrow"
+							data-direction="next"
+							data-target={section.id}
+							aria-label={`Scroll ${section.title} right`}
+						>
+							<span aria-hidden="true">→</span>
+						</button>
+
+					</div>
+
+				</div>
+
+				<div
+					class="watch-carousel"
+					id={section.id}
+				>
+
+					<div class="watch-track">
+
+						{section.items.map((item, index) => {
+
+							const youtubeUrl = getYoutubeUrl(item);
+
+							return (
+
+								<a
+									href={youtubeUrl}
+									target="_blank"
+									rel="noopener noreferrer"
+									class={`watch-card ${youtubeUrl === '#' ? 'watch-card-disabled' : ''}`}
+									aria-label={
+										youtubeUrl === '#'
+											? `${item.title} — video link not configured`
+											: `Watch ${item.title} on YouTube`
+									}
+									aria-disabled={youtubeUrl === '#' ? 'true' : undefined}
+									onclick={
+										youtubeUrl === '#'
+											? (event) => event.preventDefault()
+											: undefined
+									}
+								>
+
+									<div class="watch-poster">
+
+										<img
+											src={item.image}
+											alt={item.title}
+											loading={index > 5 ? 'lazy' : 'eager'}
+										/>
+
+										<div class="watch-image-overlay"></div>
+
+										<div class="watch-play">
+
+											<svg
+												viewBox="0 0 24 24"
+												aria-hidden="true"
+											>
+												<path d="M8 5.14v13.72c0 .76.83 1.24 1.5.86l10.1-6.86a1.03 1.03 0 0 0 0-1.72L9.5 4.28A1 1 0 0 0 8 5.14z" />
+											</svg>
+
+										</div>
+
+									</div>
+
+									<div class="watch-card-info">
+
+										<span class="watch-card-title">
+											{item.title}
+										</span>
+
+										<span class="watch-card-label">
+											{youtubeUrl === '#'
+												? 'Video link pending'
+												: 'Watch on YouTube →'}
+										</span>
+
+									</div>
+
+								</a>
+
+							);
+
+						})}
+
+					</div>
+
+				</div>
+
+			</section>
+
+		))}
+
+	</div>
+</section>
+
+<style>
+	.watch-section {
+		width: 100%;
+		margin-top: 3rem;
+		padding: 1.4rem 0 0;
+	}
+
+	.watch-heading {
+		display: flex;
+		align-items: flex-end;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 1.5rem;
+		padding: 0 0.1rem;
+	}
+
+	.watch-kicker {
+		display: block;
+		margin-bottom: 0.3rem;
+		color: #38bdf8;
+		font-size: 0.6rem;
+		font-weight: 800;
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+	}
+
+	.watch-heading h2 {
+		margin: 0;
+		color: #f8fafc;
+		font-family:
+			'Playfair Display',
+			Georgia,
+			serif;
+		font-size: clamp(2rem, 4vw, 3rem);
+		font-weight: 800;
+		line-height: 1;
+		letter-spacing: -0.03em;
+	}
+
+	.watch-channel-link {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.48rem 0.75rem;
+		border: 1px solid rgba(56, 189, 248, 0.2);
+		border-radius: 999px;
+		background: rgba(56, 189, 248, 0.04);
+		color: #7dd3fc;
+		font-size: 0.68rem;
+		font-weight: 800;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.watch-channel-link:hover {
+		transform: translateX(2px);
+		border-color: rgba(56, 189, 248, 0.45);
+		background: rgba(56, 189, 248, 0.1);
+	}
+
+	.watch-row {
+		position: relative;
+		margin-bottom: 2rem;
+	}
+
+	.watch-row:last-child {
+		margin-bottom: 0;
+	}
+
+	.watch-row-heading {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1rem;
+		margin-bottom: 0.7rem;
+	}
+
+	.watch-row-heading h3 {
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
+		margin: 0;
+		color: #f8fafc;
+		font-size: 0.82rem;
+		font-weight: 800;
+		letter-spacing: -0.01em;
+	}
+
+	.watch-row-heading h3::before {
+		width: 3px;
+		height: 0.9rem;
+		border-radius: 99px;
+		background: #38bdf8;
+		content: '';
+	}
+
+	.watch-controls {
+		display: flex;
+		gap: 0.35rem;
+	}
+
+	.watch-arrow {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 30px;
+		height: 30px;
+		padding: 0;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 7px;
+		background: rgba(15, 23, 42, 0.9);
+		color: #dbe5ef;
+		font-size: 0.9rem;
+		cursor: pointer;
+		transition:
+			background 0.2s ease,
+			border-color 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.watch-arrow:hover {
+		transform: translateY(-1px);
+		border-color: rgba(56, 189, 248, 0.4);
+		background: rgba(56, 189, 248, 0.1);
+		color: #fff;
+	}
+
+	.watch-arrow:active {
+		transform: scale(0.95);
+	}
+
+	.watch-carousel {
+		position: relative;
+		overflow: hidden;
+		width: 100%;
+	}
+
+	.watch-track {
+		display: flex;
+		gap: 0.55rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+		padding: 0.15rem 0.1rem 0.7rem;
+		scroll-behavior: smooth;
+		scrollbar-width: none;
+		overscroll-behavior-x: contain;
+	}
+
+	.watch-track::-webkit-scrollbar {
+		display: none;
+	}
+
+	.watch-card {
+		position: relative;
+		display: block;
+		flex: 0 0 105px;
+		width: 105px;
+		overflow: hidden;
+		border: 1px solid rgba(255, 255, 255, 0.08);
+		border-radius: 6px;
+		background: #080d16;
+		box-shadow:
+			0 8px 20px rgba(0, 0, 0, 0.25),
+			0 1px 0 rgba(255, 255, 255, 0.03) inset;
+		transition:
+			transform 0.2s ease,
+			border-color 0.2s ease,
+			box-shadow 0.2s ease;
+	}
+
+	.watch-card:hover {
+		transform: translateY(-4px);
+		border-color: rgba(56, 189, 248, 0.35);
+		box-shadow:
+			0 14px 28px rgba(0, 0, 0, 0.35),
+			0 0 0 1px rgba(56, 189, 248, 0.05);
+	}
+
+	.watch-card-disabled {
+		cursor: not-allowed;
+		opacity: 0.65;
+	}
+
+	.watch-card-disabled:hover {
+		transform: none;
+		border-color: rgba(255, 255, 255, 0.08);
+		box-shadow:
+			0 8px 20px rgba(0, 0, 0, 0.25),
+			0 1px 0 rgba(255, 255, 255, 0.03) inset;
+	}
+
+	.watch-poster {
+		position: relative;
+		width: 100%;
+		aspect-ratio: 0.67 / 1;
+		overflow: hidden;
+		background: #0b1220;
+	}
+
+	.watch-poster img {
+		display: block;
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.35s ease;
+	}
+
+	.watch-card:hover .watch-poster img {
+		transform: scale(1.04);
+	}
+
+	.watch-image-overlay {
+		position: absolute;
+		inset: 0;
+		background:
+			linear-gradient(
+				180deg,
+				rgba(0, 0, 0, 0) 45%,
+				rgba(0, 0, 0, 0.55) 100%
+			);
+		pointer-events: none;
+	}
+
+	.watch-play {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 34px;
+		height: 34px;
+		border: 1px solid rgba(255, 255, 255, 0.45);
+		border-radius: 50%;
+		background: rgba(3, 7, 18, 0.72);
+		color: #fff;
+		transform: translate(-50%, -50%);
+		opacity: 0;
+		backdrop-filter: blur(8px);
+		transition:
+			opacity 0.2s ease,
+			transform 0.2s ease;
+	}
+
+	.watch-play svg {
+		width: 13px;
+		height: 13px;
+		fill: currentColor;
+		margin-left: 2px;
+	}
+
+	.watch-card:hover .watch-play {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1.05);
+	}
+
+	.watch-card-info {
+		display: flex;
+		flex-direction: column;
+		gap: 0.22rem;
+		padding: 0.5rem 0.48rem 0.55rem;
+	}
+
+	.watch-card-title {
+		display: -webkit-box;
+		overflow: hidden;
+		color: #eef4fa;
+		font-size: 0.63rem;
+		font-weight: 700;
+		line-height: 1.35;
+		-webkit-box-orient: vertical;
+		-webkit-line-clamp: 2;
+	}
+
+	.watch-card-label {
+		color: #6e8298;
+		font-size: 0.5rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+	}
+
+	.reviews-row .watch-row-heading h3::before {
+		background: #38bdf8;
+	}
+
+	.breakdowns-row .watch-row-heading h3::before {
+		background: #a78bfa;
+	}
+
+	.shorts-row .watch-row-heading h3::before {
+		background: #f472b6;
+	}
+
+	@media (min-width: 701px) {
+		.watch-card {
+			flex-basis: 112px;
+			width: 112px;
+		}
+
+		.watch-track {
+			gap: 0.65rem;
+		}
+	}
+
+	@media (max-width: 700px) {
+		.watch-section {
+			margin-top: 2rem;
+		}
+
+		.watch-heading {
+			margin-bottom: 1.15rem;
+		}
+
+		.watch-heading h2 {
+			font-size: 2rem;
+		}
+
+		.watch-channel-link {
+			font-size: 0.58rem;
+		}
+
+		.watch-row {
+			margin-bottom: 1.55rem;
+		}
+
+		.watch-row-heading h3 {
+			font-size: 0.72rem;
+		}
+
+		.watch-arrow {
+			width: 28px;
+			height: 28px;
+		}
+
+		.watch-card {
+			flex-basis: 94px;
+			width: 94px;
+		}
+
+		.watch-track {
+			gap: 0.45rem;
+			padding-bottom: 0.55rem;
+		}
+
+		.watch-card-info {
+			padding: 0.42rem 0.4rem 0.48rem;
+		}
+
+		.watch-card-title {
+			font-size: 0.56rem;
+		}
+
+		.watch-card-label {
+			font-size: 0.44rem;
+		}
+	}
+
+	@media (max-width: 380px) {
+		.watch-card {
+			flex-basis: 86px;
+			width: 86px;
+		}
+
+		.watch-heading h2 {
+			font-size: 1.8rem;
+		}
+
+		.watch-channel-link {
+			padding: 0.4rem 0.55rem;
+		}
+	}
+</style>
+
+<script>
+	const buttons =
+		document.querySelectorAll('.watch-arrow');
+
+	buttons.forEach((button) => {
+
+		button.addEventListener('click', () => {
+
+			const targetId =
+				button.getAttribute('data-target');
+
+			const direction =
+				button.getAttribute('data-direction');
+
+			if (!targetId || !direction) {
+				return;
+			}
+
+			const carousel =
+				document.getElementById(targetId);
+
+			if (!carousel) {
+				return;
+			}
+
+			const track =
+				carousel.querySelector('.watch-track');
+
+			if (!track) {
+				return;
+			}
+
+			const firstCard =
+				track.querySelector('.watch-card');
+
+			if (!firstCard) {
+				return;
+			}
+
+			const cardWidth =
+				firstCard.getBoundingClientRect().width;
+
+			const gap =
+				parseFloat(
+					getComputedStyle(track).gap
+				) || 0;
+
+			const distance =
+				(cardWidth + gap) * 4;
+
+			track.scrollBy({
+				left:
+					direction === 'next'
+						? distance
+						: -distance,
+				behavior: 'smooth',
+			});
+
+		});
+
+	});
+
+	/*
+	 * Mouse wheel support.
+	 *
+	 * Desktop users can place the mouse over a row
+	 * and use the wheel to move horizontally.
+	 */
+
+	const tracks =
+		document.querySelectorAll('.watch-track');
+
+	tracks.forEach((track) => {
+
+		track.addEventListener(
+			'wheel',
+			(event) => {
+
+				if (
+					Math.abs(event.deltaY) >
+					Math.abs(event.deltaX)
+				) {
+
+					event.preventDefault();
+
+					track.scrollBy({
+						left: event.deltaY,
+						behavior: 'auto',
+					});
+
+				}
+
+			},
+			{ passive: false }
+		);
+
+	});
+
+</script>

@@ -1,0 +1,933 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import watchContent from '../data/json/watchContent.json';
+
+const socialLinks = {
+	youtube: 'https://www.youtube.com/@Sceneandopinion',
+	instagram: 'https://www.instagram.com/sceneandopinion/',
+	email: 'mailto:sceneandopinion69@gmail.com'
+};
+
+const sections = [
+	{
+		id: 'watch-shorts',
+		title: watchContent?.shorts?.title || 'Shorts',
+		items: Array.isArray(watchContent?.shorts?.items)
+			? watchContent.shorts.items
+			: []
+	},
+	{
+		id: 'watch-breakdowns',
+		title: watchContent?.breakdowns?.title || 'Breakdowns & Discussions',
+		items: Array.isArray(watchContent?.breakdowns?.items)
+			? watchContent.breakdowns.items
+			: []
+	},
+	{
+		id: 'watch-reviews',
+		title: watchContent?.reviews?.title || 'Reviews',
+		items: Array.isArray(watchContent?.reviews?.items)
+			? watchContent.reviews.items
+			: []
+	}
+];
+
+function getYoutubeUrl(item) {
+	if (item?.url) return item.url;
+	if (item?.link) return item.link;
+	if (item?.youtubeUrl) return item.youtubeUrl;
+
+	const id = String(item?.videoId || item?.id || '').trim();
+
+	if (!id) return '#';
+
+	return item?.type === 'short'
+		? `https://www.youtube.com/shorts/${id}`
+		: `https://www.youtube.com/watch?v=${id}`;
+}
+
+function getVideoId(item) {
+	if (item?.videoId) {
+		return String(item.videoId).trim();
+	}
+
+	const url = item?.url || item?.link || item?.youtubeUrl || '';
+
+	const match = String(url).match(
+		/(?:v=|youtu\.be\/|shorts\/)([A-Za-z0-9_-]{6,})/
+	);
+
+	return match?.[1] || '';
+}
+
+function getThumbnail(item) {
+	if (item?.image) return item.image;
+
+	const id = getVideoId(item);
+
+	return id
+		? `https://i.ytimg.com/vi/${id}/hqdefault.jpg`
+		: '';
+}
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead
+			title={`Watch · ${SITE_TITLE}`}
+			description={SITE_DESCRIPTION}
+		/>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link
+			rel="preconnect"
+			href="https://fonts.gstatic.com"
+			crossorigin="anonymous"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+			rel="stylesheet"
+		/>
+
+		<style>
+			:root {
+				--bg-main: #0b0b0b;
+				--bg-nav: #111111;
+				--accent: #38bdf8;
+				--text: #f8fbff;
+				--muted: #8998a9;
+				--border: rgba(255, 255, 255, 0.09);
+			}
+
+			* {
+				box-sizing: border-box;
+			}
+
+			html {
+				scroll-behavior: smooth;
+			}
+
+			body {
+				margin: 0;
+				background: var(--bg-main);
+				color: var(--text);
+				font-family: 'Manrope', system-ui, -apple-system, sans-serif;
+			}
+
+			a {
+				color: inherit;
+				text-decoration: none;
+			}
+
+			/* =========================================================
+			   WATCH PAGE
+			   ========================================================= */
+
+			.watch-page {
+				width: min(1180px, calc(100% - 3rem));
+				margin: 0 auto;
+				padding: 4.25rem 0 5rem;
+			}
+
+			.watch-intro {
+				margin-bottom: 3rem;
+			}
+
+			.watch-kicker {
+				margin: 0 0 0.55rem;
+				color: var(--accent);
+				font-size: 0.65rem;
+				font-weight: 800;
+				letter-spacing: 0.18em;
+				text-transform: uppercase;
+			}
+
+			.watch-title {
+				margin: 0;
+				color: #fff;
+				font-size: clamp(2rem, 4vw, 3.3rem);
+				font-weight: 800;
+				letter-spacing: -0.05em;
+				line-height: 1.05;
+			}
+
+			.watch-title span {
+				color: #8fb5ff;
+			}
+
+			.watch-description {
+				max-width: 620px;
+				margin: 1rem 0 0;
+				color: var(--muted);
+				font-size: 0.84rem;
+				line-height: 1.7;
+			}
+
+			/* =========================================================
+			   ROW
+			   ========================================================= */
+
+			.watch-row {
+				margin-top: 2.7rem;
+			}
+
+			.watch-row-top {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 1rem;
+				margin-bottom: 0.85rem;
+			}
+
+			.watch-row-title {
+				display: flex;
+				align-items: center;
+				gap: 0.55rem;
+				margin: 0;
+				color: #f8fbff;
+				font-size: 0.95rem;
+				font-weight: 800;
+			}
+
+			.watch-row-title::before {
+				content: '';
+				width: 3px;
+				height: 17px;
+				border-radius: 999px;
+				background: var(--accent);
+				box-shadow: 0 0 12px rgba(56, 189, 248, 0.28);
+			}
+
+			/* =========================================================
+			   ARROWS
+			   ========================================================= */
+
+			.watch-controls {
+				display: flex;
+				gap: 0.4rem;
+			}
+
+			.watch-arrow {
+				width: 34px;
+				height: 34px;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0;
+				border: 1px solid rgba(255, 255, 255, 0.1);
+				border-radius: 8px;
+				background: rgba(255, 255, 255, 0.035);
+				color: #eaf7ff;
+				cursor: pointer;
+				transition:
+					transform 0.2s ease,
+					background 0.2s ease,
+					border-color 0.2s ease;
+			}
+
+			.watch-arrow:hover {
+				transform: translateY(-1px);
+				background: rgba(56, 189, 248, 0.1);
+				border-color: rgba(56, 189, 248, 0.45);
+			}
+
+			.watch-arrow:disabled {
+				opacity: 0.3;
+				cursor: default;
+				transform: none;
+			}
+
+			.watch-arrow svg {
+				width: 17px;
+				height: 17px;
+				fill: none;
+				stroke: currentColor;
+				stroke-width: 2;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
+
+			/* =========================================================
+			   HORIZONTAL TRACK
+			   ========================================================= */
+
+			.watch-track {
+				display: grid;
+				grid-auto-flow: column;
+
+				/* Every item occupies the same 4:5 card width */
+				grid-auto-columns: 260px;
+
+				gap: 0.9rem;
+				width: 100%;
+
+				overflow-x: auto;
+				overflow-y: hidden;
+
+				scroll-behavior: smooth;
+				scrollbar-width: none;
+
+				padding: 2px 1px 10px;
+
+				overscroll-behavior-inline: contain;
+				scroll-snap-type: x proximity;
+			}
+
+			.watch-track::-webkit-scrollbar {
+				display: none;
+			}
+
+			/* =========================================================
+			   MAIN CARD
+			   ========================================================= */
+
+			/*
+			 * THE COMPLETE TILE IS 4:5.
+			 *
+			 * 260px wide
+			 * 325px tall
+			 *
+			 * This applies identically to:
+			 * Shorts
+			 * Breakdowns & Discussions
+			 * Reviews
+			 */
+			.watch-card {
+				position: relative;
+
+				display: block;
+
+				width: 260px;
+				min-width: 260px;
+				flex: 0 0 260px;
+
+				aspect-ratio: 4 / 5;
+
+				overflow: hidden;
+
+				border: 1px solid rgba(56, 189, 248, 0.22);
+				border-radius: 12px;
+
+				background: #0d131c;
+
+				scroll-snap-align: start;
+
+				box-shadow:
+					0 12px 35px rgba(0, 0, 0, 0.25);
+
+				transition:
+					transform 0.25s ease,
+					border-color 0.25s ease,
+					box-shadow 0.25s ease;
+			}
+
+			.watch-card:hover {
+				transform: translateY(-4px);
+
+				border-color: rgba(56, 189, 248, 0.48);
+
+				box-shadow:
+					0 18px 42px rgba(0, 0, 0, 0.35);
+			}
+
+			/* =========================================================
+			   POSTER AREA
+			   ========================================================= */
+
+			/*
+			 * This layer occupies the ENTIRE 4:5 card.
+			 *
+			 * The background image is created with ::before.
+			 * The real poster sits above it.
+			 */
+			.watch-poster {
+				position: absolute;
+				inset: 0;
+
+				width: 100%;
+				height: 100%;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				overflow: hidden;
+
+				background: #111820;
+
+				z-index: 1;
+			}
+
+			/*
+			 * BACKGROUND IMAGE
+			 *
+			 * This is the same poster/thumbnail.
+			 * It fills the complete 4:5 tile.
+			 * It is blurred and darkened.
+			 */
+			.watch-poster::before {
+				content: '';
+
+				position: absolute;
+				inset: -16px;
+
+				z-index: 0;
+
+				background-image: var(--watch-poster);
+				background-size: cover;
+				background-position: center;
+				background-repeat: no-repeat;
+
+				filter: blur(14px);
+
+				transform: scale(1.08);
+
+				opacity: 0.48;
+			}
+
+			/*
+			 * DARK OVERLAY ABOVE THE BACKGROUND
+			 */
+			.watch-poster::after {
+				content: '';
+
+				position: absolute;
+				inset: 0;
+
+				z-index: 1;
+
+				background: rgba(0, 0, 0, 0.28);
+
+				pointer-events: none;
+			}
+
+			/* =========================================================
+			   FOREGROUND IMAGE
+			   ========================================================= */
+
+			/*
+			 * IMPORTANT:
+			 *
+			 * contain = SHOW THE COMPLETE IMAGE.
+			 *
+			 * We do NOT use cover here because cover would crop
+			 * landscape thumbnails.
+			 */
+			.watch-poster img {
+				position: relative;
+
+				z-index: 2;
+
+				display: block;
+
+				width: 100%;
+				height: 100%;
+
+				max-width: 100%;
+				max-height: 100%;
+
+				object-fit: contain;
+				object-position: center center;
+
+				transition:
+					transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+			}
+
+			.watch-card:hover .watch-poster img {
+				transform: scale(1.025);
+			}
+
+			/* =========================================================
+			   BOTTOM GRADIENT
+			   ========================================================= */
+
+			.watch-image-overlay {
+				position: absolute;
+				inset: 0;
+
+				z-index: 3;
+
+				pointer-events: none;
+
+				background:
+					linear-gradient(
+						180deg,
+						rgba(0, 0, 0, 0) 42%,
+						rgba(0, 0, 0, 0.08) 58%,
+						rgba(0, 0, 0, 0.88) 100%
+					);
+			}
+
+			/* =========================================================
+			   PLAY BUTTON
+			   ========================================================= */
+
+			.watch-play {
+				position: absolute;
+
+				left: 50%;
+				top: 50%;
+
+				z-index: 5;
+
+				width: 52px;
+				height: 52px;
+
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				border: 1px solid rgba(255, 255, 255, 0.38);
+				border-radius: 50%;
+
+				background: rgba(5, 10, 16, 0.62);
+
+				color: #fff;
+
+				backdrop-filter: blur(8px);
+
+				transform:
+					translate(-50%, -50%)
+					scale(0.96);
+
+				opacity: 0;
+
+				transition:
+					opacity 0.22s ease,
+					transform 0.22s ease;
+			}
+
+			.watch-card:hover .watch-play {
+				opacity: 1;
+
+				transform:
+					translate(-50%, -50%)
+					scale(1.04);
+			}
+
+			.watch-play svg {
+				width: 18px;
+				height: 18px;
+
+				fill: currentColor;
+
+				margin-left: 2px;
+			}
+
+			/* =========================================================
+			   TITLE
+			   ========================================================= */
+
+			.watch-card-title {
+				position: absolute;
+
+				left: 0.8rem;
+				right: 0.8rem;
+				bottom: 0.75rem;
+
+				z-index: 6;
+
+				margin: 0;
+
+				color: #fff;
+
+				font-size: 0.76rem;
+				font-weight: 800;
+
+				line-height: 1.35;
+
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+
+				overflow: hidden;
+
+				text-shadow:
+					0 2px 8px rgba(0, 0, 0, 0.8);
+			}
+
+			/* =========================================================
+			   EMPTY STATE
+			   ========================================================= */
+
+			.watch-empty {
+				padding: 1.1rem;
+
+				border: 1px dashed rgba(255, 255, 255, 0.1);
+				border-radius: 10px;
+
+				color: #8290a0;
+
+				font-size: 0.78rem;
+
+				background: rgba(255, 255, 255, 0.018);
+			}
+
+			/* =========================================================
+			   FOOTER
+			   ========================================================= */
+
+			.site-footer {
+				border-top: 1px solid rgba(255, 255, 255, 0.07);
+
+				padding: 2rem 1.5rem;
+
+				text-align: center;
+
+				color: #6f7c8c;
+			}
+
+			.footer-copyright {
+				margin: 0;
+				font-size: 0.68rem;
+			}
+
+			.footer-brand {
+				margin: 0.45rem 0;
+
+				color: #dce6ef;
+
+				font-size: 0.7rem;
+				font-weight: 800;
+
+				letter-spacing: 0.18em;
+			}
+
+			.footer-email {
+				font-size: 0.7rem;
+			}
+
+			/* =========================================================
+			   TABLET
+			   ========================================================= */
+
+			@media (max-width: 900px) {
+				.watch-page {
+					width: min(100% - 2rem, 760px);
+				}
+
+				.watch-track {
+					grid-auto-columns: 220px;
+				}
+
+				.watch-card {
+					width: 220px;
+					min-width: 220px;
+					flex-basis: 220px;
+
+					aspect-ratio: 4 / 5;
+				}
+			}
+
+			/* =========================================================
+			   MOBILE
+			   ========================================================= */
+
+			@media (max-width: 700px) {
+				.watch-page {
+					width: calc(100% - 1.5rem);
+
+					padding: 2.8rem 0 4rem;
+				}
+
+				.watch-intro {
+					margin-bottom: 2.3rem;
+				}
+
+				.watch-title {
+					font-size: 2rem;
+				}
+
+				.watch-description {
+					font-size: 0.76rem;
+				}
+
+				.watch-row {
+					margin-top: 2.2rem;
+				}
+
+				.watch-track {
+					grid-auto-columns: 190px;
+					gap: 0.7rem;
+				}
+
+				.watch-card {
+					width: 190px;
+					min-width: 190px;
+					flex-basis: 190px;
+
+					aspect-ratio: 4 / 5;
+
+					border-radius: 10px;
+				}
+
+				.watch-play {
+					width: 44px;
+					height: 44px;
+				}
+
+				.watch-card-title {
+					left: 0.65rem;
+					right: 0.65rem;
+					bottom: 0.65rem;
+
+					font-size: 0.66rem;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<Header />
+
+		<main class="watch-page">
+
+			<section class="watch-intro">
+				<p class="watch-kicker">
+					Scene &amp; Opinion · Watch
+				</p>
+
+				<h1 class="watch-title">
+					Watch what we're
+					<span>talking about.</span>
+				</h1>
+
+				<p class="watch-description">
+					Reviews, breakdowns, discussions and quick takes — all in one place.
+					Choose a card and jump straight to the exact YouTube video.
+				</p>
+			</section>
+
+			{sections.map((section) => (
+				<section
+					class="watch-row"
+					aria-labelledby={`${section.id}-title`}
+				>
+					<div class="watch-row-top">
+
+						<h2
+							id={`${section.id}-title`}
+							class="watch-row-title"
+						>
+							{section.title}
+						</h2>
+
+						<div
+							class="watch-controls"
+							aria-label={`${section.title} navigation`}
+						>
+							<button
+								type="button"
+								class="watch-arrow watch-prev"
+								data-target={section.id}
+								aria-label={`Scroll ${section.title} left`}
+							>
+								<svg viewBox="0 0 24 24">
+									<path d="M15 18l-6-6 6-6" />
+								</svg>
+							</button>
+
+							<button
+								type="button"
+								class="watch-arrow watch-next"
+								data-target={section.id}
+								aria-label={`Scroll ${section.title} right`}
+							>
+								<svg viewBox="0 0 24 24">
+									<path d="M9 18l6-6-6-6" />
+								</svg>
+							</button>
+						</div>
+
+					</div>
+
+					{section.items.length > 0 ? (
+
+						<div
+							class="watch-track"
+							id={section.id}
+							tabindex="0"
+						>
+							{section.items.map((item, index) => {
+
+								const url = getYoutubeUrl(item);
+								const thumbnail = getThumbnail(item);
+								const disabled = url === '#';
+
+								return (
+									<a
+										href={url}
+										target={
+											disabled
+												? undefined
+												: '_blank'
+										}
+										rel={
+											disabled
+												? undefined
+												: 'noopener noreferrer'
+										}
+										class={`watch-card ${
+											disabled
+												? 'watch-card-disabled'
+												: ''
+										}`}
+										style={
+											thumbnail
+												? `--watch-poster: url("${thumbnail}")`
+												: ''
+										}
+										aria-label={
+											disabled
+												? `${item.title} — video link not configured`
+												: `Watch ${item.title} on YouTube`
+										}
+										onclick={
+											disabled
+												? "event.preventDefault()"
+												: undefined
+										}
+									>
+
+										<div class="watch-poster">
+
+											{thumbnail && (
+												<img
+													src={thumbnail}
+													alt={
+														item.title ||
+														'Scene and Opinion video'
+													}
+													loading={
+														index === 0
+															? 'eager'
+															: 'lazy'
+													}
+												/>
+											)}
+
+											<div class="watch-image-overlay"></div>
+
+										</div>
+
+										<span
+											class="watch-play"
+											aria-hidden="true"
+										>
+											<svg viewBox="0 0 24 24">
+												<path d="M8 5.14v13.72c0 .76.83 1.24 1.5.86l10.1-6.86a1.03 1.03 0 0 0 0-1.72L9.5 4.28A1 1 0 0 0 8 5.14z" />
+											</svg>
+										</span>
+
+										<p class="watch-card-title">
+											{item.title || 'Watch on YouTube'}
+										</p>
+
+									</a>
+								);
+							})}
+						</div>
+
+					) : (
+
+						<div class="watch-empty">
+							More videos coming soon.
+						</div>
+
+					)}
+				</section>
+			))}
+		</main>
+
+		<footer class="site-footer">
+			<p class="footer-copyright">
+				© All rights reserved.
+			</p>
+
+			<p class="footer-brand">
+				SCENE AND OPINION
+			</p>
+
+			<a
+				href={socialLinks.email}
+				class="footer-email"
+			>
+				sceneandopinion69@gmail.com
+			</a>
+		</footer>
+
+		<script>
+			document.querySelectorAll('.watch-row').forEach((row) => {
+				const track = row.querySelector('.watch-track');
+				const prev = row.querySelector('.watch-prev');
+				const next = row.querySelector('.watch-next');
+
+				if (!track || !prev || !next) return;
+
+				const getDistance = () => {
+					const card = track.querySelector('.watch-card');
+
+					if (!card) {
+						return Math.max(
+							track.clientWidth * 0.8,
+							220
+						);
+					}
+
+					const gap = parseFloat(
+						getComputedStyle(track).columnGap || '0'
+					);
+
+					return (
+						(card.getBoundingClientRect().width + gap) * 2
+					);
+				};
+
+				const updateButtons = () => {
+					const maxScroll = Math.max(
+						0,
+						track.scrollWidth -
+							track.clientWidth -
+							2
+					);
+
+					prev.disabled =
+						track.scrollLeft <= 2;
+
+					next.disabled =
+						track.scrollLeft >= maxScroll;
+				};
+
+				prev.addEventListener('click', () => {
+					track.scrollBy({
+						left: -getDistance(),
+						behavior: 'smooth'
+					});
+				});
+
+				next.addEventListener('click', () => {
+					track.scrollBy({
+						left: getDistance(),
+						behavior: 'smooth'
+					});
+				});
+
+				track.addEventListener(
+					'scroll',
+					updateButtons,
+					{ passive: true }
+				);
+
+				window.addEventListener(
+					'resize',
+					updateButtons
+				);
+
+				updateButtons();
+			});
+		</script>
+	</body>
+</html>
