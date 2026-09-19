@@ -1,0 +1,22 @@
+[
+  {
+    "posterBase": "/public_carouselPosters/poster1",
+    "youtubeLink": "https://www.youtube.com/watch?v=eNOBxueQOJ4"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster2",
+    "youtubeLink": "https://www.youtube.com/watch?v=0xKAzXh6TWo"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster3",
+    "youtubeLink": "https://www.youtube.com/watch?v=ui4_aX5FVNc"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster4",
+    "youtubeLink": "https://www.youtube.com/watch?v=zg5gDJFhcyQ"
+  },
+  {
+    "posterBase": "/public_carouselPosters/poster5",
+    "youtubeLink": "https://www.youtube.com/watch?v=NocBFHwJARQ"
+  }
+]
