@@ -6,9 +6,10 @@
       "Starring": "Ravi Teja, Priya Bhavani Shankar, Sai Kumar",
       "Director": "Shiva Nirvana",
       "Rating": "4/5",
-      "readMoreUrl": "/blog/irumudi-review",
       "Verdict": "Blockbuster 🔥",
-      "image": "/public_trending_hub_posters/irumudi"
+      "image": "/public_trending_hub_posters/irumudi",
+       "readMoreUrl": "https://scene-and-opinion.vercel.app/blog/good-bad-ugly"
+
       
     },
     {
