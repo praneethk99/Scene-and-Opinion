@@ -2118,6 +2118,29 @@ const carouselPosters = Array.isArray(carouselLinks)
 			}
 		}
 
+
+		/* Final mobile carousel fit: preserve the complete thumbnail instead of cropping it. */
+		@media (max-width: 700px) {
+			.carousel-banner {
+				aspect-ratio: 16 / 9;
+				min-height: 0;
+				height: auto;
+			}
+
+			.carousel-banner img {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+				object-position: center center;
+				transform: none !important;
+				background: #050914;
+			}
+
+			.carousel-banner:hover img {
+				transform: none !important;
+			}
+		}
+
 		</style>
 	</head>
 	<body>
