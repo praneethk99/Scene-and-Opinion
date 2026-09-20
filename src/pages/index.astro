@@ -1777,6 +1777,68 @@ const carouselPosters = Array.isArray(carouselLinks)
 					border-radius: 50% !important;
 				}
 
+				/* Mobile poll: keep the header and option contents inside the card */
+				.poll-container {
+					width: 100%;
+					max-width: 100%;
+					min-width: 0;
+					box-sizing: border-box;
+					overflow: hidden;
+				}
+
+				.poll-header {
+					flex-direction: column;
+					align-items: flex-start;
+					justify-content: flex-start;
+					gap: 0.55rem;
+				}
+
+				.poll-badge {
+					max-width: 100%;
+					box-sizing: border-box;
+					white-space: normal;
+					line-height: 1.35;
+				}
+
+				.poll-user-status {
+					width: 100%;
+					max-width: 100%;
+					line-height: 1.35;
+					white-space: normal;
+				}
+
+				.poll-question {
+					max-width: 100%;
+					overflow-wrap: anywhere;
+					word-break: break-word;
+				}
+
+				.poll-option-btn {
+					min-width: 0;
+					box-sizing: border-box;
+				}
+
+				.poll-left-wrap {
+					min-width: 0;
+					max-width: calc(100% - 50px);
+				}
+
+				.poll-option-text {
+					min-width: 0;
+					overflow-wrap: anywhere;
+					word-break: break-word;
+				}
+
+				.poll-option-percent {
+					flex: 0 0 auto;
+				}
+
+				.poll-footer {
+					flex-wrap: wrap;
+					gap: 0.35rem 0.75rem;
+					line-height: 1.4;
+				}
+
 				.feature-grid {
 					grid-template-columns: repeat(2, minmax(0,1fr));
 				}
