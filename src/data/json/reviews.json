@@ -1,17 +1,86 @@
 [
   {
+  "title": "The Paradise",
+  "genre": "Action",
+  "Cast": "Nani, Mohan Babu, Kayadu Lohar",
+  "Director": "Srikanth Odela",
+  "Music": "Anirudh Ravichander",
+  "Production": "SLVC",
+  "Plot": "A backdrop set in 1980's which fights for their rights and identity.",
+  "Review": "The Paradise is half cooked raw mass entertainer, easily one of the worst movies I ever watched in theatre. Unbelievable on how the finished product turned out to be. 2nd half is insane torcher. A pure teamwork disaster. Performance wise everyone did good. 1st half okay, 2nd half disaster. Laila from Vishwak sen is subbu 😑. Liberty cafe fight insane. Raghav and Tanikela Bharani potential wasted.<br><br>Overall, uNANImous disaster.",
+  "Rating": "1.5",
+  "image": "/public_read_poster/paradise.jpg"
+},
+  {
+    "title": "GDN",
+    "genre": "Biographical Drama",
+    "Cast": "R. Madhavan, Priyamani, Dushara Vijayan",
+    "Director": "Krishnakumar Ramakumar",
+    "Music": "Govind Vasantha",
+    "Production": "Varghese Moolan Pictures, Tricolour Productions",
+    "Plot": "Shows his journey as a self-taught engineer defying colonial restrictions.",
+    "Review": "A must watch movie, about the genius mind and crabs in a bucket.",
+    "Rating": "4.5",
+    "image": "/public_read_poster/gdn.jpg"
+  },
+  {
+    "title": "Bethlehem Kudumba Unit",
+    "genre": "Rom-com",
+    "Cast": "Nivin Pauly, Mamitha Baiju",
+    "Director": "Girish A.D.",
+    "Music": "Vishnu Vijay",
+    "Production": "Bhavana Studios",
+    "Plot": "After his return, Ashley's life is disrupted by the politics of a Catholic parish committee. Meanwhile, he falls for a younger woman but their relationship sparks a chaotic resistance from the elders",
+    "Review": "Bethlehem Kudumba Unit is a fun filled feel good sweet entertainer. Nivin shines as Justin, peak performance. Mamitha Baiju is so so cute as Ashley, heart-melting cutness and parallely giving a memorable performance. Girish once again proved his worth. Very good writing, crazy cinematography and beautiful music. The best part is the amount of laughs this movie provides. And one will come from theatre heart filled for sure. Must watch.",
+    "Rating": "4.5",
+    "image": "/public_read_poster/bku.jpg"
+  },
+  {
     "title": "Irumudi",
-    "genre": "Action, Comedy",
-    "Cast": "Ravi Teja, Priya Bhavani Shankar, Sai Kumar",
-    "Director": "Shiva Nirvana",
-    "Music": "G V Prakash Kumar",
+    "genre": "Action thriller",
+    "Cast": "Ravi Teja, Priya Bhavani Shankar",
+    "Director": "Siva Nirvana",
+    "Music": "G V Prakash",
     "Production": "Mythri Movie Makers",
-    "Plot": "Devara delivers an intense cinematic experience set against coastal lands.",
-    "Review": "An alcohol-addicted father with a violent past lives peacefully with his daughter near a waterfall. At her request, he decides to embrace reform and undertake the sacred Ayyappa Deeksha.",
-    "Rating": 4.5,
+    "Plot": "An alcohol-addicted father with a violent past lives peacefully with his daughter near a waterfall. At her request, he decides to embrace reform and undertake the sacred Ayyappa Deeksha.",
+    "Review": "The streak of excellent movies at BO this year continues. Kudos to Shiva and team, what a beautiful writing and screenplay. GVP gave very good music. This movie will be remembered as one of the best in Ravi Teja’s career. Can’t speak much go and watch it in theatres near you. Such movies are rarity in TFI these days. Dir. Shiva outshined especially for emotional scenes. Priya, Sai Kumar, Swasika and Baby Nakshatra did an excellent job.",
+    "Rating": "4",
     "image": "/public_read_poster/irumudi.jpg"
+  },
+  {
+    "title": "DC",
+    "genre": "Romance/Adventure",
+    "Cast": "Lokesh Kangaraj, Wamiqa Gabbi, Sanjana Krishnamoorthy",
+    "Director": "Arun Matheswaran",
+    "Music": "Anirudh Ravichander",
+    "Production": "Sun Pictures",
+    "Plot": "Rebel Devadas joins forces with Chandra in a dangerous world where passion and peril collide. Their turbulent alliance demands bloodshed and tests loyalties as survival becomes the ultimate stakes in their fight.",
+    "Review": "No Ani, no DC. Loki could have done better, Sanjana is good, Wami is best. Insane 2nd half",
+    "Rating": "4.5",
+    "image": "/public_read_poster/dc.jpg"
+  },
+  {
+    "title": "Vishwanath & sons",
+    "genre": "Romamce drama",
+    "Cast": "Suriya, Mamitha Baiju, Radhika",
+    "Director": "Venky Atluri",
+    "Music": "G V Prakash",
+    "Production": "Sithara Entertainments",
+    "Plot": "An aging international shooter remains dedicated to his career. However, growing family obligations and an unexpected new romance force him to re-evaluate his life's priorities.",
+    "Review": "Vishwanath & sons is a pure family drama high on emotions. Lots of fun moment, tons of love and infinite charm of Suriya. Audience will connect to the movie and Venky's writing once again proves to be brilliant. The limit in the chemistry between hero & heroine is actually the silent savior of the film. GV music is good. Great production values. Cutest Mamitha. Excellent performance of Radhika",
+    "Rating": "4",
+    "image": "/public_read_poster/vas.jpg"
+  },
+  {
+    "title": "Operation Safed Sagar",
+    "genre": "biographical War drama",
+    "Cast": "Abhay Verma, Prajakta Koli, Mihir Ahuja, Jimmy Shergill, Dia Mirza, Siddharth",
+    "Director": "Oni Sen",
+    "Music": "Anurag Saikia, Amit Trivedi. Siddharth Pandit",
+    "Production": "4.5",
+    "Plot": "A squadron of air force pilots strives to overcome various challenges and push their limits to make a dangerous mission successful.",
+    "Review": "Thanks to IAF for such bold attempt & great innovation. Thanks to makers for bringing this to us.",
+    "Rating": "4/5",
+    "image": "/public_read_poster/opss.jpg"
   }
-  
-  
 ]
-

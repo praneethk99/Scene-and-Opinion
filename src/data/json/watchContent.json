@@ -3,6 +3,13 @@
     "title": "Reviews",
     "items": [
       {
+        "title": "The Paradise",
+        "videoId": "TF2hP_NX6x0",
+        "type": "video",
+        "url": "https://www.youtube.com/watch?v=TF2hP_NX6x0"
+      },
+
+      {
         "title": "Irumudi & Bethlehem kudumba unit",
         "videoId": "QlD55AaDMjM",
         "type": "video",
@@ -221,6 +228,11 @@
   },
   "shorts": {
     "items": [
+       {
+        "videoId": "X5Cec2sTtbk",
+        "type": "short",
+        "url": "https://www.youtube.com/shorts/X5Cec2sTtbk"
+      },
       {
         "videoId": "rjgIU-y23JM",
         "type": "short",

@@ -1,7 +1,7 @@
 {
   "trendingHub": [
     {
-      "label": "#Top Grosser of the Week",
+      "label": "#Top Grosser of the Recent times #Tollywood",
       "title": "Irumudi",
       "Starring": "Ravi Teja, Priya Bhavani Shankar, Sai Kumar",
       "Director": "Shiva Nirvana",
@@ -11,47 +11,47 @@
       "readMoreUrl": "https://scene-and-opinion.vercel.app/blog/irumudi"
     },
     {
-      "label": "Fan Favorite Pick",
-      "title": "Irumudi",
+      "label": "This week's most hyped movie",
+      "title": "The Paradise",
       "tag": "Highest Hype Ratio"
     }
   ],
   "communityFeatures": {
     "quoteOfTheDay": {
-      "text": "Cinema is a matter of what's in the frame and what's out.",
-      "source": "Martin Scorsese"
+      "text": "Some movies deserve a standing ovation. Some deserve a standing warning.",
+      "source": "Anonymous Cinephile"
     },
     "memeOfTheWeek": {
       "title": "Meme of the Week",
-      "caption": "Waiting for a good plot twist like..."
+      "caption": "Waiting for a good plot twist like, Me waiting for the movie to become good after the interval. 😭"
     }
   },
   "pollData": {
-    "question": "Which upcoming 2026 movie are you most excited for?",
+    "question": "How did you feel after watching Paradise?",
     "options": [
       {
         "id": "opt1",
-        "text": "Paradise",
+        "text": "I loved it",
         "votes": 0
       },
       {
         "id": "opt2",
-        "text": "Fauzi",
+        "text": "I liked it",
         "votes": 0
       },
       {
         "id": "opt3",
-        "text": "Ramayana",
+        "text": "It was okay",
         "votes": 0
       },
       {
         "id": "opt4",
-        "text": "Ranabali",
+        "text": "Paradise : Doors will open on the left",
         "votes": 0
       },
       {
         "id": "opt5",
-        "text": "Mysaa",
+        "text": "Paradise : Doors closed from both inside and outside",
         "votes": 0
       }
     ]

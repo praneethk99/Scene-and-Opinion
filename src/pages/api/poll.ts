@@ -2,7 +2,7 @@ export const prerender = false;
 import type { APIRoute } from 'astro';
 import { supabase } from '../../lib/supabase';
 
-const POLL_ID = 'weekly-audience-poll';
+const POLL_ID = 'paradise-review-poll';
 
 const VALID_OPTIONS = new Set([
 	'opt1',
@@ -97,9 +97,6 @@ export const GET: APIRoute = async () => {
 
 export const POST: APIRoute = async ({ request }) => {
 	try {
-		/*
-		 * Read the request body safely.
-		 */
 		const rawBody = await request.text();
 
 		console.log('Poll POST body:', rawBody);
@@ -152,9 +149,6 @@ export const POST: APIRoute = async ({ request }) => {
 		console.log('Poll optionId:', optionId);
 		console.log('Poll voterId:', voterId);
 
-		/*
-		 * Validate option.
-		 */
 		if (
 			typeof optionId !== 'string' ||
 			!VALID_OPTIONS.has(optionId)
@@ -173,9 +167,6 @@ export const POST: APIRoute = async ({ request }) => {
 			);
 		}
 
-		/*
-		 * Validate voter ID.
-		 */
 		if (
 			typeof voterId !== 'string' ||
 			voterId.length < 10 ||
@@ -195,9 +186,6 @@ export const POST: APIRoute = async ({ request }) => {
 			);
 		}
 
-		/*
-		 * Insert the vote into Supabase.
-		 */
 		const { data, error } = await supabase
 			.from('poll_votes')
 			.insert({
@@ -214,9 +202,6 @@ export const POST: APIRoute = async ({ request }) => {
 				error
 			);
 
-			/*
-			 * Duplicate voter.
-			 */
 			if (error.code === '23505') {
 				return new Response(
 					JSON.stringify({

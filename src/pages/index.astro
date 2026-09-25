@@ -2385,7 +2385,7 @@ const carouselPosters = Array.isArray(carouselLinks)
 					<div class="community-features">
 						<div class="community-card">
 							<span class="community-badge">Cinephile Quote of the Day</span>
-							<p class="community-text">{communityFeatures.quoteOfTheDay.text}</p>
+							<p class="community-text" style="font-style: normal;">{communityFeatures.quoteOfTheDay.text}</p>
 							<span class="community-sub">{communityFeatures.quoteOfTheDay.source}</span>
 						</div>
 						<div class="community-card">
@@ -2581,9 +2581,9 @@ const carouselPosters = Array.isArray(carouselLinks)
 			const statusText = document.getElementById('poll-user-status');
 			const totalVotesEl = document.getElementById('poll-total-votes');
 
-			const POLL_ID = 'weekly-audience-poll';
+			const POLL_ID = 'paradise-review-poll';
 			const VOTER_STORAGE_KEY = 'scene_opinion_voter_id_v1';
-			const VOTE_STORAGE_KEY = 'scene_opinion_user_voted_v1';
+			const VOTE_STORAGE_KEY = 'scene_opinion_user_voted_paradise_v1';
 
 			function getVoterId() {
 				let id = localStorage.getItem(VOTER_STORAGE_KEY);
