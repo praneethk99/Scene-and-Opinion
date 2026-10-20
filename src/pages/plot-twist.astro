@@ -1,0 +1,233 @@
+---
+const categories = [
+  { key: 'story', label: 'Story & Screenplay' },
+  { key: 'direction', label: 'Direction & Vision' },
+  { key: 'performances', label: 'Performances & Characterization' },
+  { key: 'visuals', label: 'Cinematography & Visuals' },
+  { key: 'music', label: 'Music & Sound Design' },
+  { key: 'editing', label: 'Editing & Pacing' },
+  { key: 'production', label: 'Production Design & World-Building' },
+  { key: 'verdict', label: 'Overall Impact & Verdict' },
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#111014" />
+    <title>Plot Twist — Review Studio</title>
+    <meta name="description" content="Your one-page workspace for writing thoughtful, evidence-grounded movie reviews." />
+  </head>
+  <body>
+    <main class="studio">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Scene and Opinion home">
+          <span class="brand-mark">PT</span>
+          <span><strong>PLOT TWIST</strong><small>AI REVIEW STUDIO</small></span>
+        </a>
+        <div class="top-actions">
+          <span class="draft-state" id="save-state"><i></i> Local draft</span>
+          <button class="btn btn-quiet" id="save-draft" type="button">Save draft</button>
+        </div>
+      </header>
+
+      <section class="intro">
+        <div>
+          <p class="eyebrow">YOUR OPINION. YOUR VERDICT.</p>
+          <h1>Make every review <em>mean something.</em></h1>
+          <p class="intro-copy">One workspace for your ratings, reasoning, review draft, and publishing previews. Your opinions lead; the assistant helps with the words.</p>
+        </div>
+        <div class="score-orb"><span id="hero-score">—</span><small>YOUR SCORE<br/>OUT OF 5</small></div>
+      </section>
+
+      <div class="workspace">
+        <section class="panel movie-panel">
+          <div class="panel-heading"><span class="step">01</span><div><h2>Movie details</h2><p>Start with the film you watched.</p></div></div>
+          <div class="field-grid">
+            <label class="field full">Movie title<input id="movie-title" placeholder="e.g. Jailer 2" autocomplete="off" /></label>
+            <label class="field">Release year<input id="movie-year" inputmode="numeric" placeholder="e.g. 2026" /></label>
+            <label class="field">Genre<input id="movie-genre" placeholder="Action, drama…" /></label>
+            <label class="field full">Verified poster URL <span class="optional">optional</span><input id="poster-url" type="url" placeholder="Paste an official poster image URL" /><small>Use a verified, legitimate poster URL. No generated movie artwork.</small></label>
+            <label class="field full">Plot synopsis <span class="optional">optional</span><textarea id="movie-synopsis" rows="2" placeholder="Add a verified synopsis or your spoiler-free summary."></textarea></label>
+          </div>
+          <div class="poster-preview" id="poster-preview"><span class="poster-placeholder">POSTER<br/>PREVIEW</span><img id="poster-image" alt="Movie poster preview" hidden /></div>
+          <div class="panel-heading subheading"><span class="step">02</span><div><h2>Your ratings & reasons</h2><p>Choose a rating and explain why. Missing reasons are flagged.</p></div></div>
+          <div id="category-list" class="category-list">
+            {categories.map((category, index) => (
+              <article class="category-card" data-category={category.key}>
+                <div class="category-top">
+                  <div class="category-title"><span class="category-number">{String(index + 1).padStart(2, '0')}</span><h3>{category.label}</h3></div>
+                  <label class="rating-field"><span class="sr-only">{category.label} rating</span><select data-rating={category.key} aria-label={category.label + ' rating'}><option value="">Choose rating</option><option value="5">Masterpiece / Exceptional</option><option value="4">Good / Solid</option><option value="3">Average / Okay</option><option value="2">Weak / Below average</option><option value="1">Poor / Terrible</option></select></label>
+                </div>
+                <label class="field reason-field">Why this rating?<textarea data-reason={category.key} rows="2" placeholder="What specifically worked or didn't work for you?"></textarea></label>
+                <p class="inline-validation" data-validation={category.key}>Add your reasoning to include this category in the review.</p>
+              </article>
+            ))}
+          </div>
+          <label class="field overall-rating">Your overall star rating
+            <select id="overall-rating"><option value="">Choose overall score</option><option value="5">5 / 5 — Loved it</option><option value="4">4 / 5 — Very good</option><option value="3">3 / 5 — Mixed</option><option value="2">2 / 5 — Disappointing</option><option value="1">1 / 5 — Didn't work for me</option></select>
+            <small>The overall score is yours. Plot Twist will flag possible conflicts, never silently change it.</small>
+          </label>
+          <label class="field">Additional observations <span class="optional">optional</span><textarea id="observations" rows="3" placeholder="Humour, cameos, standout moments, or anything else you want included. Avoid adding spoilers unless clearly marked."></textarea></label>
+        </section>
+
+        <div class="right-column">
+          <section class="panel draft-panel">
+            <div class="panel-heading"><span class="step">03</span><div><h2>Review draft</h2><p>Built only from the details and opinions you provide.</p></div></div>
+            <div class="status-row"><span class="status-dot"></span><span id="draft-status">Waiting for your input</span></div>
+            <label class="field">Review title<input id="review-heading" placeholder="A title for your review" /></label>
+            <label class="field">Full review<textarea id="review-body" rows="14" placeholder="Your review will appear here as you add reasons. You can edit it directly."></textarea></label>
+            <div class="notice"><strong>Grounding rule</strong><p>Plot Twist will not invent plot points, scenes, cast details, or opinions. Missing explanations and possible rating conflicts appear below for you to resolve.</p></div>
+            <div class="validation-box"><div class="validation-heading"><h3>Review checks</h3><span id="check-count">0 items</span></div><ul id="validation-list"><li>Enter a movie title and at least one reason to begin.</li></ul></div>
+            <div class="button-row"><button class="btn btn-primary" id="generate-draft" type="button">Build review draft</button><button class="btn btn-secondary" id="copy-review" type="button">Copy review</button></div>
+          </section>
+
+          <section class="panel publish-panel">
+            <div class="panel-heading"><span class="step">04</span><div><h2>Publishing preview</h2><p>Prepare each channel. Nothing publishes automatically.</p></div></div>
+            <div class="channel-tabs" role="tablist" aria-label="Publishing channels">
+              <button class="channel-tab active" type="button" data-channel="instagram" role="tab" aria-selected="true">Instagram</button>
+              <button class="channel-tab" type="button" data-channel="x" role="tab" aria-selected="false">X post</button>
+              <button class="channel-tab" type="button" data-channel="website" role="tab" aria-selected="false">Website</button>
+            </div>
+            <div class="social-preview" id="social-preview">
+              <div class="social-brand">PLOT TWIST <span>★ ★ ★ ★ ★</span></div>
+              <h3 id="social-title">Your movie review</h3>
+              <p id="social-copy">Your concise review summary will appear here after you add your thoughts.</p>
+              <div class="social-footer"><span id="social-score">— / 5</span><span>YOUR OPINION. YOUR VERDICT.</span></div>
+            </div>
+            <label class="field">Channel copy<textarea id="channel-copy" rows="4" placeholder="Preview copy for the selected channel."></textarea></label>
+            <div class="button-row"><button class="btn btn-secondary" id="refresh-channel" type="button">Refresh preview</button><button class="btn btn-secondary" id="copy-channel" type="button">Copy channel copy</button></div>
+            <div class="approval-note"><span class="lock">⌑</span><p><strong>Approval required</strong><br/>This workspace only prepares drafts. Website publishing and social posting are not connected or triggered from this page.</p></div>
+          </section>
+        </div>
+      </div>
+      <footer><span>© PLOT TWIST</span><span>Built around your voice, not made-up opinions.</span><a href="/">Back to Scene & Opinion</a></footer>
+    </main>
+
+    <style>
+      :root{color-scheme:dark;--bg:#111014;--panel:#19171d;--panel2:#211e26;--line:#35313b;--muted:#a6a0ad;--text:#f6f2f7;--red:#a52b43;--red2:#c23d55;--gold:#e6b85c;--green:#80c8a0}
+      *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 12% 0%,#28131c 0,transparent 36rem),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:14px;line-height:1.5}.studio{max-width:1600px;margin:auto;padding:0 32px}.topbar{height:82px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line);gap:20px}.brand{display:flex;align-items:center;gap:12px;color:inherit;text-decoration:none}.brand-mark{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,var(--red2),#5f1729);font-weight:900;letter-spacing:-1px}.brand strong{display:block;letter-spacing:.16em;font-size:14px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:.18em;margin-top:1px}.top-actions{display:flex;align-items:center;gap:14px}.draft-state{color:var(--muted);font-size:12px;display:flex;align-items:center;gap:7px}.draft-state i,.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block}.btn{border:1px solid var(--line);border-radius:9px;padding:10px 14px;color:var(--text);font:inherit;font-weight:650;cursor:pointer;transition:transform .15s,border-color .15s,background .15s}.btn:hover{transform:translateY(-1px);border-color:#716775}.btn-primary{background:var(--red);border-color:var(--red);color:white}.btn-primary:hover{background:var(--red2)}.btn-secondary{background:#24212a}.btn-quiet{background:transparent}.intro{padding:34px 0 28px;display:flex;align-items:center;justify-content:space-between;gap:28px}.eyebrow,.step{font-size:10px;letter-spacing:.15em;color:var(--gold);font-weight:800}.intro h1{font-size:clamp(27px,3vw,42px);letter-spacing:-.045em;line-height:1.1;margin:9px 0 10px}.intro h1 em{font-style:normal;color:var(--gold)}.intro-copy{max-width:660px;color:var(--muted);margin:0}.score-orb{width:94px;height:94px;flex:0 0 94px;border:1px solid #5a3d46;background:linear-gradient(140deg,#2c1b23,#19171d);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center}.score-orb span{font-size:25px;font-weight:800;color:var(--gold);line-height:1.1}.score-orb small{text-align:center;font-size:8px;line-height:1.5;color:var(--muted);letter-spacing:.08em;margin-top:5px}.workspace{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(380px,.92fr);align-items:start;gap:20px}.panel{background:rgba(25,23,29,.96);border:1px solid var(--line);border-radius:15px;padding:21px;min-width:0}.movie-panel{padding-bottom:24px}.right-column{display:grid;gap:20px}.panel-heading{display:flex;gap:12px;align-items:flex-start;margin-bottom:20px}.panel-heading h2{font-size:16px;margin:0;font-weight:750;letter-spacing:-.02em}.panel-heading p{color:var(--muted);font-size:12px;margin:4px 0 0}.step{display:grid;place-items:center;border:1px solid #65404a;background:#2a1b22;width:31px;height:31px;border-radius:9px;flex:0 0 31px}.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:14px}.field{display:flex;flex-direction:column;gap:7px;color:#e7e2eb;font-size:12px;font-weight:650;min-width:0}.field.full{grid-column:1/-1}.field input,.field textarea,.rating-field select,.category-card select{width:100%;border:1px solid #3c3743;background:#121116;border-radius:8px;color:var(--text);font:inherit;font-weight:400;padding:10px 11px;outline:none}.field input:focus,.field textarea:focus,select:focus{border-color:var(--red2);box-shadow:0 0 0 2px #a52b432b}.field textarea{resize:vertical;min-height:60px;line-height:1.5}.field input::placeholder,.field textarea::placeholder{color:#706a78}.field small{font-weight:400;color:var(--muted);font-size:10px}.optional{color:var(--muted);font-weight:400}.poster-preview{height:100px;border:1px dashed #49414d;border-radius:10px;background:repeating-linear-gradient(135deg,#19171d,#19171d 10px,#1c1921 10px,#1c1921 20px);display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:25px}.poster-placeholder{font-size:10px;letter-spacing:.18em;color:#817987;text-align:center}.poster-preview img{height:100%;max-width:100%;object-fit:contain}.subheading{margin-top:0;margin-bottom:15px}.category-list{display:grid;gap:10px}.category-card{border:1px solid #332f39;background:#1e1b23;border-radius:10px;padding:12px}.category-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.category-title{display:flex;align-items:center;gap:9px;min-width:0}.category-title h3{font-size:12px;font-weight:700;margin:0}.category-number{font-size:10px;color:var(--muted);font-variant-numeric:tabular-nums}.rating-field{width:180px;max-width:52%;flex:0 0 auto}.category-card select{padding:8px 9px;font-size:11px}.reason-field{font-size:11px}.reason-field textarea{min-height:58px}.inline-validation{font-size:10px;color:#d5a8ae;margin:7px 0 0;display:none}.category-card.needs-reason .inline-validation{display:block}.category-card.needs-reason{border-color:#74404a}.overall-rating{margin:17px 0}.overall-rating select{max-width:250px}.draft-panel .field{margin-bottom:13px}.status-row{font-size:11px;color:var(--muted);display:flex;gap:8px;align-items:center;margin:-5px 0 17px}.validation-box{border:1px solid #403640;background:#211b24;border-radius:10px;padding:13px;margin-top:14px}.validation-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.validation-heading h3{font-size:12px;margin:0}.validation-heading span{font-size:10px;color:var(--muted)}.validation-box ul{padding-left:17px;margin:9px 0 0;color:#d5aeb5;font-size:11px}.validation-box li+li{margin-top:5px}.validation-box li.ok{color:var(--green)}.notice{padding:12px;border-radius:9px;background:#211e24;border-left:3px solid var(--gold);margin:13px 0}.notice strong{font-size:11px}.notice p{font-size:11px;color:var(--muted);margin:4px 0 0}.button-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:13px}.channel-tabs{display:flex;gap:5px;padding:4px;border-radius:10px;background:#111014;margin-bottom:14px}.channel-tab{border:0;background:transparent;color:var(--muted);padding:8px 10px;border-radius:7px;flex:1;font:inherit;font-size:11px;font-weight:700;cursor:pointer}.channel-tab.active{background:#38303a;color:#fff}.social-preview{min-height:210px;border:1px solid #51404a;border-radius:11px;background:radial-gradient(ellipse at 100% 0%,#48202d 0,transparent 65%),linear-gradient(145deg,#211b23,#121116);padding:19px;display:flex;flex-direction:column;justify-content:space-between;margin-bottom:14px}.social-brand{font-size:10px;font-weight:900;letter-spacing:.15em}.social-brand span{color:var(--gold);letter-spacing:.08em;float:right}.social-preview h3{font-size:23px;line-height:1.15;letter-spacing:-.03em;margin:23px 0 8px}.social-preview p{color:#c4bdc8;font-size:12px;margin:0;max-width:550px;white-space:pre-wrap}.social-footer{border-top:1px solid #49404b;padding-top:11px;margin-top:24px;display:flex;justify-content:space-between;gap:12px;color:var(--gold);font-size:11px;font-weight:750}.social-footer span+span{font-size:8px;letter-spacing:.1em;color:#b5aab7;text-align:right}.approval-note{display:flex;gap:10px;align-items:flex-start;background:#1c2420;border:1px solid #304238;border-radius:9px;padding:11px;margin-top:15px}.lock{color:var(--green);font-size:19px}.approval-note p{margin:0;color:#b5c9bd;font-size:10px}.approval-note strong{color:#dff2e5;font-size:11px}footer{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:23px 0 30px;margin-top:8px;color:var(--muted);font-size:10px}footer a{color:#d8c9d5;text-decoration:none}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+      @media(min-width:1250px){.workspace{grid-template-columns:minmax(0,1.03fr) minmax(430px,.97fr)}.right-column{grid-template-columns:1fr}.movie-panel,.right-column>.panel{padding:24px}}
+      @media(max-width:900px){.studio{padding:0 18px}.workspace{grid-template-columns:1fr}.right-column{grid-template-columns:1fr 1fr;align-items:start}.draft-panel,.publish-panel{min-width:0}.intro{padding-top:26px}.intro h1{font-size:32px}}
+      @media(max-width:650px){.studio{padding:0 12px}.topbar{height:70px}.draft-state{display:none}.brand-mark{width:37px;height:37px}.intro{align-items:flex-start}.intro h1{font-size:28px}.intro-copy{font-size:12px}.score-orb{width:70px;height:70px;flex-basis:70px}.score-orb span{font-size:20px}.score-orb small{font-size:7px}.right-column{grid-template-columns:1fr}.panel{padding:15px}.field-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.category-top{align-items:flex-start;flex-direction:column}.rating-field{width:100%;max-width:none}.category-title h3{font-size:12px}.social-preview h3{font-size:20px}footer{flex-wrap:wrap}footer span:nth-child(2){order:3;width:100%}}
+      @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+    </style>
+    <script>
+      const categoryLabels = {
+        story: 'Story & Screenplay', direction: 'Direction & Vision',
+        performances: 'Performances & Characterization', visuals: 'Cinematography & Visuals',
+        music: 'Music & Sound Design', editing: 'Editing & Pacing',
+        production: 'Production Design & World-Building', verdict: 'Overall Impact & Verdict'
+      };
+      const ratingLabels = { '5':'Masterpiece / Exceptional', '4':'Good / Solid', '3':'Average / Okay', '2':'Weak / Below average', '1':'Poor / Terrible' };
+      const $ = (id) => document.getElementById(id);
+      const categories = Object.keys(categoryLabels);
+      let activeChannel = 'instagram';
+      let manuallyEditedReview = false;
+      const inputs = ['movie-title','movie-year','movie-genre','poster-url','movie-synopsis','overall-rating','observations','review-heading','review-body', 'channel-copy'];
+      const ratingInputs = categories.map(k => document.querySelector('[data-rating="' + k + '"]'));
+      const reasonInputs = categories.map(k => document.querySelector('[data-reason="' + k + '"]'));
+      const valueOf = id => $(id).value.trim();
+      const scoreText = value => value ? value + ' / 5' : '— / 5';
+      function getData() {
+        const ratings = {}, reasons = {};
+        categories.forEach(k => { ratings[k] = document.querySelector('[data-rating="' + k + '"]').value; reasons[k] = document.querySelector('[data-reason="' + k + '"]').value.trim(); });
+        return { title:valueOf('movie-title'), year:valueOf('movie-year'), genre:valueOf('movie-genre'), poster:valueOf('poster-url'), synopsis:valueOf('movie-synopsis'), ratings, reasons, overall:valueOf('overall-rating'), observations:valueOf('observations'), heading:valueOf('review-heading'), body:valueOf('review-body') };
+      }
+      function buildReview(data) {
+        const included = categories.filter(k => data.ratings[k] && data.reasons[k]);
+        if (!included.length) return '';
+        const title = data.title || 'This film';
+        const first = included.slice(0, 3).map(k => data.reasons[k].replace(/\s+/g,' ').replace(/[.\s]+$/,'')).join('. ');
+        const rest = included.slice(3).map(k => categoryLabels[k] + ': ' + data.reasons[k].replace(/\s+/g,' ').replace(/[.\s]+$/,'') + '.').join('\n\n');
+        let body = title + ': ' + first + '.';
+        if (rest) body += '\n\n' + rest;
+        if (data.observations) body += '\n\nAdditional thoughts: ' + data.observations;
+        const overall = data.overall ? '\n\nPLOT TWIST VERDICT: ' + (data.reasons.verdict || data.observations || 'My overall rating is ' + data.overall + ' out of 5.') + ' Overall rating: ' + data.overall + '/5.' : '';
+        return body + overall;
+      }
+      function collectChecks(data) {
+        const checks = [];
+        if (!data.title) checks.push({text:'Add the movie title.',ok:false});
+        const missing = categories.filter(k => data.ratings[k] && !data.reasons[k]);
+        missing.forEach(k => checks.push({text:'Explain your ' + categoryLabels[k] + ' rating.',ok:false}));
+        const unrated = categories.filter(k => !data.ratings[k]);
+        if (unrated.length) checks.push({text:unrated.length + ' rating categor' + (unrated.length===1?'y is':'ies are') + ' still unrated.',ok:false});
+        const unreasoned = categories.filter(k => !data.ratings[k] && data.reasons[k]);
+        if (unreasoned.length) checks.push({text:'Choose a rating for: ' + unreasoned.map(k=>categoryLabels[k]).join(', ') + '.',ok:false});
+        if (!data.overall) checks.push({text:'Choose your overall rating.',ok:false});
+        if (data.overall && data.ratings.verdict && Math.abs(Number(data.overall)-Number(data.ratings.verdict)) >= 2) checks.push({text:'Your overall score differs substantially from your Overall Impact category. Confirm that this is intentional.',ok:false});
+        if (!data.synopsis) checks.push({text:'No synopsis provided; no plot details will be invented.',ok:false});
+        if (!data.poster) checks.push({text:'No poster URL provided; use an official or verified poster before making artwork.',ok:false});
+        if (data.title && categories.some(k=>data.ratings[k] && data.reasons[k])) checks.push({text:'Draft is based on your supplied reasons. Review and edit it before approval.',ok:true});
+        return checks;
+      }
+      function renderChecks(data) {
+        const checks = collectChecks(data);
+        $('check-count').textContent = checks.length + ' item' + (checks.length===1?'':'s');
+        $('validation-list').innerHTML = checks.length ? checks.map(c=>'<li class="'+(c.ok?'ok':'')+'">'+escapeHtml(c.text)+'</li>').join('') : '<li class="ok">No issues detected.</li>';
+        categories.forEach(k=>{
+          const card = document.querySelector('[data-category="'+k+'"]');
+          const needs = Boolean(data.ratings[k] && !data.reasons[k]);
+          card.classList.toggle('needs-reason', needs);
+          const note = card.querySelector('[data-validation="'+k+'"]');
+          note.textContent = needs ? 'Required before this rating can be used in the review.' : 'Add your reasoning to include this category in the review.';
+        });
+        $('draft-status').textContent = checks.some(c=>!c.ok) ? 'Draft needs your attention' : 'Ready for your review';
+      }
+      function escapeHtml(value) { return String(value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+      function renderScore(data) { const s=data.overall; $('hero-score').textContent=s ? s+'.0' : '—'; $('social-score').textContent=scoreText(s); }
+      function renderPoster() {
+        const url = valueOf('poster-url');
+        const img = $('poster-image');
+        if (!url) { img.hidden = true; $('poster-preview').querySelector('.poster-placeholder').hidden = false; return; }
+        try { const parsed = new URL(url); if (!['https:','http:'].includes(parsed.protocol)) throw new Error(); img.src = parsed.href; img.hidden = false; $('poster-preview').querySelector('.poster-placeholder').hidden = true; img.onerror = () => { img.hidden = true; $('poster-preview').querySelector('.poster-placeholder').hidden = false; }; } catch { img.hidden = true; $('poster-preview').querySelector('.poster-placeholder').hidden = false; }
+      }
+      function renderChannel() {
+        const d=getData();
+        const short = d.body ? d.body.replace(/\n+/g,' ').slice(0,260) : 'Your concise review summary will appear here after you add your thoughts.';
+        $('social-title').textContent = d.title || 'Your movie review';
+        $('social-copy').textContent = activeChannel==='x' ? (short.length>220?short.slice(0,217)+'…':short) : activeChannel==='website' ? (d.body || 'Your full review will appear here after you add your thoughts.') : (short.length>180?short.slice(0,177)+'…':short);
+        $('channel-copy').value = activeChannel==='x' ? ((d.title ? d.title + ' — ' : '') + (short.length>220?short.slice(0,217)+'…':short) + (d.overall?' ★ '+d.overall+'/5':'' ) + '\nFull review: [add your published review URL]') : activeChannel==='website' ? (d.heading || d.title || '') + '\n\n' + (d.body || '') : (d.title || 'Movie review') + '\n' + (short.length>180?short.slice(0,177)+'…':short) + '\n' + scoreText(d.overall) + '\nPLOT TWIST';
+        $('social-score').textContent=scoreText(d.overall);
+      }
+      function refreshDraft(force=false) {
+        const data=getData();
+        if (force || !manuallyEditedReview) {
+          const draft=buildReview(data);
+          if (!valueOf('review-heading') && data.title) $('review-heading').value = data.title + ' — Review';
+          $('review-body').value=draft;
+        }
+        renderScore(data); renderChecks(data); renderPoster(); renderChannel();
+      }
+      function persist(showStatus=true) {
+        const data=getData();
+        try { localStorage.setItem('plot-twist-draft-v1', JSON.stringify(data)); if(showStatus){$('save-state').innerHTML='<i></i> Saved locally'; setTimeout(()=>{$('save-state').innerHTML='<i></i> Local draft'},1800);} } catch { $('save-state').textContent='Local storage unavailable'; }
+      }
+      function loadSaved() {
+        try {
+          const saved=JSON.parse(localStorage.getItem('plot-twist-draft-v1')||'null');
+          if(!saved) return;
+          const mapping={'movie-title':'title','movie-year':'year','movie-genre':'genre','poster-url':'poster','movie-synopsis':'synopsis','overall-rating':'overall','observations':'observations','review-heading':'heading','review-body':'body'};
+          Object.entries(mapping).forEach(([id,key])=>{if(saved[key]!==undefined) $(id).value=saved[key]});
+          categories.forEach(k=>{if(saved.ratings?.[k]) document.querySelector('[data-rating="'+k+'"]').value=saved.ratings[k]; if(saved.reasons?.[k]) document.querySelector('[data-reason="'+k+'"]').value=saved.reasons[k]});
+          manuallyEditedReview=Boolean(saved.body);
+        } catch { /* Ignore invalid local draft; do not block the editor. */ }
+      }
+      inputs.filter(id=>id!=='review-body'&&id!=='channel-copy').forEach(id=>$(id).addEventListener('input',()=>{refreshDraft();persist(false)}));
+      ratingInputs.forEach(el=>el.addEventListener('change',()=>{refreshDraft();persist(false)}));
+      reasonInputs.forEach(el=>el.addEventListener('input',()=>{manuallyEditedReview=false;refreshDraft();persist(false)}));
+      $('review-body').addEventListener('input',()=>{manuallyEditedReview=true;renderChannel();persist(false)});
+      $('review-heading').addEventListener('input',()=>{renderChannel();persist(false)});
+      $('channel-copy').addEventListener('input',()=>{});
+      $('save-draft').addEventListener('click',()=>persist(true));
+      $('generate-draft').addEventListener('click',()=>{manuallyEditedReview=false;refreshDraft(true);persist(false);$('draft-status').textContent='Draft rebuilt — review it before approval';});
+      $('refresh-channel').addEventListener('click',renderChannel);
+      $('copy-review').addEventListener('click',async()=>{try{await navigator.clipboard.writeText((valueOf('review-heading')?valueOf('review-heading')+'\n\n':'')+valueOf('review-body'));$('copy-review').textContent='Copied';setTimeout(()=>$('copy-review').textContent='Copy review',1400)}catch{$('review-body').focus();$('review-body').select()}});
+      $('copy-channel').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(valueOf('channel-copy'));$('copy-channel').textContent='Copied';setTimeout(()=>$('copy-channel').textContent='Copy channel copy',1400)}catch{$('channel-copy').focus();$('channel-copy').select()}});
+      document.querySelectorAll('[data-channel]').forEach(btn=>btn.addEventListener('click',()=>{activeChannel=btn.dataset.channel;document.querySelectorAll('[data-channel]').forEach(b=>{b.classList.toggle('active',b===btn);b.setAttribute('aria-selected',String(b===btn))});renderChannel()}));
+      loadSaved(); refreshDraft();
+    </script>
+  </body>
+</html>
