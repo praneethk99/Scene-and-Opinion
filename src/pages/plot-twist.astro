@@ -138,14 +138,16 @@ const categories = [
       function buildReview(data) {
         const included = categories.filter(k => data.ratings[k] && data.reasons[k]);
         if (!included.length) return '';
-        const title = data.title || 'This film';
-        const first = included.slice(0, 3).map(k => data.reasons[k].replace(/\s+/g,' ').replace(/[.\s]+$/,'')).join('. ');
-        const rest = included.slice(3).map(k => categoryLabels[k] + ': ' + data.reasons[k].replace(/\s+/g,' ').replace(/[.\s]+$/,'') + '.').join('\n\n');
-        let body = title + ': ' + first + '.';
-        if (rest) body += '\n\n' + rest;
-        if (data.observations) body += '\n\nAdditional thoughts: ' + data.observations;
-        const overall = data.overall ? '\n\nPLOT TWIST VERDICT: ' + (data.reasons.verdict || data.observations || 'My overall rating is ' + data.overall + ' out of 5.') + ' Overall rating: ' + data.overall + '/5.' : '';
-        return body + overall;
+        const clean = value => value.replace(/\\s+/g, ' ').replace(/[.\\s]+$/, '');
+        const title = data.title || 'Untitled film';
+        const sections = included.map(k => categoryLabels[k] + ' (' + ratingLabels[data.ratings[k]] + '): ' + clean(data.reasons[k]) + '.');
+        let body = title + '\\n\\n' + sections.join('\\n\\n');
+        if (data.observations) body += '\\n\\nAdditional observations: ' + clean(data.observations) + '.';
+        if (data.overall) {
+          const verdictReason = data.reasons.verdict ? clean(data.reasons.verdict) : '';
+          body += '\\n\\nPLOT TWIST VERDICT: ' + (verdictReason || 'My overall rating is ' + data.overall + ' out of 5.') + ' Overall rating: ' + data.overall + '/5.';
+        }
+        return body;
       }
       function collectChecks(data) {
         const checks = [];
